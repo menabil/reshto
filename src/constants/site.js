@@ -1,0 +1,41 @@
+/**
+ * Global site configuration and metadata constants
+ */
+export const siteConfig = {
+  name: "Reshto",
+  description:
+    "Reshto is a modern React restaurant template for online food ordering and delivery. Perfect for restaurants, cafes, food startups, and takeaway services.",
+  url: "https://reshto.example.com",
+  ogImage: "/og.jpg",
+  copyrightYear: 2026,
+  keywords: [
+    "Reshto",
+    "restaurant template",
+    "React restaurant website",
+    "online food ordering",
+    "food delivery",
+    "restaurant landing page",
+    "cafe website",
+    "fresh meals",
+  ],
+  navLinks: [
+    { label: "Home", href: "#home" },
+    { label: "About Us", href: "#about" },
+    { label: "Menu", href: "#menu" },
+    { label: "Chefs", href: "#chefs" },
+    { label: "Contact Us", href: "#book" },
+  ],
+  links: {
+    facebook: "#",
+    twitter: "#",
+    instagram: "#",
+    linkedin: "#",
+    youtube: "#",
+  },
+  contact: {
+    phone: "+1 415-555-1234",
+    email: "contact@reshto.com",
+    address: "3667 Nutters Washington Barn, Way Mason City, IA 50401",
+    hours: ["Monday - Sunday", "8:00am - 11:00pm"],
+  },
+};
