@@ -12,7 +12,7 @@ const socials = [
 
 export const Footer = () => {
   return (
-    <footer className="relative overflow-hidden bg-ink text-white">
+    <footer id="contact" className="site-footer relative overflow-hidden bg-ink text-white">
       <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
 
@@ -104,7 +104,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/60 md:flex-row">
+        <div className="footer-copy mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/60 md:flex-row">
           <p>
             Copyright &copy; {siteConfig.copyrightYear}{" "}
             <a href="#" className="font-medium text-brand">

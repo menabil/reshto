@@ -23,7 +23,7 @@ export const siteConfig = {
     { label: "About Us", href: "#about" },
     { label: "Menu", href: "#menu" },
     { label: "Chefs", href: "#chefs" },
-    { label: "Contact Us", href: "#book" },
+    { label: "Contact Us", href: "#contact" },
   ],
   links: {
     facebook: "#",

@@ -1,40 +1,29 @@
 import { Container } from "@/components/ui/Container";
-import { Placeholder } from "@/components/ui/Placeholder";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { foodImages } from "@/constants/images";
 
-const tones = ["brand", "amber", "green", "violet", "rose", "slate"];
+const posts = [foodImages.pizza, foodImages.pasta, foodImages.chicken, foodImages.vegetables, foodImages.dessert, foodImages.sandwich];
 
-export const InstagramFeed = () => {
-  const posts = Array.from({ length: 10 }, (_, i) => i + 1);
-
-  return (
-    <section className="section bg-soft-primary/40">
-      <Container>
-        <Reveal className="mb-12">
-          <SectionTitle eyebrow="@reshto" title="Instagram Post" />
-        </Reveal>
-
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {posts.map((post, index) => (
-            <Reveal key={post} delay={index * 40}>
-              <a href="#" className="group relative block overflow-hidden rounded-2xl">
-                <Placeholder
-                  tone={tones[index % tones.length]}
-                  icon="ri-instagram-line"
-                  className="aspect-square w-full"
-                  iconClassName="text-3xl"
-                />
-                <span className="absolute inset-0 grid place-items-center bg-brand/70 opacity-0 transition duration-300 group-hover:opacity-100">
-                  <i className="ri-instagram-fill text-3xl text-white" />
-                </span>
-              </a>
-            </Reveal>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-};
+export const InstagramFeed = () => (
+  <section className="section bg-[#f8f7f5]">
+    <Container>
+      <Reveal className="mb-10 flex flex-col items-center text-center">
+        <SectionTitle eyebrow="@reshto" title="Instagram Post" />
+        <a href="#contact" className="mt-3 text-sm font-semibold text-brand">Follow our kitchen <i className="ri-arrow-right-up-line" /></a>
+      </Reveal>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {posts.map((image, index) => (
+          <Reveal key={`${image}-${index}`} delay={index * 35}>
+            <a href="#contact" className="instagram-tile" aria-label={`View Reshto food post ${index + 1}`}>
+              <img src={image} alt="A freshly prepared Reshto dish" loading="lazy" />
+              <span><i className="ri-instagram-line" /></span>
+            </a>
+          </Reveal>
+        ))}
+      </div>
+    </Container>
+  </section>
+);
 
 export default InstagramFeed;

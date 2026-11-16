@@ -1,94 +1,41 @@
 import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
+import { foodImages } from "@/constants/images";
 
-const stats = [
-  { icon: "ri-emotion-happy-line", value: "1000+", label: "Happy Customers" },
-  { icon: "ri-restaurant-line", value: "50+", label: "Signature Dishes" },
-  { icon: "ri-award-line", value: "12", label: "Award Winning Chef" },
-];
-
-export const Hero = () => {
-  return (
-    <section id="home" className="relative overflow-hidden bg-white">
-      <div className="pointer-events-none absolute -right-40 -top-40 h-[28rem] w-[28rem] rounded-full bg-brand-50" />
-      <div className="pointer-events-none absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-soft-warning/70" />
-
-      <Container className="relative z-10 grid items-center gap-12 py-16 md:py-24 lg:grid-cols-2">
-        <Reveal className="text-center lg:text-left">
-          <span className="section-pill">
-            <i className="ri-leaf-line" />
-            Best Healthy Food
-          </span>
-          <h1 className="mt-4 font-display text-4xl font-extrabold leading-[1.1] text-ink md:text-6xl">
-            Enjoy <span className="text-brand">Delicious</span> Food in Your Healthy Life
-          </h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-ink-700/70 lg:mx-0">
-            This is a type of restaurant which typically serves food and drink, in addition to light
-            refreshments such as baked goods.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-            <a href="#menu" className="btn-brand px-7! py-3.5! text-base!">
-              Get Started <i className="ri-arrow-right-line" />
-            </a>
-            <a href="#book" className="btn-dark px-7! py-3.5! text-base!">
-              Order Now
-            </a>
-          </div>
-
-          <div className="mt-10 flex flex-wrap justify-center gap-6 lg:justify-start">
-            {stats.map((s) => (
-              <div key={s.label} className="flex items-center gap-3">
-                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-brand-50 text-brand">
-                  <i className={`${s.icon} text-xl`} />
-                </span>
-                <span className="text-left">
-                  <span className="block font-display text-lg font-bold text-ink">{s.value}</span>
-                  <span className="block text-xs text-ink-700/60">{s.label}</span>
-                </span>
-              </div>
+export const Hero = () => (
+  <section id="home" className="hero-section relative overflow-hidden text-white">
+    <Container className="hero-content relative z-10 grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
+      <div className="hero-copy">
+        <span className="hero-eyebrow"><i className="ri-restaurant-2-fill" /> Best Healthy Food</span>
+        <h1>Enjoy <span>Delicious</span> Food in Your Healthy Life</h1>
+        <p>
+          This is a type of restaurant which typically serves food and drink, in addition to light
+          refreshments such as baked goods.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-4">
+          <a href="#menu" className="btn-brand hero-button">Get Started <i className="ri-arrow-right-line" /></a>
+          <a href="#menu" className="btn-dark hero-button">Order Now</a>
+        </div>
+        <div className="hero-rating mt-8 flex items-center gap-3">
+          <div className="flex -space-x-2" aria-hidden="true">
+            {foodImages.chefs.slice(0, 3).map((image) => (
+              <img key={image} src={image} alt="" className="h-9 w-9 rounded-full border-2 border-[#202224] object-cover" loading="lazy" />
             ))}
           </div>
-        </Reveal>
-
-        <Reveal delay={120} className="relative mx-auto w-full max-w-md">
-          <div className="relative aspect-square">
-            <div className="absolute inset-0 animate-[spin_28s_linear_infinite] rounded-full border-2 border-dashed border-brand/30" />
-            <div className="absolute inset-6 overflow-hidden rounded-full bg-linear-to-br from-brand-400 via-brand-500 to-brand-700 shadow-card">
-              <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_25%_25%,#fff_0,transparent_45%),radial-gradient(circle_at_75%_75%,#fff_0,transparent_40%)]" />
-              <div className="grid h-full w-full place-items-center">
-                <i className="ri-restaurant-2-fill text-[6rem] text-white/90" />
-              </div>
-            </div>
-
-            {/* floating chips */}
-            <div className="absolute -left-2 top-10 animate-float rounded-2xl bg-white px-4 py-3 shadow-card">
-              <div className="flex items-center gap-2">
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-soft-success text-emerald-600">
-                  <i className="ri-leaf-fill" />
-                </span>
-                <span className="text-xs font-semibold text-ink">
-                  100% Fresh
-                  <span className="block text-[10px] font-normal text-ink-700/60">Ingredients</span>
-                </span>
-              </div>
-            </div>
-
-            <div className="absolute -right-2 bottom-12 animate-float rounded-2xl bg-white px-4 py-3 shadow-card [animation-delay:1.2s]">
-              <div className="flex items-center gap-2">
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-soft-warning text-amber-600">
-                  <i className="ri-star-fill" />
-                </span>
-                <span className="text-xs font-semibold text-ink">
-                  4.9 Rating
-                  <span className="block text-[10px] font-normal text-ink-700/60">2.5k reviews</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-      </Container>
-    </section>
-  );
-};
+          <span><strong>4.9/5</strong><span className="block text-xs text-white/60">Loved by 2,500+ foodies</span></span>
+          <span className="ml-1 flex gap-0.5 text-sm text-amber-300" aria-label="5 out of 5 stars"><i className="ri-star-fill" /><i className="ri-star-fill" /><i className="ri-star-fill" /><i className="ri-star-fill" /><i className="ri-star-fill" /></span>
+        </div>
+      </div>
+      <div className="hero-art relative mx-auto w-full max-w-[560px]">
+        <div className="hero-art-ring" />
+        <div className="hero-plate">
+          <img src={foodImages.hero} alt="Freshly prepared healthy meal with greens and vegetables" fetchPriority="high" />
+        </div>
+        <div className="hero-float-card hero-float-left"><span className="hero-float-icon"><i className="ri-leaf-line" /></span><span><strong>100% Fresh</strong><small>Locally sourced</small></span></div>
+        <div className="hero-float-card hero-float-right"><span className="hero-float-icon warm"><i className="ri-time-line" /></span><span><strong>30 min</strong><small>Fast delivery</small></span></div>
+      </div>
+    </Container>
+    <a href="#specials" className="hero-scroll" aria-label="Scroll to popular dishes"><i className="ri-arrow-down-line" /></a>
+  </section>
+);
 
 export default Hero;

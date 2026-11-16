@@ -1,103 +1,47 @@
 import { Container } from "@/components/ui/Container";
-import { Placeholder } from "@/components/ui/Placeholder";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { foodImages } from "@/constants/images";
 
-export const Discover = () => {
-  return (
-    <section id="about" className="section bg-white">
-      <Container>
-        <Reveal className="mb-14">
-          <SectionTitle eyebrow="About Us" title="Discover Reshto" />
+const reasons = [
+  { icon: "ri-shopping-basket-2-line", title: "Easy to Order", text: "A few taps are all it takes to bring your favorites to the table." },
+  { icon: "ri-heart-3-line", title: "Delicious Taste", text: "Fresh ingredients and thoughtful recipes in every bite." },
+  { icon: "ri-e-bike-2-line", title: "Fastest Delivery", text: "Hot, fresh meals delivered right to your doorstep." },
+];
+
+export const Discover = () => (
+  <section id="about" className="section bg-white">
+    <Container>
+      <Reveal className="mb-12 flex flex-col items-center text-center">
+        <SectionTitle eyebrow="About Us" title="Choosing Healthy & Fresh Food" />
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-ink-700/65 md:text-base">
+          At Reshto, we prioritize the healthiest and freshest ingredients to make every meal both delicious and nourishing.
+        </p>
+      </Reveal>
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        <Reveal className="about-photo-wrap">
+          <img src={foodImages.restaurant} alt="Warm and welcoming Reshto dining room" loading="lazy" />
+          <div className="about-photo-note"><span className="about-note-icon"><i className="ri-restaurant-2-line" /></span><span><strong>Made fresh, every day</strong><small>Good food brings us together</small></span></div>
         </Reveal>
-
-        {/* Row 1 */}
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <Reveal>
-            <Placeholder
-              tone="amber"
-              icon="ri-restaurant-2-fill"
-              label="Our Restaurant"
-              className="aspect-[4/3] w-full rounded-3xl shadow-card"
-              iconClassName="text-5xl"
-            />
-          </Reveal>
-
-          <Reveal delay={100}>
-            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-soft-danger text-2xl text-brand">
-              <i className="ri-restaurant-line" />
-            </span>
-            <h2 className="mt-4 font-display text-3xl font-bold text-ink md:text-4xl">
-              Our Restaurant
-            </h2>
-            <p className="mt-4 text-ink-700/70">
-              At Reshto, we believe dining is not just about food but also about creating moments.
-              Our restaurant provides a cozy, welcoming ambiance that enhances your dining
-              experience, making every meal special. From casual family dinners to celebrations,
-              Reshto is the perfect spot.
-            </p>
-            <p className="mt-4 text-ink-700/70">
-              We take pride in serving dishes made from the finest ingredients. With our diverse
-              menu of traditional and modern cuisines, we aim to satisfy every palate. Join us to
-              enjoy delightful meals prepared with care and precision.
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "A warm, inviting atmosphere for every occasion.",
-                "Delicious meals crafted from the freshest ingredients.",
-              ].map((point) => (
-                <li key={point} className="flex items-center gap-3 text-ink-700">
-                  <i className="ri-checkbox-circle-line text-xl text-emerald-500" />
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-
-        {/* Row 2 */}
-        <div className="mt-20 grid items-center gap-12 lg:grid-cols-2">
-          <Reveal className="lg:order-2">
-            <Placeholder
-              tone="green"
-              icon="ri-truck-fill"
-              label="Fast & Fresh"
-              className="aspect-[4/3] w-full rounded-3xl shadow-card"
-              iconClassName="text-5xl"
-            />
-          </Reveal>
-
-          <Reveal delay={100} className="lg:order-1">
-            <span className="section-pill">
-              <i className="ri-thumb-up-line" />
-              Made With Love
-            </span>
-            <h2 className="mt-4 font-display text-3xl font-bold text-ink md:text-4xl">
-              Fresh Ingredients, Delivered With Care
-            </h2>
-            <p className="mt-4 text-ink-700/70">
-              From our kitchen to your table, we focus on quality at every step — so every bite feels
-              just as good as it tastes.
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Ensuring fast delivery without compromising on quality.",
-                "Partnering with trusted restaurants for an exceptional dining experience.",
-              ].map((point) => (
-                <li key={point} className="flex items-center gap-3 text-ink-700">
-                  <i className="ri-checkbox-circle-line text-xl text-emerald-500" />
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <a href="#book" className="btn-brand mt-8 px-7! py-3.5! text-base!">
-              Book A Table
-            </a>
-          </Reveal>
-        </div>
-      </Container>
-    </section>
-  );
-};
+        <Reveal delay={100}>
+          <span className="section-pill"><i className="ri-leaf-line" /> Made With Care</span>
+          <h3 className="mt-5 font-display text-3xl font-extrabold leading-tight text-ink md:text-4xl">Good food, <span className="text-brand">good mood</span> — that&apos;s the Reshto way.</h3>
+          <p className="mt-5 leading-7 text-ink-700/65">
+            We believe a great meal begins with ingredients you can feel good about. Our kitchen brings together honest produce, bold flavors, and the warmth of a meal shared with friends.
+          </p>
+          <div className="mt-7 space-y-5">
+            {reasons.map((reason) => (
+              <div key={reason.title} className="about-reason">
+                <span className="about-reason-icon"><i className={reason.icon} /></span>
+                <span><strong>{reason.title}</strong><small>{reason.text}</small></span>
+              </div>
+            ))}
+          </div>
+          <a href="#menu" className="btn-brand mt-8">Explore Our Menu <i className="ri-arrow-right-line" /></a>
+        </Reveal>
+      </div>
+    </Container>
+  </section>
+);
 
 export default Discover;
