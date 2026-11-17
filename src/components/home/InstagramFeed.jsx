@@ -6,7 +6,7 @@ import { foodImages } from "@/constants/images";
 const posts = [foodImages.pizza, foodImages.pasta, foodImages.chicken, foodImages.vegetables, foodImages.dessert, foodImages.sandwich];
 
 export const InstagramFeed = () => (
-  <section className="section bg-[#f8f7f5]">
+  <section className="section bg-[#f8f5ef]">
     <Container>
       <Reveal className="mb-10 flex flex-col items-center text-center">
         <SectionTitle eyebrow="@reshto" title="Instagram Post" />

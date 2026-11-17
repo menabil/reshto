@@ -20,7 +20,7 @@ export const ExploreMenu = () => {
   const items = menu[active] || [];
 
   return (
-    <section id="menu" className="section bg-[#f8f7f5]">
+    <section id="menu" className="section bg-[#f8f5ef]">
       <Container>
         <div className="mb-10 flex flex-col items-center gap-7 text-center">
           <SectionTitle eyebrow="Tasty & Delicious" title="Explore Our Menu" />
