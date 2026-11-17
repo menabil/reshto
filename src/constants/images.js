@@ -18,3 +18,11 @@ export const foodImages = {
     "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=800&q=85",
   ],
 };
+
+export const menuImages = {
+  breakfast: [foodImages.breakfast, foodImages.breakfast, foodImages.breakfast, foodImages.breakfast, foodImages.breakfast, foodImages.breakfast, foodImages.breakfast, foodImages.breakfast],
+  lunch: [foodImages.vegetables, foodImages.sandwich, foodImages.pasta, foodImages.chicken, foodImages.sandwich, foodImages.chicken, foodImages.vegetables, foodImages.vegetables],
+  dinner: [foodImages.steak, foodImages.shrimp, foodImages.chicken, foodImages.vegetables, foodImages.chicken, foodImages.steak, foodImages.shrimp, foodImages.pasta],
+  dessert: [foodImages.dessert, foodImages.dessert, foodImages.dessert, foodImages.dessert, foodImages.dessert, foodImages.dessert, foodImages.dessert, foodImages.dessert],
+  drink: [foodImages.drink, foodImages.drink, foodImages.drink, foodImages.drink, foodImages.drink, foodImages.drink, foodImages.drink, foodImages.drink],
+};

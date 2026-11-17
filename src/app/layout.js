@@ -1,6 +1,7 @@
 import { Manrope, Bricolage_Grotesque } from "next/font/google";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
+import { BackToTop } from "@/components/ui/BackToTop";
 import { siteConfig } from "@/constants/site";
 import "./globals.css";
 
@@ -51,10 +52,11 @@ export default function RootLayout({ children }) {
           href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
         />
       </head>
-      <body className="flex min-h-screen flex-col bg-white text-ink">
+      <body className="flex min-h-screen flex-col bg-[#f7f4ed] text-ink">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <BackToTop />
       </body>
     </html>
   );

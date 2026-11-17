@@ -10,7 +10,7 @@ const reasons = [
 ];
 
 export const Discover = () => (
-  <section id="about" className="section bg-white">
+  <section id="about" className="section bg-[#f7f4ed]">
     <Container>
       <Reveal className="mb-12 flex flex-col items-center text-center">
         <SectionTitle eyebrow="About Us" title="Choosing Healthy & Fresh Food" />

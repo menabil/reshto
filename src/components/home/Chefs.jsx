@@ -7,7 +7,7 @@ import { chefs } from "@/data/data";
 const socials = ["ri-facebook-circle-fill", "ri-instagram-line", "ri-twitter-x-line"];
 
 export const Chefs = () => (
-  <section id="chefs" className="section bg-white">
+  <section id="chefs" className="section bg-[#f7f4ed]">
     <Container>
       <Reveal className="mb-11 flex flex-col items-center text-center">
         <SectionTitle eyebrow="Our Team" title="Meet Our Chefs" />

@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/Container";
 import { foodImages } from "@/constants/images";
+import Link from "next/link";
 
 export const Hero = () => (
   <section id="home" className="hero-section relative overflow-hidden text-white">
@@ -13,7 +14,7 @@ export const Hero = () => (
         </p>
         <div className="mt-8 flex flex-wrap gap-4">
           <a href="#menu" className="btn-brand hero-button">Get Started <i className="ri-arrow-right-line" /></a>
-          <a href="#menu" className="btn-dark hero-button">Order Now</a>
+          <Link href="/order" className="btn-dark hero-button">Order Now</Link>
         </div>
         <div className="hero-rating mt-8 flex items-center gap-3">
           <div className="flex -space-x-2" aria-hidden="true">

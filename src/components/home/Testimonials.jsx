@@ -129,7 +129,7 @@ export const Testimonials = () => {
         >
           {testimonials.map((item, index) => (
             <SwiperSlide key={item.id} className="!h-auto">
-              <article className="flex h-full flex-col rounded-3xl bg-white p-7 shadow-soft">
+              <article className="flex h-full flex-col rounded-3xl bg-[#fffdf8] p-7 shadow-soft">
                 <i className="ri-double-quotes-l text-3xl text-brand/30" />
                 <div className="mt-2 flex gap-0.5 text-amber-400">
                   {Array.from({ length: 5 }).map((_, i) => (
