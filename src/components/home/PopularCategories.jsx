@@ -7,7 +7,7 @@ import { categories } from "@/data/data";
 const categoryImages = [foodImages.pizza, foodImages.pasta, foodImages.chicken, foodImages.steak, foodImages.shrimp, foodImages.vegetables, foodImages.steak, foodImages.sandwich];
 
 export const PopularCategories = () => (
-  <section id="specials" className="section bg-[#f8f7f5]">
+  <section id="specials" className="section bg-[#f8f5ef]">
     <Container>
       <Reveal className="mb-11 flex flex-col items-center text-center">
         <SectionTitle eyebrow="Our Specialties" title="Popular Categories" />

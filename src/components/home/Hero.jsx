@@ -18,7 +18,7 @@ export const Hero = () => (
         <div className="hero-rating mt-8 flex items-center gap-3">
           <div className="flex -space-x-2" aria-hidden="true">
             {foodImages.chefs.slice(0, 3).map((image) => (
-              <img key={image} src={image} alt="" className="h-9 w-9 rounded-full border-2 border-[#202224] object-cover" loading="lazy" />
+              <img key={image} src={image} alt="" className="h-9 w-9 rounded-full border-2 border-[#12231d] object-cover" loading="lazy" />
             ))}
           </div>
           <span><strong>4.9/5</strong><span className="block text-xs text-white/60">Loved by 2,500+ foodies</span></span>
