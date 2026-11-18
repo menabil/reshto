@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 
@@ -10,6 +10,13 @@ const labelClass = "mb-2 block text-sm font-semibold text-white";
 
 export const BookTable = () => {
   const [done, setDone] = useState(false);
+  const [minDate, setMinDate] = useState("");
+
+  useEffect(() => {
+    const now = new Date();
+    const pad = (value) => String(value).padStart(2, "0");
+    setMinDate(`${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,7 +51,7 @@ export const BookTable = () => {
                   <label className={labelClass} htmlFor="people">
                     How Many People
                   </label>
-                  <select id="people" name="people" className={inputClass} defaultValue="">
+                  <select id="people" name="people" className={inputClass} defaultValue="" required>
                     <option value="" disabled>
                       Select People
                     </option>
@@ -60,14 +67,14 @@ export const BookTable = () => {
                   <label className={labelClass} htmlFor="date">
                     Select Booking Date
                   </label>
-                  <input id="date" name="date" type="date" className={inputClass} />
+                  <input id="date" name="date" type="date" min={minDate || undefined} className={inputClass} required />
                 </div>
 
                 <div>
                   <label className={labelClass} htmlFor="time">
                     Select Booking Time
                   </label>
-                  <input id="time" name="time" type="time" className={inputClass} />
+                  <input id="time" name="time" type="time" className={inputClass} required />
                 </div>
 
                 <div>
@@ -80,6 +87,8 @@ export const BookTable = () => {
                     type="text"
                     placeholder="Enter your name"
                     className={inputClass}
+                    minLength={2}
+                    required
                   />
                 </div>
 
@@ -93,6 +102,7 @@ export const BookTable = () => {
                     type="email"
                     placeholder="Enter your email"
                     className={inputClass}
+                    required
                   />
                 </div>
 

@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { WhyChoose } from "@/components/home/WhyChoose";
+import { Chefs } from "@/components/home/Chefs";
+import { BookTable } from "@/components/home/BookTable";
 import { foodImages } from "@/constants/images";
 
 export const metadata = {
@@ -28,6 +31,9 @@ export default function AboutPage() {
           </div>
         </Container>
       </section>
+      <WhyChoose />
+      <Chefs />
+      <BookTable />
     </>
   );
 }

@@ -162,23 +162,23 @@ export const contactInfo = [
 ];
 
 export const footerAboutLinks = [
-  "Our Reaturant",
-  "Investors Relations",
-  "FAQs",
-  "Customer Reviews",
-  "Social Stories",
-  "Careers",
-  "Food & Drinks",
-  "Pizza & Dessert",
+  { label: "Our Restaurant", href: "/about" },
+  { label: "Investors Relations", href: "/about" },
+  { label: "FAQs", href: "/#contact" },
+  { label: "Customer Reviews", href: "/#review" },
+  { label: "Social Stories", href: "/#specials" },
+  { label: "Careers", href: "/about" },
+  { label: "Food & Drinks", href: "/#menu" },
+  { label: "Pizza & Dessert", href: "/#menu" },
 ];
 
 export const footerQuickLinks = [
-  "About Us",
-  "Special Menu",
-  "Online Delivery",
-  "Best Foods",
-  "Featured",
-  "Privacy & Policy",
-  "Payment Services",
-  "Resturant Services",
+  { label: "About Us", href: "/about" },
+  { label: "Special Menu", href: "/#menu" },
+  { label: "Online Delivery", href: "/order" },
+  { label: "Best Foods", href: "/#specials" },
+  { label: "Featured", href: "/#specials" },
+  { label: "Privacy & Policy", href: "/#contact" },
+  { label: "Payment Services", href: "/#contact" },
+  { label: "Restaurant Services", href: "/#about" },
 ];

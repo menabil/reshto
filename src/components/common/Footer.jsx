@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/constants/site";
 import { footerAboutLinks, footerQuickLinks } from "@/data/data";
@@ -36,7 +37,9 @@ export const Footer = () => {
                 <a
                   key={s.label}
                   href={s.href}
-                  aria-label={s.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Reshto on ${s.label}`}
                   className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-brand hover:bg-brand hover:text-white"
                 >
                   <i className={`${s.icon} text-lg`} />
@@ -49,10 +52,10 @@ export const Footer = () => {
             <h5 className="font-display text-base font-bold">About Us</h5>
             <ul className="mt-4 space-y-2.5">
               {footerAboutLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm text-white/60 transition hover:text-brand">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link href={link.href} className="text-sm text-white/60 transition hover:text-brand">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -62,10 +65,10 @@ export const Footer = () => {
             <h5 className="font-display text-base font-bold">Quick Links</h5>
             <ul className="mt-4 space-y-2.5">
               {footerQuickLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm text-white/60 transition hover:text-brand">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link href={link.href} className="text-sm text-white/60 transition hover:text-brand">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>

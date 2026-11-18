@@ -26,11 +26,11 @@ export const siteConfig = {
     { label: "Contact Us", href: "#contact" },
   ],
   links: {
-    facebook: "#",
-    twitter: "#",
-    instagram: "#",
-    linkedin: "#",
-    youtube: "#",
+    facebook: "https://www.facebook.com/reshto",
+    twitter: "https://twitter.com/reshto",
+    instagram: "https://www.instagram.com/reshto",
+    linkedin: "https://www.linkedin.com/company/reshto",
+    youtube: "https://www.youtube.com/@reshto",
   },
   contact: {
     phone: "+1 415-555-1234",

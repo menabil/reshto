@@ -11,6 +11,7 @@ export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const homeHref = pathname === "/" ? "#home" : "/#home";
 
   useEffect(() => {
@@ -20,6 +21,26 @@ export const Header = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const sections = siteConfig.navLinks
+      .map((link) => document.getElementById(link.href.replace("#", "")))
+      .filter(Boolean);
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [pathname]);
+
   return (
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
       <Container className="header-inner">
@@ -28,8 +49,14 @@ export const Header = () => {
           <span>{siteConfig.name}<small>FRESH &amp; DELICIOUS</small></span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
-          {siteConfig.navLinks.map((link, index) => (
-            <Link key={link.label} href={pathname === "/" ? link.href : `/${link.href}`} className={index === 0 ? "active" : ""}>{link.label}</Link>
+          {siteConfig.navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={pathname === "/" ? link.href : `/${link.href}`}
+              className={pathname === "/" && link.href === `#${activeSection}` ? "active" : ""}
+            >
+              {link.label}
+            </Link>
           ))}
         </nav>
         <div className="header-actions">
