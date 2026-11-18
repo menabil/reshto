@@ -1,29 +1,52 @@
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { foodImages } from "@/constants/images";
-import { siteConfig } from "@/constants/site";
 import { chefs } from "@/data/data";
 
-const socials = [
-  { icon: "ri-facebook-circle-fill", label: "Facebook", href: siteConfig.links.facebook },
-  { icon: "ri-instagram-line", label: "Instagram", href: siteConfig.links.instagram },
-  { icon: "ri-twitter-x-line", label: "Twitter", href: siteConfig.links.twitter },
-];
+const socials = ["ri-facebook-circle-fill", "ri-instagram-line", "ri-twitter-x-line"];
 
 export const Chefs = () => (
-  <section id="chefs" className="section bg-[#f7f4ed]">
+  <section id="chefs" className="section bg-[#f7f4ed] transition-colors duration-300 dark:bg-[#0c1612]">
     <Container>
       <Reveal className="mb-11 flex flex-col items-center text-center">
         <SectionTitle eyebrow="Our Team" title="Meet Our Chefs" />
-        <p className="mt-4 max-w-xl text-sm leading-7 text-ink-700/65 md:text-base">The creative hands and warm hearts behind every plate.</p>
+        <p className="mt-4 max-w-xl text-sm leading-7 text-ink-700/65 dark:text-white/60 md:text-base">
+          The creative hands and warm hearts behind every plate.
+        </p>
       </Reveal>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {chefs.map((chef, index) => (
           <Reveal key={chef.id} delay={index * 55}>
-            <article className="chef-card">
-              <div className="chef-image"><img src={foodImages.chefs[index]} alt={chef.chefName} loading="lazy" /><div className="chef-socials">{socials.map((social) => <a key={social.icon} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={`${chef.chefName} on ${social.label}`}><i className={social.icon} /></a>)}</div></div>
-              <div className="p-5 text-center"><h3 className="font-display text-lg font-bold text-ink">{chef.chefName}</h3><p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-brand">{chef.chefInfo}</p></div>
+            <article className="chef-card dark:bg-[#15241d] dark:border-white/10">
+              <div className="chef-image">
+                <SafeImage
+                  src={foodImages.chefs[index]}
+                  alt={chef.chefName}
+                  className="w-full h-full object-cover"
+                />
+                <div className="chef-socials">
+                  {socials.map((icon) => (
+                    <a
+                      key={icon}
+                      href="#contact"
+                      aria-label={`${chef.chefName} social profile`}
+                      className="dark:bg-[#1a2f26] dark:text-white dark:hover:bg-brand"
+                    >
+                      <i className={icon} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <div className="p-5 text-center">
+                <h3 className="font-display text-lg font-bold text-ink dark:text-white">
+                  {chef.chefName}
+                </h3>
+                <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-brand dark:text-brand-300">
+                  {chef.chefInfo}
+                </p>
+              </div>
             </article>
           </Reveal>
         ))}

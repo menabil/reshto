@@ -1,24 +1,46 @@
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { foodImages } from "@/constants/images";
-import { siteConfig } from "@/constants/site";
 
-const posts = [foodImages.pizza, foodImages.pasta, foodImages.chicken, foodImages.vegetables, foodImages.dessert, foodImages.sandwich];
+const posts = [
+  foodImages.pizza,
+  foodImages.pasta,
+  foodImages.chicken,
+  foodImages.vegetables,
+  foodImages.dessert,
+  foodImages.burger,
+];
 
 export const InstagramFeed = () => (
-  <section className="section bg-[#f8f5ef]">
+  <section className="section bg-[#f8f5ef] transition-colors duration-300 dark:bg-[#0c1612]">
     <Container>
       <Reveal className="mb-10 flex flex-col items-center text-center">
         <SectionTitle eyebrow="@reshto" title="Instagram Post" />
-        <a href={siteConfig.links.instagram} target="_blank" rel="noopener noreferrer" className="mt-3 text-sm font-semibold text-brand">Follow our kitchen <i className="ri-arrow-right-up-line" /></a>
+        <a
+          href="https://www.instagram.com/reshto"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 text-sm font-semibold text-brand dark:text-brand-300 hover:underline inline-flex items-center gap-1"
+        >
+          Follow our kitchen <i className="ri-arrow-right-up-line" />
+        </a>
       </Reveal>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {posts.map((image, index) => (
           <Reveal key={`${image}-${index}`} delay={index * 35}>
-            <a href={siteConfig.links.instagram} target="_blank" rel="noopener noreferrer" className="instagram-tile" aria-label={`View Reshto food post ${index + 1} on Instagram`}>
-              <img src={image} alt="A freshly prepared Reshto dish" loading="lazy" />
-              <span><i className="ri-instagram-line" /></span>
+            <a
+              href="https://www.instagram.com/reshto"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="instagram-tile"
+              aria-label={`View Reshto food post ${index + 1}`}
+            >
+              <SafeImage src={image} alt="A freshly prepared Reshto dish" />
+              <span>
+                <i className="ri-instagram-line" />
+              </span>
             </a>
           </Reveal>
         ))}
