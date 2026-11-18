@@ -2,12 +2,17 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { foodImages } from "@/constants/images";
+import { siteConfig } from "@/constants/site";
 import { chefs } from "@/data/data";
 
-const socials = ["ri-facebook-circle-fill", "ri-instagram-line", "ri-twitter-x-line"];
+const socials = [
+  { icon: "ri-facebook-circle-fill", label: "Facebook", href: siteConfig.links.facebook },
+  { icon: "ri-instagram-line", label: "Instagram", href: siteConfig.links.instagram },
+  { icon: "ri-twitter-x-line", label: "Twitter", href: siteConfig.links.twitter },
+];
 
 export const Chefs = () => (
-  <section id="chefs" className="section bg-white">
+  <section id="chefs" className="section bg-[#f7f4ed]">
     <Container>
       <Reveal className="mb-11 flex flex-col items-center text-center">
         <SectionTitle eyebrow="Our Team" title="Meet Our Chefs" />
@@ -17,7 +22,7 @@ export const Chefs = () => (
         {chefs.map((chef, index) => (
           <Reveal key={chef.id} delay={index * 55}>
             <article className="chef-card">
-              <div className="chef-image"><img src={foodImages.chefs[index]} alt={chef.chefName} loading="lazy" /><div className="chef-socials">{socials.map((icon) => <a key={icon} href="#contact" aria-label={`${chef.chefName} social profile`}><i className={icon} /></a>)}</div></div>
+              <div className="chef-image"><img src={foodImages.chefs[index]} alt={chef.chefName} loading="lazy" /><div className="chef-socials">{socials.map((social) => <a key={social.icon} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={`${chef.chefName} on ${social.label}`}><i className={social.icon} /></a>)}</div></div>
               <div className="p-5 text-center"><h3 className="font-display text-lg font-bold text-ink">{chef.chefName}</h3><p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-brand">{chef.chefInfo}</p></div>
             </article>
           </Reveal>

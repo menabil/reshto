@@ -7,11 +7,11 @@ import { siteConfig } from "@/constants/site";
 const LAST_MODIFIED = "2026-01-01";
 
 export default function sitemap() {
-  const routes = ["", "/about"].map((route) => ({
+  const routes = ["", "/about", "/order"].map((route) => ({
     url: `${siteConfig.url}${route}`,
     lastModified: LAST_MODIFIED,
     changeFrequency: "weekly",
-    priority: route === "" ? 1.0 : 0.8,
+    priority: route === "" ? 1.0 : route === "/order" ? 0.9 : 0.8,
   }));
 
   return routes;

@@ -1,3 +1,11 @@
+"use client";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+
+// Swiper এর প্রয়োজনীয় CSS ফাইলগুলো
+import "swiper/css";
+import "swiper/css/pagination";
+
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
@@ -29,35 +37,65 @@ export const Testimonials = () => {
           <SectionTitle eyebrow="Testimonials" title="Food Lover Feedback" />
         </Reveal>
 
-        <div className="-mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-4">
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          spaceBetween={24}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{
+            delay: 3500,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          pagination={{
+            clickable: true,
+          }}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+          }}
+          className="pb-12!" // নিচের পেজিনেশন ডটের জন্য জায়গা
+        >
           {testimonials.map((item, index) => (
-            <Reveal key={item.id} delay={index * 60} className="w-[85%] shrink-0 snap-start sm:w-[46%] lg:w-[31.5%]">
-              <article className="flex h-full flex-col rounded-3xl bg-white p-7 shadow-soft">
+            <SwiperSlide key={item.id} className="h-auto!">
+              <article className="flex h-full flex-col rounded-3xl bg-[#fffdf8] p-7 shadow-soft">
                 <i className="ri-double-quotes-l text-3xl text-brand/30" />
                 <div className="mt-2 flex gap-0.5 text-amber-400">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <i key={i} className="ri-star-fill text-sm" />
                   ))}
                 </div>
-                <h5 className="mt-3 font-display text-lg font-bold text-ink">{item.reviewHL}</h5>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-700/70">{item.review}</p>
+                <h5 className="mt-3 font-display text-lg font-bold text-ink">
+                  {item.reviewHL}
+                </h5>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-700/70">
+                  {item.review}
+                </p>
                 <div className="mt-6 flex items-center gap-3 border-t border-ink/5 pt-5">
                   <span
-                    className={`grid h-12 w-12 place-items-center rounded-full bg-linear-to-br text-sm font-bold text-white ${
+                    className={`grid h-12 w-12 shrink-0 place-items-center rounded-full bg-linear-to-br text-sm font-bold text-white ${
                       avatarTones[index % avatarTones.length]
                     }`}
                   >
                     {initials(item.clientName)}
                   </span>
                   <span>
-                    <span className="block font-semibold text-ink">{item.clientName}</span>
-                    <span className="block text-xs text-ink-700/60">{item.clientInfo}</span>
+                    <span className="block font-semibold text-ink">
+                      {item.clientName}
+                    </span>
+                    <span className="block text-xs text-ink-700/60">
+                      {item.clientInfo}
+                    </span>
                   </span>
                 </div>
               </article>
-            </Reveal>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </Container>
     </section>
   );

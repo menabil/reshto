@@ -1,4 +1,8 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { WhyChoose } from "@/components/home/WhyChoose";
+import { Chefs } from "@/components/home/Chefs";
+import { BookTable } from "@/components/home/BookTable";
 import { foodImages } from "@/constants/images";
 
 export const metadata = {
@@ -16,17 +20,20 @@ export default function AboutPage() {
           <p>Fresh ingredients, thoughtful cooking, and a table that always has room for one more.</p>
         </Container>
       </section>
-      <section className="section bg-white">
+      <section className="section bg-[#f7f4ed]">
         <Container className="grid items-center gap-12 lg:grid-cols-2">
           <div className="about-photo-wrap"><img src={foodImages.restaurant} alt="A warmly lit restaurant dining room" loading="lazy" /></div>
           <div>
             <span className="section-pill"><i className="ri-leaf-line" /> Our Philosophy</span>
             <h2 className="mt-5 font-display text-3xl font-extrabold leading-tight text-ink md:text-4xl">A little care makes every plate special.</h2>
             <p className="mt-5 leading-7 text-ink-700/65">At Reshto, we bring together fresh produce, comforting favorites, and the kind of hospitality that makes you want to stay a little longer. Every dish starts with quality ingredients and ends with a reason to come back.</p>
-            <a href="/#menu" className="btn-brand mt-8">Explore the Menu <i className="ri-arrow-right-line" /></a>
+            <Link href="/#menu" className="btn-brand mt-8">Explore the Menu <i className="ri-arrow-right-line" /></Link>
           </div>
         </Container>
       </section>
+      <WhyChoose />
+      <Chefs />
+      <BookTable />
     </>
   );
 }
