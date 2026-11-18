@@ -19,11 +19,12 @@ export const siteConfig = {
     "fresh meals",
   ],
   navLinks: [
-    { label: "Home", href: "#home" },
-    { label: "About Us", href: "#about" },
-    { label: "Menu", href: "#menu" },
-    { label: "Chefs", href: "#chefs" },
-    { label: "Contact Us", href: "#contact" },
+    { label: "Home", href: "#home", targetId: "home" },
+    { label: "About Us", href: "#about", targetId: "about" },
+    { label: "Menu", href: "#menu", targetId: "menu" },
+    { label: "Book Table", href: "#book", targetId: "book" },
+    { label: "Chefs", href: "#chefs", targetId: "chefs" },
+    { label: "Contact", href: "#contact", targetId: "contact" },
   ],
   links: {
     facebook: "https://www.facebook.com/reshto",

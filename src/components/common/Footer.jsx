@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { NewsletterForm } from "@/components/common/NewsletterForm";
 import { siteConfig } from "@/constants/site";
 import { footerAboutLinks, footerQuickLinks } from "@/data/data";
 
@@ -13,7 +13,7 @@ const socials = [
 
 export const Footer = () => {
   return (
-    <footer id="contact" className="site-footer relative overflow-hidden bg-ink text-white">
+    <footer id="contact" className="site-footer relative overflow-hidden bg-ink text-white dark:bg-[#070e0b]">
       <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
 
@@ -27,7 +27,7 @@ export const Footer = () => {
               {siteConfig.name}
             </a>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
-              At Reshto, we believe that food is more than just a meal&mdash;it&apos;s an experience. Our
+              At Reshto, we believe that food is more than just a meal &mdash; it&apos;s an experience. Our
               passion lies in crafting culinary delights that bring people together, creating memories
               that linger long after the last bite.
             </p>
@@ -39,7 +39,7 @@ export const Footer = () => {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Reshto on ${s.label}`}
+                  aria-label={s.label}
                   className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-brand hover:bg-brand hover:text-white"
                 >
                   <i className={`${s.icon} text-lg`} />
@@ -52,10 +52,10 @@ export const Footer = () => {
             <h5 className="font-display text-base font-bold">About Us</h5>
             <ul className="mt-4 space-y-2.5">
               {footerAboutLinks.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-sm text-white/60 transition hover:text-brand">
-                    {link.label}
-                  </Link>
+                <li key={link}>
+                  <a href="#about" className="text-sm text-white/60 transition hover:text-brand">
+                    {link}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -65,18 +65,28 @@ export const Footer = () => {
             <h5 className="font-display text-base font-bold">Quick Links</h5>
             <ul className="mt-4 space-y-2.5">
               {footerQuickLinks.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-sm text-white/60 transition hover:text-brand">
-                    {link.label}
-                  </Link>
+                <li key={link}>
+                  <a href="#menu" className="text-sm text-white/60 transition hover:text-brand">
+                    {link}
+                  </a>
                 </li>
               ))}
+              <li>
+                <a href="/dashboard" className="text-sm text-amber-300/80 transition hover:text-amber-200">
+                  User Dashboard
+                </a>
+              </li>
+              <li>
+                <a href="/admin" className="text-sm text-amber-300/80 transition hover:text-amber-200">
+                  Admin Dashboard
+                </a>
+              </li>
             </ul>
           </div>
 
           <div className="lg:col-span-4">
             <h5 className="font-display text-base font-bold">Reshto Info</h5>
-            <a href="#" className="mt-4 block text-sm text-white/60 transition hover:text-brand">
+            <a href="#contact" className="mt-4 block text-sm text-white/60 transition hover:text-brand">
               {siteConfig.contact.address}
             </a>
             <p className="mt-4 text-sm text-white/60">{siteConfig.contact.hours[0]}</p>
@@ -93,17 +103,7 @@ export const Footer = () => {
               </a>
             </div>
 
-            <form className="mt-5 flex items-center gap-2 rounded-full bg-white/10 p-1 pl-4">
-              <i className="ri-mail-send-line text-brand" />
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="w-full bg-transparent py-2 text-sm text-white outline-none placeholder:text-white/40"
-              />
-              <button type="submit" className="btn-brand px-5! py-2.5! text-xs!">
-                Subscribe
-              </button>
-            </form>
+            <NewsletterForm />
           </div>
         </div>
 
@@ -111,13 +111,18 @@ export const Footer = () => {
           <p>
             Copyright &copy; {siteConfig.copyrightYear}{" "}
             <a href="#" className="font-medium text-brand">
-              Mantraksh Devs
+              Reshto Restaurant
             </a>
             . Crafted with <i className="ri-heart-fill text-brand" />
           </p>
-          <a href="#" className="transition hover:text-brand">
-            Term Condition &amp; Policy
-          </a>
+          <div className="flex gap-4">
+            <a href="/dashboard" className="transition hover:text-brand">
+              My Orders
+            </a>
+            <a href="/admin" className="transition hover:text-brand">
+              Admin Portal
+            </a>
+          </div>
         </div>
       </Container>
     </footer>

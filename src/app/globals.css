@@ -101,7 +101,7 @@
 .hero-float-icon.warm { background: #fff1e3; color: #d37b24; }
 .hero-float-left { top: 15%; left: -1%; }
 .hero-float-right { right: 0; bottom: 16%; animation-delay: 1.2s; }
-.hero-scroll { position: absolute; bottom: 22px; left: 50%; display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid rgba(223,193,138,.4); border-radius: 50%; color: #e2c58f; transform: translateX(-50%); }
+.hero-scroll { position: absolute; z-index: 20; bottom: 22px; left: 50%; display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid rgba(223,193,138,.4); border-radius: 50%; color: #e2c58f; transform: translateX(-50%); }
 .subpage-hero { position: relative; overflow: hidden; padding: 150px 0 78px; background: #12231d; color: white; }
 .subpage-hero::before { position: absolute; inset: 0; background: radial-gradient(ellipse at 10% 20%, rgba(190,145,75,.2), transparent 40%), radial-gradient(ellipse at 90% 95%, rgba(85,121,97,.24), transparent 42%), linear-gradient(115deg, #12231d, #1b3027); content: ""; }
 .subpage-hero > div { position: relative; }
@@ -294,3 +294,125 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Dark Mode Overrides */
+html.dark body {
+  background-color: #0c1612;
+  color: #e5ede8;
+  background-image: radial-gradient(ellipse at 12% 0%, rgba(196, 166, 114, 0.05), transparent 34%),
+    radial-gradient(ellipse at 92% 70%, rgba(74, 101, 76, 0.03), transparent 32%);
+}
+
+html.dark .site-header.is-scrolled {
+  background: rgba(10, 19, 15, 0.96);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+html.dark .food-card {
+  background: #14231b;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 9px 30px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .menu-tabs {
+  background: #14231b;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .menu-tab {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+html.dark .menu-search {
+  background: #14231b;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-brand-300);
+}
+
+html.dark .menu-search input {
+  color: #ffffff;
+}
+
+html.dark .menu-item {
+  background: #14231b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .chef-card {
+  background: #14231b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .order-section {
+  background: #0c1612;
+}
+
+html.dark .order-card {
+  background: #14231b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .order-summary {
+  background: rgba(20, 35, 27, 0.96);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .order-category {
+  background: #14231b;
+  color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .quantity-control {
+  background: #1c3025;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .quantity-control button {
+  background: #253f32;
+  color: #ffffff;
+}
+
+html.dark .quantity-control span {
+  color: #ffffff;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  border-color: #0c1612;
+}
+
+/* Swiper Testimonials Theme Pagination Dots */
+.swiper-pagination {
+  bottom: 6px !important;
+}
+
+.swiper-pagination-bullet {
+  width: 10px !important;
+  height: 10px !important;
+  background-color: var(--color-brand) !important;
+  opacity: 0.28 !important;
+  transition: all 0.35s ease !important;
+  border-radius: 999px !important;
+  margin: 0 4px !important;
+}
+
+.swiper-pagination-bullet-active {
+  width: 32px !important;
+  border-radius: 999px !important;
+  opacity: 1 !important;
+  background: linear-gradient(115deg, #58765b, #263f32) !important;
+  box-shadow: 0 4px 14px rgba(38, 63, 50, 0.45) !important;
+}
+
+html.dark .swiper-pagination-bullet {
+  background-color: #d3ad70 !important;
+  opacity: 0.35 !important;
+}
+
+html.dark .swiper-pagination-bullet-active {
+  background: linear-gradient(115deg, #d3ad70, #a76f30) !important;
+  opacity: 1 !important;
+  box-shadow: 0 4px 14px rgba(167, 111, 48, 0.5) !important;
+}
+
+
