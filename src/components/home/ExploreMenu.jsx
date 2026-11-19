@@ -20,13 +20,13 @@ export const ExploreMenu = () => {
   );
 
   return (
-    <section id="menu" className="section bg-[#f4f0e7] transition-colors duration-300 dark:bg-[#111f18]">
+    <section id="menu" className="section bg-[#f2ece1] transition-colors duration-300 dark:bg-[#171614]">
       <Container>
         <div className="mb-10 flex flex-col items-center gap-6 text-center">
           <SectionTitle eyebrow="Tasty & Delicious" title="Explore Our Menu" />
 
           {/* Search bar */}
-          <div className="menu-search dark:bg-[#182a21] dark:border-white/10 dark:text-white">
+          <div className="menu-search dark:bg-[#1e1c1a] dark:border-white/10 dark:text-white">
             <i className="ri-search-line" aria-hidden="true" />
             <input
               type="search"
@@ -50,7 +50,7 @@ export const ExploreMenu = () => {
 
           {/* Category Tabs */}
           <div
-            className="menu-tabs dark:bg-[#182a21] dark:border-white/10"
+            className="menu-tabs dark:bg-[#1e1c1a] dark:border-white/10"
             role="group"
             aria-label="Filter menu by meal"
           >
@@ -78,7 +78,7 @@ export const ExploreMenu = () => {
           {items.map((item) => (
             <article
               key={`${activeTab}-${item.id}`}
-              className="menu-item dark:bg-[#15241d] dark:border-white/10"
+              className="menu-item dark:bg-[#1e1c1a] dark:border-white/10"
             >
               <SafeImage
                 className="menu-item-image rounded-xl"
@@ -135,7 +135,7 @@ export const ExploreMenu = () => {
         <div className="mt-10 text-center">
           <a
             href="/order"
-            className="btn-outline dark:bg-[#182a21] dark:text-white dark:border-white/15 dark:hover:border-brand"
+            className="btn-outline dark:bg-[#1e1c1a] dark:text-white dark:border-white/15 dark:hover:border-brand"
           >
             Order from the Full Menu <i className="ri-arrow-right-line" />
           </a>

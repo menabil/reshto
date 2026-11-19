@@ -14,7 +14,7 @@ const posts = [
 ];
 
 export const InstagramFeed = () => (
-  <section className="section bg-[#f8f5ef] transition-colors duration-300 dark:bg-[#0c1612]">
+  <section className="section bg-[#f7f3eb] transition-colors duration-300 dark:bg-[#0f0e0d]">
     <Container>
       <Reveal className="mb-10 flex flex-col items-center text-center">
         <SectionTitle eyebrow="@reshto" title="Instagram Post" />

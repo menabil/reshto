@@ -20,7 +20,7 @@ export default function AboutPage() {
           <p>Fresh ingredients, thoughtful cooking, and a table that always has room for one more.</p>
         </Container>
       </section>
-      <section className="section bg-[#f7f4ed]">
+      <section className="section bg-soft-primary">
         <Container className="grid items-center gap-12 lg:grid-cols-2">
           <div className="about-photo-wrap"><img src={foodImages.restaurant} alt="A warmly lit restaurant dining room" loading="lazy" /></div>
           <div>

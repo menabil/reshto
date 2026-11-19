@@ -13,15 +13,15 @@ export const VideoCta = () => {
     <section className="story-section">
       <Container className="grid items-center gap-12 py-16 md:py-20 lg:grid-cols-[.95fr_1.05fr]">
         <div className="story-copy">
-          <span className="section-pill"><i className="ri-play-circle-line" /> Our Story</span>
-          <h2 className="mt-5 font-display text-3xl font-extrabold leading-tight text-white md:text-5xl">Food is not just eating energy. <span>It&apos;s an experience.</span></h2>
-          <p className="mt-5 max-w-lg leading-7 text-white/65">At Reshto, every dish is made with passion. From the first aroma to the last bite, we want your meal to feel like a moment worth sharing.</p>
-          <button type="button" onClick={() => setOpen(true)} className="story-link mt-7">Watch Our Story <i className="ri-arrow-right-line" /></button>
+          <span className="section-pill"><i className="ri-play-circle-line" /> The Reshto feeling</span>
+          <h2 className="mt-5 font-display text-3xl font-extrabold leading-tight text-white md:text-5xl">A table set for <span>moments that matter.</span></h2>
+          <p className="mt-5 max-w-lg leading-7 text-white/65">From the first welcome to the final pour, we make space for the kind of evening you wish could last a little longer.</p>
+          <button type="button" onClick={() => setOpen(true)} className="story-link mt-7">Step inside <i className="ri-arrow-right-line" /></button>
         </div>
         <div className="story-image-wrap">
           <img src={foodImages.restaurant} alt="Inside the Reshto dining room" loading="lazy" />
           <button type="button" onClick={() => setOpen(true)} className="story-play" aria-label="Play Reshto restaurant story"><i className="ri-play-fill" /></button>
-          <span className="story-image-caption"><i className="ri-map-pin-2-fill" /> Fresh from our kitchen, made for your table</span>
+          <span className="story-image-caption"><i className="ri-map-pin-2-fill" /> An evening made for lingering</span>
         </div>
       </Container>
       {open ? (

@@ -5,6 +5,7 @@ import { WhyChoose } from "@/components/home/WhyChoose";
 import { ExploreMenu } from "@/components/home/ExploreMenu";
 import { VideoCta } from "@/components/home/VideoCta";
 import { BookTable } from "@/components/home/BookTable";
+import { Gallery } from "@/components/home/Gallery";
 import { Chefs } from "@/components/home/Chefs";
 import { Testimonials } from "@/components/home/Testimonials";
 import { InstagramFeed } from "@/components/home/InstagramFeed";
@@ -12,14 +13,15 @@ import { InstagramFeed } from "@/components/home/InstagramFeed";
 export const HomeLanding = () => (
   <>
     <Hero />
-    <PopularCategories />
     <Discover />
-    <WhyChoose />
+    <PopularCategories />
     <ExploreMenu />
+    <WhyChoose />
     <VideoCta />
-    <BookTable />
+    <Gallery />
     <Chefs />
     <Testimonials />
+    <BookTable />
     <InstagramFeed />
   </>
 );

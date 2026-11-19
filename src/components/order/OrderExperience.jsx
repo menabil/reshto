@@ -75,7 +75,7 @@ export const OrderExperience = ({ initialSearch }) => {
         </Container>
       </section>
 
-      <section className="order-section transition-colors duration-300 dark:bg-[#0c1612]">
+      <section className="order-section transition-colors duration-300 dark:bg-[#0f0e0d]">
         <Container>
           <div className="order-intro">
             <div>
@@ -100,7 +100,7 @@ export const OrderExperience = ({ initialSearch }) => {
           <div className="order-layout">
             <div className="order-catalog">
               {/* Search */}
-              <div className="menu-search order-search dark:bg-[#15241d] dark:border-white/10">
+              <div className="menu-search order-search dark:bg-[#1e1c1a] dark:border-white/10">
                 <i className="ri-search-line" aria-hidden="true" />
                 <input
                   type="search"
@@ -133,7 +133,7 @@ export const OrderExperience = ({ initialSearch }) => {
                   className={
                     activeCategory === "all"
                       ? "order-category active"
-                      : "order-category dark:bg-[#15241d] dark:text-white/70 dark:border-white/10"
+                      : "order-category dark:bg-[#1e1c1a] dark:text-white/70 dark:border-white/10"
                   }
                   aria-pressed={activeCategory === "all"}
                   onClick={() => setActiveCategory("all")}
@@ -147,7 +147,7 @@ export const OrderExperience = ({ initialSearch }) => {
                     className={
                       activeCategory === tab.key
                         ? "order-category active"
-                        : "order-category dark:bg-[#15241d] dark:text-white/70 dark:border-white/10"
+                        : "order-category dark:bg-[#1e1c1a] dark:text-white/70 dark:border-white/10"
                     }
                     aria-pressed={activeCategory === tab.key}
                     onClick={() => setActiveCategory(tab.key)}
@@ -166,7 +166,7 @@ export const OrderExperience = ({ initialSearch }) => {
               <div className="order-menu-grid">
                 {filteredItems.map((item) => (
                   <article
-                    className="order-card dark:bg-[#15241d] dark:border-white/10"
+                    className="order-card dark:bg-[#1e1c1a] dark:border-white/10"
                     key={item.cartId}
                   >
                     <SafeImage
@@ -186,14 +186,14 @@ export const OrderExperience = ({ initialSearch }) => {
                         </strong>
                         {quantities[item.cartId] ? (
                           <div
-                            className="quantity-control dark:bg-[#1a2f26] dark:border-white/10"
+                            className="quantity-control dark:bg-[#0f0e0d] dark:border-white/10"
                             aria-label={`${item.menuItemName} quantity`}
                           >
                             <button
                               type="button"
                               onClick={() => changeQuantity(item.cartId, -1)}
                               aria-label={`Remove one ${item.menuItemName}`}
-                              className="dark:bg-[#253f33] dark:text-white"
+                              className="dark:bg-[#2c2925] dark:text-white"
                             >
                               <i className="ri-subtract-line" aria-hidden="true" />
                             </button>
@@ -204,7 +204,7 @@ export const OrderExperience = ({ initialSearch }) => {
                               type="button"
                               onClick={() => changeQuantity(item.cartId, 1)}
                               aria-label={`Add one ${item.menuItemName}`}
-                              className="dark:bg-[#253f33] dark:text-white"
+                              className="dark:bg-[#2c2925] dark:text-white"
                             >
                               <i className="ri-add-line" aria-hidden="true" />
                             </button>
@@ -212,7 +212,7 @@ export const OrderExperience = ({ initialSearch }) => {
                         ) : (
                           <button
                             type="button"
-                            className="order-add dark:bg-white/10 dark:text-white dark:hover:bg-brand"
+                            className="order-add dark:bg-white/10 dark:text-white dark:hover:bg-brand dark:hover:text-[#171512]"
                             onClick={() => changeQuantity(item.cartId, 1)}
                             aria-label={`Add ${item.menuItemName} to order`}
                           >
@@ -236,7 +236,7 @@ export const OrderExperience = ({ initialSearch }) => {
 
             {/* Sidebar Summary */}
             <aside
-              className="order-summary dark:bg-[#15241d]/95 dark:border-white/10"
+              className="order-summary dark:bg-[#1e1c1a]/95 dark:border-white/10"
               aria-label="Your order"
             >
               <div className="order-summary-heading dark:border-white/10">
@@ -264,14 +264,14 @@ export const OrderExperience = ({ initialSearch }) => {
                         </small>
                       </span>
                       <div
-                        className="quantity-control compact dark:bg-[#1a2f26] dark:border-white/10"
+                        className="quantity-control compact dark:bg-[#0f0e0d] dark:border-white/10"
                         aria-label={`${item.menuItemName} quantity`}
                       >
                         <button
                           type="button"
                           onClick={() => changeQuantity(item.cartId, -1)}
                           aria-label={`Remove one ${item.menuItemName}`}
-                          className="dark:bg-[#253f33] dark:text-white"
+                          className="dark:bg-[#2c2925] dark:text-white"
                         >
                           <i className="ri-subtract-line" aria-hidden="true" />
                         </button>
@@ -282,7 +282,7 @@ export const OrderExperience = ({ initialSearch }) => {
                           type="button"
                           onClick={() => changeQuantity(item.cartId, 1)}
                           aria-label={`Add one ${item.menuItemName}`}
-                          className="dark:bg-[#253f33] dark:text-white"
+                          className="dark:bg-[#2c2925] dark:text-white"
                         >
                           <i className="ri-add-line" aria-hidden="true" />
                         </button>

@@ -114,7 +114,7 @@ export const Header = () => {
       <header
         className={`site-header transition-all duration-300 ${
           scrolled
-            ? "is-scrolled shadow-lg backdrop-blur-md dark:bg-[#0c1612]/95"
+            ? "is-scrolled shadow-lg backdrop-blur-md dark:bg-[#0f0e0d]/95"
             : "bg-transparent"
         }`}
       >
@@ -181,7 +181,7 @@ export const Header = () => {
                     className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 p-1 pr-2.5 text-white transition hover:bg-white/20"
                     aria-label="User menu"
                   >
-                    <span className="grid h-7 w-7 place-items-center rounded-full bg-brand text-xs font-bold text-white uppercase">
+                    <span className="grid h-7 w-7 place-items-center rounded-full bg-brand text-xs font-bold text-white uppercase dark:text-[#171512]">
                       {user.name ? user.name[0] : "U"}
                     </span>
                     <span className="max-w-[70px] truncate text-xs font-semibold">
@@ -192,11 +192,11 @@ export const Header = () => {
 
                   {/* Dropdown Menu */}
                   {userMenuOpen ? (
-                    <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-white/15 bg-[#12231d] p-2 text-white shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-[#0d1813] z-50">
-                      <div className="border-b border-white/10 px-3 py-2">
-                        <p className="font-bold text-xs truncate">{user.name}</p>
-                        <p className="text-[11px] text-white/60 truncate">{user.email}</p>
-                        <span className="mt-1 inline-block rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-bold text-amber-300">
+                    <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-ink/10 bg-[var(--theme-surface)] p-2 text-ink shadow-2xl backdrop-blur-xl dark:border-white/10 z-50">
+                      <div className="border-b border-ink/10 px-3 py-2 dark:border-white/10">
+                        <p className="truncate text-xs font-bold">{user.name}</p>
+                        <p className="truncate text-[11px] text-ink-700">{user.email}</p>
+                        <span className="mt-1 inline-block rounded-md bg-soft-primary px-2 py-0.5 text-[10px] font-bold text-brand">
                           {user.role === "admin" ? "👑 Admin" : "👤 Customer"}
                         </span>
                       </div>
@@ -205,7 +205,7 @@ export const Header = () => {
                         <Link
                           href="/dashboard"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-white/90 hover:bg-white/10"
+                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-ink hover:bg-soft-primary"
                         >
                           <i className="ri-user-smile-line text-sm" /> User Dashboard
                         </Link>
@@ -213,21 +213,21 @@ export const Header = () => {
                           <Link
                             href="/admin"
                             onClick={() => setUserMenuOpen(false)}
-                            className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-amber-300 hover:bg-white/10"
+                            className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-brand hover:bg-soft-primary"
                           >
                             <i className="ri-dashboard-line text-sm" /> Admin Portal
                           </Link>
                         ) : null}
                       </div>
 
-                      <div className="border-t border-white/10 pt-1">
+                      <div className="border-t border-ink/10 pt-1 dark:border-white/10">
                         <button
                           type="button"
                           onClick={() => {
                             logout();
                             setUserMenuOpen(false);
                           }}
-                          className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-rose-400 hover:bg-white/10"
+                          className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-white/5"
                         >
                           <i className="ri-logout-box-r-line text-sm" /> Sign Out
                         </button>
@@ -270,7 +270,7 @@ export const Header = () => {
 
         {/* Mobile Navigation Drawer */}
         {open ? (
-          <div className="mobile-nav dark:bg-[#0c1612] dark:border-white/10">
+          <div className="mobile-nav dark:bg-[#0f0e0d] dark:border-white/10">
             <Container>
               {siteConfig.navLinks.map((link) => {
                 const targetId = link.targetId || link.href.replace(/^[/#]+/, "");
@@ -367,18 +367,18 @@ export const Header = () => {
           aria-modal="true"
         >
           <div
-            className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/20 bg-[#12231d]/90 p-6 text-white shadow-2xl backdrop-blur-2xl dark:bg-[#0a1510]/95 animate-in fade-in zoom-in-95 duration-200"
+            className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-ink/10 bg-[var(--theme-surface)] p-6 text-ink shadow-2xl backdrop-blur-2xl dark:border-white/10 animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3">
-              <span className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-brand-300">
+              <span className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-brand dark:text-brand-300">
                 <i className="ri-search-2-line" /> Explore Reshto Menu
               </span>
               <button
                 type="button"
                 onClick={() => setSearchOpen(false)}
-                className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20 transition"
+                className="grid h-8 w-8 place-items-center rounded-full bg-soft-primary text-ink hover:bg-brand/10 transition"
                 aria-label="Close search"
               >
                 <i className="ri-close-line text-lg" />
@@ -387,14 +387,14 @@ export const Header = () => {
 
             {/* Search Input Box */}
             <form onSubmit={handleSearchSubmit} className="relative mt-2">
-              <i className="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-xl text-brand-300" />
+              <i className="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-xl text-brand dark:text-brand-300" />
               <input
                 ref={searchInputRef}
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search pizza, ribeye steak, salmon, salad, desserts..."
-                className="w-full rounded-2xl border border-white/20 bg-white/10 py-4 pl-12 pr-28 text-base text-white placeholder:text-white/50 outline-none transition focus:border-brand-300 focus:bg-white/15"
+                className="w-full rounded-2xl border border-ink/15 bg-soft-primary py-4 pl-12 pr-28 text-base text-ink placeholder:text-ink-700/60 outline-none transition focus:border-brand focus:bg-[var(--theme-surface)] dark:border-white/10"
               />
               <button
                 type="submit"
@@ -405,8 +405,8 @@ export const Header = () => {
             </form>
 
             {/* Quick Popular Searches */}
-            <div className="mt-5 border-t border-white/10 pt-4">
-              <span className="block text-xs font-semibold text-white/60 mb-2">
+            <div className="mt-5 border-t border-ink/10 pt-4 dark:border-white/10">
+              <span className="mb-2 block text-xs font-semibold text-ink-700">
                 Popular Craving Suggestions:
               </span>
               <div className="flex flex-wrap gap-2">
@@ -415,16 +415,16 @@ export const Header = () => {
                     key={term}
                     type="button"
                     onClick={() => handleQuickSearch(term)}
-                    className="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-white/90 hover:border-brand-300 hover:bg-white/15 transition-all"
+                    className="flex items-center gap-1.5 rounded-full border border-ink/10 bg-soft-primary px-3 py-1 text-xs font-medium text-ink hover:border-brand hover:bg-brand/10 transition-all dark:border-white/10"
                   >
-                    <i className="ri-arrow-right-up-line text-brand-300" /> {term}
+                    <i className="ri-arrow-right-up-line text-brand dark:text-brand-300" /> {term}
                   </button>
                 ))}
               </div>
             </div>
 
-            <p className="mt-4 text-center text-[11px] text-white/40">
-              Press <kbd className="rounded bg-white/10 px-1.5 py-0.5">ESC</kbd> to close
+            <p className="mt-4 text-center text-[11px] text-ink-700/70">
+              Press <kbd className="rounded bg-soft-primary px-1.5 py-0.5">ESC</kbd> to close
             </p>
           </div>
         </div>

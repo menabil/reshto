@@ -4,14 +4,14 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { whyChoose } from "@/data/data";
 
 const tones = {
-  primary: "bg-soft-primary text-emerald-700 border-soft-primary dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/40",
-  success: "bg-soft-success text-emerald-600 border-soft-success dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/40",
-  warning: "bg-soft-warning text-amber-600 border-soft-warning dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800/40",
+  primary: "bg-brand-50 text-brand-800 border-brand-100 dark:bg-white/5 dark:text-brand-200 dark:border-white/10",
+  success: "bg-[#f0e8d9] text-[#76501d] border-[#e7dac4] dark:bg-white/5 dark:text-brand-200 dark:border-white/10",
+  warning: "bg-soft-warning text-brand-700 border-brand-100 dark:bg-white/5 dark:text-brand-200 dark:border-white/10",
 };
 
 export const WhyChoose = () => {
   return (
-    <section className="section bg-ink text-white transition-colors duration-300 dark:bg-[#08100c]">
+    <section className="section bg-ink text-white transition-colors duration-300 dark:bg-[#0f0e0d]">
       <Container>
         <Reveal className="mb-14">
           <SectionTitle eyebrow="Our Promise" title="Why Choose Reshto?" light />

@@ -13,7 +13,7 @@ const socials = [
 
 export const Footer = () => {
   return (
-    <footer id="contact" className="site-footer relative overflow-hidden bg-ink text-white dark:bg-[#070e0b]">
+    <footer id="contact" className="site-footer relative overflow-hidden bg-ink text-white dark:bg-[#0f0e0d]">
       <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
 
@@ -21,7 +21,7 @@ export const Footer = () => {
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <a href="#home" className="flex items-center gap-2 font-display text-2xl font-extrabold text-white">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand text-white">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand text-white dark:text-[#171512]">
                 <i className="ri-restaurant-2-fill text-xl" />
               </span>
               {siteConfig.name}
@@ -40,7 +40,7 @@ export const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-brand hover:bg-brand hover:text-white"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-brand hover:bg-brand hover:text-white dark:hover:text-[#171512]"
                 >
                   <i className={`${s.icon} text-lg`} />
                 </a>

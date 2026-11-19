@@ -28,9 +28,9 @@ export const BookTable = () => {
   };
 
   return (
-    <section id="book" className="section py-16 md:py-24 transition-colors duration-300 dark:bg-[#0c1612]">
+    <section id="book" className="reservation-section section pt-24 pb-20 md:pt-32 md:pb-28 transition-colors duration-300 dark:bg-[#0f0e0d]">
       <Container>
-        <div className="relative overflow-hidden rounded-4xl bg-gradient-to-br from-ink via-ink-800 to-brand-900 px-6 py-14 md:px-12 dark:from-[#0d1a14] dark:via-[#13271e] dark:to-[#1a382b] border border-white/10 shadow-2xl">
+        <div className="reservation-panel relative overflow-hidden rounded-4xl bg-gradient-to-br from-[#1e1c1a] via-[#171614] to-[#402d17] px-6 py-14 md:px-12 border border-white/10 shadow-2xl">
           <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:radial-gradient(circle_at_12%_20%,#fff_0,transparent_35%),radial-gradient(circle_at_88%_80%,#fff_0,transparent_30%)]" />
 
           <div className="relative z-10">

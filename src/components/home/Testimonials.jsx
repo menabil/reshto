@@ -13,11 +13,11 @@ import { testimonials } from "@/data/data";
 
 const avatarTones = [
   "from-brand-400 to-brand-600",
-  "from-amber-400 to-orange-500",
-  "from-emerald-400 to-teal-500",
-  "from-violet-400 to-indigo-500",
-  "from-rose-400 to-pink-500",
-  "from-sky-400 to-blue-500",
+  "from-amber-500 to-yellow-700",
+  "from-stone-500 to-stone-800",
+  "from-orange-400 to-amber-700",
+  "from-brand-200 to-brand-500",
+  "from-neutral-500 to-neutral-800",
 ];
 
 const initials = (name) =>
@@ -31,10 +31,10 @@ const initials = (name) =>
 
 export const Testimonials = () => {
   return (
-    <section id="review" className="section bg-soft-primary/40 transition-colors duration-300 dark:bg-[#101e17]">
+    <section id="review" className="section testimonial-section bg-soft-primary/40 transition-colors duration-300 dark:bg-[#171614]">
       <Container>
         <Reveal className="mb-12">
-          <SectionTitle eyebrow="Testimonials" title="Food Lover Feedback" />
+          <SectionTitle eyebrow="Kind words" title="Memorable meals. Good company." />
         </Reveal>
 
         <Swiper
@@ -62,7 +62,7 @@ export const Testimonials = () => {
         >
           {testimonials.map((item, index) => (
             <SwiperSlide key={item.id} className="h-auto!">
-              <article className="flex h-full flex-col rounded-3xl bg-[#fffdf8] p-7 shadow-soft transition-colors dark:bg-[#15241d] dark:border dark:border-white/10">
+              <article className="testimonial-card flex h-full flex-col rounded-3xl bg-[#fffdf8] p-7 shadow-soft transition-colors dark:bg-[#1e1c1a] dark:border dark:border-white/10">
                 <i className="ri-double-quotes-l text-3xl text-brand/30 dark:text-brand-300/40" />
                 <div className="mt-2 flex gap-0.5 text-amber-400">
                   {Array.from({ length: 5 }).map((_, i) => (

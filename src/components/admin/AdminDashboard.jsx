@@ -212,9 +212,9 @@ export const AdminDashboard = () => {
 
   if (mounted && !isAdmin) {
     return (
-      <div className="min-h-screen bg-[#f7f4ed] pb-20 pt-32 transition-colors duration-300 dark:bg-[#09110d] dark:text-[#e5ede8] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f7f3eb] pb-20 pt-32 transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4] flex items-center justify-center">
         <Container className="max-w-md text-center">
-          <div className="rounded-4xl border border-ink/10 bg-[#fffdf8] p-8 shadow-2xl dark:border-white/10 dark:bg-[#122119]">
+          <div className="rounded-4xl border border-ink/10 bg-[#fffdf8] p-8 shadow-2xl dark:border-white/10 dark:bg-[#1e1c1a]">
             <span className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-amber-500/10 text-3xl text-amber-500">
               <i className="ri-shield-keyhole-line" />
             </span>
@@ -249,7 +249,7 @@ export const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f4ed] pb-20 pt-28 transition-colors duration-300 dark:bg-[#09110d] dark:text-[#e5ede8]">
+    <div className="min-h-screen bg-[#f7f3eb] pb-20 pt-28 transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4]">
       <Container>
         {/* Top Header / Breadcrumb */}
         <div className="mb-8 flex flex-col justify-between gap-4 border-b border-ink/10 pb-6 dark:border-white/10 md:flex-row md:items-center">
@@ -282,7 +282,7 @@ export const AdminDashboard = () => {
 
         {/* Quick Stats Grid */}
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#122119]">
+          <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/60">
                 Today&apos;s Revenue
@@ -299,7 +299,7 @@ export const AdminDashboard = () => {
             </span>
           </div>
 
-          <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#122119]">
+          <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/60">
                 Active Orders
@@ -316,7 +316,7 @@ export const AdminDashboard = () => {
             </span>
           </div>
 
-          <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#122119]">
+          <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/60">
                 Reservations
@@ -333,7 +333,7 @@ export const AdminDashboard = () => {
             </span>
           </div>
 
-          <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#122119]">
+          <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/60">
                 Menu Dishes
@@ -358,8 +358,8 @@ export const AdminDashboard = () => {
             onClick={() => setActiveTab("overview")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "overview"
-                ? "bg-brand text-white shadow-sm"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#122119] dark:text-white/70 dark:hover:bg-white/10"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
             <i className="ri-dashboard-3-line" /> Overview
@@ -369,8 +369,8 @@ export const AdminDashboard = () => {
             onClick={() => setActiveTab("menu")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "menu"
-                ? "bg-brand text-white shadow-sm"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#122119] dark:text-white/70 dark:hover:bg-white/10"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
             <i className="ri-restaurant-line" /> Menu Management ({menuItems.length})
@@ -380,8 +380,8 @@ export const AdminDashboard = () => {
             onClick={() => setActiveTab("orders")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "orders"
-                ? "bg-brand text-white shadow-sm"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#122119] dark:text-white/70 dark:hover:bg-white/10"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
             <i className="ri-list-check-2" /> Live Orders ({orders.length})
@@ -391,8 +391,8 @@ export const AdminDashboard = () => {
             onClick={() => setActiveTab("reservations")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "reservations"
-                ? "bg-brand text-white shadow-sm"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#122119] dark:text-white/70 dark:hover:bg-white/10"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
             <i className="ri-calendar-check-line" /> Bookings &amp; Tables ({reservations.length})
@@ -404,7 +404,7 @@ export const AdminDashboard = () => {
           <div className="grid gap-6 lg:grid-cols-12">
             <div className="lg:col-span-8 space-y-6">
               {/* Recent Orders Box */}
-              <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#122119]">
+              <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-display text-lg font-bold text-ink dark:text-white">
                     Live Kitchen Queue
@@ -462,7 +462,7 @@ export const AdminDashboard = () => {
               </div>
 
               {/* Popular Dishes Highlight */}
-              <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#122119]">
+              <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
                 <h3 className="mb-4 font-display text-lg font-bold text-ink dark:text-white">
                   Trending Menu Items
                 </h3>
@@ -493,7 +493,7 @@ export const AdminDashboard = () => {
 
             {/* Right Column: Upcoming Bookings & System Health */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#122119]">
+              <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-display text-lg font-bold text-ink dark:text-white">
                     Tonight&apos;s Tables
@@ -555,7 +555,7 @@ export const AdminDashboard = () => {
         {activeTab === "menu" ? (
           <div className="space-y-6">
             {/* Action Bar */}
-            <div className="flex flex-col justify-between gap-4 rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#122119] md:flex-row md:items-center">
+            <div className="flex flex-col justify-between gap-4 rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] md:flex-row md:items-center">
               <div className="flex flex-1 flex-wrap items-center gap-3">
                 {/* Search */}
                 <div className="relative min-w-[220px] flex-1">
@@ -565,7 +565,7 @@ export const AdminDashboard = () => {
                     placeholder="Search dish title..."
                     value={menuSearch}
                     onChange={(e) => setMenuSearch(e.target.value)}
-                    className="w-full rounded-xl border border-ink/15 bg-white py-2 pl-9 pr-3 text-sm text-ink outline-none transition focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                    className="w-full rounded-xl border border-ink/15 bg-white py-2 pl-9 pr-3 text-sm text-ink outline-none transition focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
 
@@ -573,7 +573,7 @@ export const AdminDashboard = () => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="rounded-xl border border-ink/15 bg-white px-3 py-2 text-sm text-ink outline-none dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                  className="rounded-xl border border-ink/15 bg-white px-3 py-2 text-sm text-ink outline-none dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                 >
                   <option value="all">All Categories</option>
                   {menuTabs.map((t) => (
@@ -595,7 +595,7 @@ export const AdminDashboard = () => {
             </div>
 
             {/* Menu Table */}
-            <div className="overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#122119]">
+            <div className="overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead className="border-b border-ink/10 bg-ink/[0.02] text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:border-white/10 dark:bg-white/[0.02] dark:text-white/60">
@@ -670,7 +670,7 @@ export const AdminDashboard = () => {
         {/* TAB 3: ORDERS MANAGEMENT */}
         {activeTab === "orders" ? (
           <div className="space-y-6">
-            <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#122119]">
+            <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
               <div className="border-b border-ink/10 p-5 dark:border-white/10">
                 <h3 className="font-display text-lg font-bold text-ink dark:text-white">
                   Incoming &amp; Recent Orders
@@ -717,7 +717,7 @@ export const AdminDashboard = () => {
                           <select
                             value={ord.status}
                             onChange={(e) => updateOrderStatus(ord.id, e.target.value)}
-                            className="rounded-lg border border-ink/15 bg-white px-2.5 py-1 text-xs font-bold text-ink outline-none dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                            className="rounded-lg border border-ink/15 bg-white px-2.5 py-1 text-xs font-bold text-ink outline-none dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                           >
                             <option value="Pending">Pending</option>
                             <option value="Preparing">Preparing</option>
@@ -737,7 +737,7 @@ export const AdminDashboard = () => {
         {/* TAB 4: RESERVATIONS */}
         {activeTab === "reservations" ? (
           <div className="space-y-6">
-            <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#122119]">
+            <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
               <div className="border-b border-ink/10 p-5 dark:border-white/10">
                 <h3 className="font-display text-lg font-bold text-ink dark:text-white">
                   Table Reservations
@@ -822,7 +822,7 @@ export const AdminDashboard = () => {
         {/* MODAL: ADD NEW DISH */}
         {showAddModal ? (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-            <div className="w-full max-w-lg rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-2xl dark:border-white/10 dark:bg-[#122119]">
+            <div className="w-full max-w-lg rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-2xl dark:border-white/10 dark:bg-[#1e1c1a]">
               <div className="flex items-center justify-between border-b border-ink/10 pb-4 dark:border-white/10">
                 <h3 className="font-display text-xl font-bold text-ink dark:text-white">
                   Add New Dish
@@ -847,7 +847,7 @@ export const AdminDashboard = () => {
                     placeholder="e.g. Truffle Mushroom Risotto"
                     value={newDish.name}
                     onChange={(e) => setNewDish({ ...newDish, name: e.target.value })}
-                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
 
@@ -862,7 +862,7 @@ export const AdminDashboard = () => {
                       placeholder="$22.50"
                       value={newDish.price}
                       onChange={(e) => setNewDish({ ...newDish, price: e.target.value })}
-                      className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                      className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                     />
                   </div>
                   <div>
@@ -872,7 +872,7 @@ export const AdminDashboard = () => {
                     <select
                       value={newDish.category}
                       onChange={(e) => setNewDish({ ...newDish, category: e.target.value })}
-                      className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                      className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                     >
                       {menuTabs.map((t) => (
                         <option key={t.key} value={t.key}>
@@ -892,7 +892,7 @@ export const AdminDashboard = () => {
                     placeholder="Short description of ingredients and flavors..."
                     value={newDish.desc}
                     onChange={(e) => setNewDish({ ...newDish, desc: e.target.value })}
-                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
 
@@ -905,7 +905,7 @@ export const AdminDashboard = () => {
                     placeholder="https://images.unsplash.com/..."
                     value={newDish.image}
                     onChange={(e) => setNewDish({ ...newDish, image: e.target.value })}
-                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
 

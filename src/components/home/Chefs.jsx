@@ -8,7 +8,7 @@ import { chefs } from "@/data/data";
 const socials = ["ri-facebook-circle-fill", "ri-instagram-line", "ri-twitter-x-line"];
 
 export const Chefs = () => (
-  <section id="chefs" className="section bg-[#f7f4ed] transition-colors duration-300 dark:bg-[#0c1612]">
+  <section id="chefs" className="section bg-[#f7f3eb] transition-colors duration-300 dark:bg-[#0f0e0d]">
     <Container>
       <Reveal className="mb-11 flex flex-col items-center text-center">
         <SectionTitle eyebrow="Our Team" title="Meet Our Chefs" />
@@ -19,7 +19,7 @@ export const Chefs = () => (
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {chefs.map((chef, index) => (
           <Reveal key={chef.id} delay={index * 55}>
-            <article className="chef-card dark:bg-[#15241d] dark:border-white/10">
+            <article className="chef-card dark:bg-[#1e1c1a] dark:border-white/10">
               <div className="chef-image">
                 <SafeImage
                   src={foodImages.chefs[index]}
@@ -32,7 +32,7 @@ export const Chefs = () => (
                       key={icon}
                       href="#contact"
                       aria-label={`${chef.chefName} social profile`}
-                      className="dark:bg-[#1a2f26] dark:text-white dark:hover:bg-brand"
+                      className="dark:bg-[#171614] dark:text-white dark:hover:bg-brand dark:hover:text-[#171512]"
                     >
                       <i className={icon} />
                     </a>

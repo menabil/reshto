@@ -149,9 +149,9 @@ export const UserDashboard = () => {
 
   if (mounted && !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#f7f4ed] pb-20 pt-32 transition-colors duration-300 dark:bg-[#09110d] dark:text-[#e5ede8] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f7f3eb] pb-20 pt-32 transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4] flex items-center justify-center">
         <Container className="max-w-md text-center">
-          <div className="rounded-4xl border border-ink/10 bg-[#fffdf8] p-8 shadow-2xl dark:border-white/10 dark:bg-[#122119]">
+          <div className="rounded-4xl border border-ink/10 bg-[#fffdf8] p-8 shadow-2xl dark:border-white/10 dark:bg-[#1e1c1a]">
             <span className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-brand/10 text-3xl text-brand">
               <i className="ri-user-smile-line" />
             </span>
@@ -186,10 +186,10 @@ export const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f4ed] pb-20 pt-28 transition-colors duration-300 dark:bg-[#09110d] dark:text-[#e5ede8]">
+    <div className="min-h-screen bg-[#f7f3eb] pb-20 pt-28 transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4]">
       <Container>
         {/* User Profile Header Card */}
-        <div className="relative mb-8 overflow-hidden rounded-4xl border border-ink/10 bg-gradient-to-br from-[#12231d] via-[#1a3328] to-[#12231d] p-6 text-white shadow-xl dark:border-white/10 md:p-8">
+        <div className="relative mb-8 overflow-hidden rounded-4xl border border-ink/10 bg-gradient-to-br from-[#171512] via-[#24211d] to-[#171512] p-6 text-white shadow-xl dark:border-white/10 md:p-8">
           <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand/30 blur-3xl" />
 
           <div className="relative z-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
@@ -246,8 +246,8 @@ export const UserDashboard = () => {
             onClick={() => setActiveTab("orders")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "orders"
-                ? "bg-brand text-white shadow-sm"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#122119] dark:text-white/70 dark:hover:bg-white/10"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
             <i className="ri-shopping-bag-3-line" /> My Orders ({USER_ORDERS.length})
@@ -258,8 +258,8 @@ export const UserDashboard = () => {
             onClick={() => setActiveTab("bookings")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "bookings"
-                ? "bg-brand text-white shadow-sm"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#122119] dark:text-white/70 dark:hover:bg-white/10"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
             <i className="ri-calendar-check-line" /> My Reservations ({USER_RESERVATIONS.length})
@@ -270,8 +270,8 @@ export const UserDashboard = () => {
             onClick={() => setActiveTab("favorites")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "favorites"
-                ? "bg-brand text-white shadow-sm"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#122119] dark:text-white/70 dark:hover:bg-white/10"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
             <i className="ri-heart-3-line" /> Saved Favorites ({USER_FAVORITES.length})
@@ -282,8 +282,8 @@ export const UserDashboard = () => {
             onClick={() => setActiveTab("profile")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "profile"
-                ? "bg-brand text-white shadow-sm"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#122119] dark:text-white/70 dark:hover:bg-white/10"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
             <i className="ri-user-settings-line" /> Account Settings
@@ -296,7 +296,7 @@ export const UserDashboard = () => {
             {USER_ORDERS.map((order) => (
               <div
                 key={order.id}
-                className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm transition-all hover:border-brand/40 dark:border-white/10 dark:bg-[#122119]"
+                className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm transition-all hover:border-brand/40 dark:border-white/10 dark:bg-[#1e1c1a]"
               >
                 <div className="flex flex-col justify-between gap-3 border-b border-ink/5 pb-4 dark:border-white/5 sm:flex-row sm:items-center">
                   <div>
@@ -352,7 +352,7 @@ export const UserDashboard = () => {
                 <div className="mt-4 flex justify-end gap-3 pt-2">
                   <Link
                     href="/order"
-                    className="btn-outline text-xs py-2! px-4! dark:bg-[#1a2e23] dark:text-white dark:border-white/10"
+                    className="btn-outline text-xs py-2! px-4! dark:bg-[#1e1c1a] dark:text-white dark:border-white/10"
                   >
                     <i className="ri-repeat-line mr-1" /> Reorder Dishes
                   </Link>
@@ -368,7 +368,7 @@ export const UserDashboard = () => {
             {USER_RESERVATIONS.map((res) => (
               <div
                 key={res.id}
-                className="flex flex-col justify-between gap-4 rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#122119] sm:flex-row sm:items-center"
+                className="flex flex-col justify-between gap-4 rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] sm:flex-row sm:items-center"
               >
                 <div>
                   <div className="flex items-center gap-2">
@@ -412,7 +412,7 @@ export const UserDashboard = () => {
             {USER_FAVORITES.map((fav) => (
               <div
                 key={fav.id}
-                className="flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#122119]"
+                className="flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]"
               >
                 <div className="relative h-44">
                   <SafeImage
@@ -420,7 +420,7 @@ export const UserDashboard = () => {
                     alt={fav.name}
                     className="h-full w-full object-cover"
                   />
-                  <span className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white text-rose-500 shadow-md dark:bg-[#1c3025]">
+                  <span className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white text-rose-500 shadow-md dark:bg-[#292522]">
                     <i className="ri-heart-3-fill" />
                   </span>
                 </div>
@@ -450,7 +450,7 @@ export const UserDashboard = () => {
 
         {/* TAB 4: ACCOUNT SETTINGS */}
         {activeTab === "profile" ? (
-          <div className="max-w-2xl rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#122119]">
+          <div className="max-w-2xl rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
             <h3 className="font-display text-xl font-bold text-ink dark:text-white">
               Profile &amp; Delivery Preferences
             </h3>
@@ -474,7 +474,7 @@ export const UserDashboard = () => {
                     type="text"
                     value={user.name}
                     onChange={(e) => setUser({ ...user, name: e.target.value })}
-                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
                 <div>
@@ -485,7 +485,7 @@ export const UserDashboard = () => {
                     type="email"
                     value={user.email}
                     onChange={(e) => setUser({ ...user, email: e.target.value })}
-                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                    className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
               </div>
@@ -498,7 +498,7 @@ export const UserDashboard = () => {
                   type="tel"
                   value={user.phone}
                   onChange={(e) => setUser({ ...user, phone: e.target.value })}
-                  className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                  className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                 />
               </div>
 
@@ -509,7 +509,7 @@ export const UserDashboard = () => {
                 <input
                   type="text"
                   defaultValue="House 24, Road 7, Block D, Banani, Dhaka"
-                  className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0c1612] dark:text-white"
+                  className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                 />
               </div>
 
