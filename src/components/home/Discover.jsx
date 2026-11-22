@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SafeImage } from "@/components/ui/SafeImage";
@@ -49,9 +50,14 @@ export const Discover = () => (
             <small>The Reshto kitchen</small>
           </span>
         </div>
-        <a href="#book" className="story-text-link">
-          Find your seat <i className="ri-arrow-right-line" aria-hidden="true" />
-        </a>
+        <div className="mt-6 flex flex-wrap gap-4">
+          <Link href="/about" className="story-text-link">
+            Read our full story <i className="ri-arrow-right-line" aria-hidden="true" />
+          </Link>
+          <Link href="/reservation" className="story-text-link">
+            Find your seat <i className="ri-calendar-line" aria-hidden="true" />
+          </Link>
+        </div>
       </Reveal>
     </Container>
   </section>

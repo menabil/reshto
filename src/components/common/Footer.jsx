@@ -1,7 +1,7 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { NewsletterForm } from "@/components/common/NewsletterForm";
 import { siteConfig } from "@/constants/site";
-import { footerAboutLinks, footerQuickLinks } from "@/data/data";
 
 const socials = [
   { icon: "ri-facebook-circle-fill", label: "Facebook", href: siteConfig.links.facebook },
@@ -13,19 +13,19 @@ const socials = [
 
 export const Footer = () => {
   return (
-    <footer id="contact" className="site-footer relative overflow-hidden bg-ink text-white dark:bg-[#0f0e0d]">
+    <footer id="contact-footer" className="site-footer relative overflow-hidden bg-ink text-white dark:bg-[#0f0e0d]">
       <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
 
       <Container className="relative z-10 py-16">
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <a href="#home" className="flex items-center gap-2 font-display text-2xl font-extrabold text-white">
+            <Link href="/" className="flex items-center gap-2 font-display text-2xl font-extrabold text-white">
               <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand text-white dark:text-[#171512]">
                 <i className="ri-restaurant-2-fill text-xl" />
               </span>
               {siteConfig.name}
-            </a>
+            </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
               At Reshto, we believe that food is more than just a meal &mdash; it&apos;s an experience. Our
               passion lies in crafting culinary delights that bring people together, creating memories
@@ -49,46 +49,77 @@ export const Footer = () => {
           </div>
 
           <div className="lg:col-span-2">
-            <h5 className="font-display text-base font-bold">About Us</h5>
+            <h5 className="font-display text-base font-bold">Explore</h5>
             <ul className="mt-4 space-y-2.5">
-              {footerAboutLinks.map((link) => (
-                <li key={link}>
-                  <a href="#about" className="text-sm text-white/60 transition hover:text-brand">
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/" className="text-sm text-white/60 transition hover:text-brand">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="text-sm text-white/60 transition hover:text-brand">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/menu" className="text-sm text-white/60 transition hover:text-brand">
+                  Our Menu
+                </Link>
+              </li>
+              <li>
+                <Link href="/order" className="text-sm text-white/60 transition hover:text-brand">
+                  Online Order
+                </Link>
+              </li>
+              <li>
+                <Link href="/reservation" className="text-sm text-white/60 transition hover:text-brand">
+                  Book A Table
+                </Link>
+              </li>
+              <li>
+                <Link href="/chefs" className="text-sm text-white/60 transition hover:text-brand">
+                  Our Chefs
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="text-sm text-white/60 transition hover:text-brand">
+                  Photo Gallery
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div className="lg:col-span-2">
-            <h5 className="font-display text-base font-bold">Quick Links</h5>
+            <h5 className="font-display text-base font-bold">Portals & Info</h5>
             <ul className="mt-4 space-y-2.5">
-              {footerQuickLinks.map((link) => (
-                <li key={link}>
-                  <a href="#menu" className="text-sm text-white/60 transition hover:text-brand">
-                    {link}
-                  </a>
-                </li>
-              ))}
               <li>
-                <a href="/dashboard" className="text-sm text-amber-300/80 transition hover:text-amber-200">
-                  User Dashboard
-                </a>
+                <Link href="/contact" className="text-sm text-white/60 transition hover:text-brand">
+                  Contact & Location
+                </Link>
               </li>
               <li>
-                <a href="/admin" className="text-sm text-amber-300/80 transition hover:text-amber-200">
-                  Admin Dashboard
-                </a>
+                <Link href="/login" className="text-sm text-white/60 transition hover:text-brand">
+                  Sign In / Register
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard" className="text-sm text-amber-300/80 transition hover:text-amber-200">
+                  User Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin" className="text-sm text-amber-300/80 transition hover:text-amber-200">
+                  Admin Portal
+                </Link>
               </li>
             </ul>
           </div>
 
           <div className="lg:col-span-4">
             <h5 className="font-display text-base font-bold">Reshto Info</h5>
-            <a href="#contact" className="mt-4 block text-sm text-white/60 transition hover:text-brand">
+            <Link href="/contact" className="mt-4 block text-sm text-white/60 transition hover:text-brand">
               {siteConfig.contact.address}
-            </a>
+            </Link>
             <p className="mt-4 text-sm text-white/60">{siteConfig.contact.hours[0]}</p>
             <p className="text-sm text-white/60">{siteConfig.contact.hours[1]}</p>
 
@@ -110,18 +141,18 @@ export const Footer = () => {
         <div className="footer-copy mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/60 md:flex-row">
           <p>
             Copyright &copy; {siteConfig.copyrightYear}{" "}
-            <a href="#" className="font-medium text-brand">
+            <Link href="/" className="font-medium text-brand">
               Reshto Restaurant
-            </a>
+            </Link>
             . Crafted with <i className="ri-heart-fill text-brand" />
           </p>
           <div className="flex gap-4">
-            <a href="/dashboard" className="transition hover:text-brand">
+            <Link href="/dashboard" className="transition hover:text-brand">
               My Orders
-            </a>
-            <a href="/admin" className="transition hover:text-brand">
+            </Link>
+            <Link href="/admin" className="transition hover:text-brand">
               Admin Portal
-            </a>
+            </Link>
           </div>
         </div>
       </Container>

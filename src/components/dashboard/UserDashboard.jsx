@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { useAuth } from "@/context/AuthContext";
+import { useStore } from "@/context/StoreContext";
+import { ReceiptModal } from "@/components/checkout/ReceiptModal";
 
 const USER_MOCK = {
   name: "Tahmid Hassan",
@@ -17,129 +19,42 @@ const USER_MOCK = {
     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
 };
 
-const USER_ORDERS = [
-  {
-    id: "ORD-8921",
-    date: "Nov 16, 2026 &middot; 8:15 PM",
-    items: [
-      {
-        name: "Classic Margherita Pizza",
-        qty: 1,
-        price: "$15.00",
-        image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80",
-      },
-      {
-        name: "Fresh Mint Lemonade",
-        qty: 2,
-        price: "$8.00",
-        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=400&q=80",
-      },
-    ],
-    total: "$23.00",
-    status: "Delivered",
-    address: "House 24, Road 7, Banani, Dhaka",
-  },
-  {
-    id: "ORD-8710",
-    date: "Nov 10, 2026 &middot; 1:30 PM",
-    items: [
-      {
-        name: "Caesar Salad",
-        qty: 1,
-        price: "$14.50",
-        image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=400&q=80",
-      },
-      {
-        name: "Grilled Chicken Sandwich",
-        qty: 1,
-        price: "$16.00",
-        image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=400&q=80",
-      },
-    ],
-    total: "$30.50",
-    status: "Delivered",
-    address: "Gulshan-1 Circle, Dhaka",
-  },
-  {
-    id: "ORD-8604",
-    date: "Nov 02, 2026 &middot; 7:45 PM",
-    items: [
-      {
-        name: "Prime Ribeye Steak",
-        qty: 1,
-        price: "$28.00",
-        image: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=400&q=80",
-      },
-      {
-        name: "Dark Chocolate Cake",
-        qty: 1,
-        price: "$8.00",
-        image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80",
-      },
-    ],
-    total: "$36.00",
-    status: "Delivered",
-    address: "House 24, Road 7, Banani, Dhaka",
-  },
-];
-
-const USER_RESERVATIONS = [
-  {
-    id: "RES-981",
-    date: "Nov 20, 2026",
-    time: "7:30 PM",
-    guests: 4,
-    table: "Table 4 (Patio Garden View)",
-    status: "Confirmed",
-    occasion: "Family Dinner",
-  },
-  {
-    id: "RES-742",
-    date: "Oct 28, 2026",
-    time: "8:00 PM",
-    guests: 2,
-    table: "Table 2 (Window Corner)",
-    status: "Completed",
-    occasion: "Anniversary",
-  },
-];
-
-const USER_FAVORITES = [
-  {
-    id: 1,
-    name: "Classic Margherita Pizza",
-    price: "$15.00",
-    desc: "Traditional Italian Pizza with fresh mozzarella, basil and virgin olive oil",
-    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 2,
-    name: "Pan-Seared Salmon",
-    price: "$26.00",
-    desc: "Fresh and flavorful Atlantic fillet with lemon dill cream",
-    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 3,
-    name: "Fiery Beef Tacos",
-    price: "$20.00",
-    desc: "Spicy and savory beef with smoked chipotle salsa & fresh cilantro",
-    image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 4,
-    name: "Specialty Roasted Coffee",
-    price: "$3.00",
-    desc: "Single-origin pour over with rich aroma",
-    image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
-  },
-];
-
 export const UserDashboard = () => {
   const { user: authUser, isAuthenticated, mounted, login } = useAuth();
+  const {
+    orders,
+    reservations,
+    updateReservationStatus,
+    favorites,
+    menuItems,
+    toggleFavorite,
+  } = useStore();
   const [activeTab, setActiveTab] = useState("orders"); // orders, bookings, favorites, profile
   const [user, setUser] = useState(() => (authUser ? { ...USER_MOCK, ...authUser } : USER_MOCK));
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [selectedOrderReceipt, setSelectedOrderReceipt] = useState(null);
+
+  const userOrders = authUser
+    ? orders.filter(
+        (o) =>
+          !o.email ||
+          o.email.toLowerCase() === authUser.email.toLowerCase() ||
+          o.customer === authUser.name
+      )
+    : orders;
+
+  const userReservations = authUser
+    ? reservations.filter(
+        (r) =>
+          !r.email ||
+          r.email.toLowerCase() === authUser.email.toLowerCase() ||
+          r.guestName === authUser.name
+      )
+    : reservations;
+
+  const favoriteDishes = menuItems.filter(
+    (item) => favorites.includes(item.id) || favorites.includes(item.cartId)
+  );
 
   const handleProfileSave = (e) => {
     e.preventDefault();
@@ -187,6 +102,12 @@ export const UserDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#f7f3eb] pb-20 pt-28 transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4]">
+      {selectedOrderReceipt && (
+        <ReceiptModal
+          order={selectedOrderReceipt}
+          onClose={() => setSelectedOrderReceipt(null)}
+        />
+      )}
       <Container>
         {/* User Profile Header Card */}
         <div className="relative mb-8 overflow-hidden rounded-4xl border border-ink/10 bg-gradient-to-br from-[#171512] via-[#24211d] to-[#171512] p-6 text-white shadow-xl dark:border-white/10 md:p-8">
@@ -250,7 +171,7 @@ export const UserDashboard = () => {
                 : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
-            <i className="ri-shopping-bag-3-line" /> My Orders ({USER_ORDERS.length})
+            <i className="ri-shopping-bag-3-line" /> My Orders ({userOrders.length})
           </button>
 
           <button
@@ -262,7 +183,7 @@ export const UserDashboard = () => {
                 : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
-            <i className="ri-calendar-check-line" /> My Reservations ({USER_RESERVATIONS.length})
+            <i className="ri-calendar-check-line" /> My Reservations ({userReservations.length})
           </button>
 
           <button
@@ -274,7 +195,7 @@ export const UserDashboard = () => {
                 : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
-            <i className="ri-heart-3-line" /> Saved Favorites ({USER_FAVORITES.length})
+            <i className="ri-heart-3-line" /> Saved Favorites ({favoriteDishes.length})
           </button>
 
           <button
@@ -293,158 +214,239 @@ export const UserDashboard = () => {
         {/* TAB 1: MY ORDERS */}
         {activeTab === "orders" ? (
           <div className="space-y-4">
-            {USER_ORDERS.map((order) => (
-              <div
-                key={order.id}
-                className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm transition-all hover:border-brand/40 dark:border-white/10 dark:bg-[#1e1c1a]"
-              >
-                <div className="flex flex-col justify-between gap-3 border-b border-ink/5 pb-4 dark:border-white/5 sm:flex-row sm:items-center">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm font-extrabold text-brand dark:text-brand-300">
-                        {order.id}
+            {userOrders.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-ink/20 p-12 text-center dark:border-white/20">
+                <i className="ri-shopping-bag-3-line text-4xl text-ink-700/40 dark:text-white/40" />
+                <h4 className="mt-3 font-display text-lg font-bold text-ink dark:text-white">No orders yet</h4>
+                <p className="mt-1 text-xs text-ink-700/60 dark:text-white/60">Explore our delicious menu and place your first order.</p>
+                <Link href="/order" className="btn-brand mt-4 inline-flex py-2! text-xs!">
+                  Order Now <i className="ri-arrow-right-line" />
+                </Link>
+              </div>
+            ) : (
+              userOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm transition-all hover:border-brand/40 dark:border-white/10 dark:bg-[#1e1c1a]"
+                >
+                  <div className="flex flex-col justify-between gap-3 border-b border-ink/5 pb-4 dark:border-white/5 sm:flex-row sm:items-center">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-sm font-extrabold text-brand dark:text-brand-300">
+                          {order.id}
+                        </span>
+                        <span className="text-xs text-ink-700/60 dark:text-white/50">
+                          &middot; {order.date}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-ink-700/60 dark:text-white/60">
+                        <i className="ri-map-pin-line mr-1" />
+                        {order.address}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400">
+                        <i className="ri-checkbox-circle-fill mr-1" />
+                        {order.status}
                       </span>
-                      <span className="text-xs text-ink-700/60 dark:text-white/50">
-                        &middot; {order.date}
+                      <span className="font-display text-lg font-extrabold text-ink dark:text-white">
+                        {order.total}
                       </span>
                     </div>
-                    <p className="mt-1 text-xs text-ink-700/60 dark:text-white/60">
-                      <i className="ri-map-pin-line mr-1" />
-                      {order.address}
+                  </div>
+
+                  {/* Items preview */}
+                  <div className="mt-4">
+                    <p className="text-xs text-ink-700/70 dark:text-white/70">
+                      <strong>Items:</strong> {order.itemsSummary || (order.items && order.items.map((i) => `${i.name} (x${i.qty})`).join(", "))}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400">
-                      <i className="ri-checkbox-circle-fill mr-1" />
-                      {order.status}
-                    </span>
-                    <span className="font-display text-lg font-extrabold text-ink dark:text-white">
-                      {order.total}
-                    </span>
+                  <div className="mt-4 flex flex-wrap justify-end gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedOrderReceipt(order)}
+                      className="btn-outline text-xs py-2! px-3.5! flex items-center gap-1.5 dark:bg-[#1e1c1a] dark:text-white dark:border-white/10"
+                    >
+                      <i className="ri-printer-line" /> View &amp; Print Receipt
+                    </button>
+                    <Link
+                      href="/order"
+                      className="btn-outline text-xs py-2! px-4! dark:bg-[#1e1c1a] dark:text-white dark:border-white/10"
+                    >
+                      <i className="ri-repeat-line mr-1" /> Reorder Dishes
+                    </Link>
                   </div>
                 </div>
-
-                {/* Items preview */}
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  {order.items.map((it, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-3 rounded-2xl border border-ink/5 bg-ink/[0.02] p-3 dark:border-white/5 dark:bg-white/[0.02]"
-                    >
-                      <SafeImage
-                        src={it.image}
-                        alt={it.name}
-                        className="h-12 w-12 rounded-xl object-cover"
-                      />
-                      <div className="flex-1">
-                        <p className="font-bold text-sm text-ink dark:text-white">
-                          {it.name}
-                        </p>
-                        <p className="text-xs text-ink-700/60 dark:text-white/60">
-                          Qty: {it.qty} &middot; {it.price}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-4 flex justify-end gap-3 pt-2">
-                  <Link
-                    href="/order"
-                    className="btn-outline text-xs py-2! px-4! dark:bg-[#1e1c1a] dark:text-white dark:border-white/10"
-                  >
-                    <i className="ri-repeat-line mr-1" /> Reorder Dishes
-                  </Link>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         ) : null}
 
         {/* TAB 2: MY RESERVATIONS */}
         {activeTab === "bookings" ? (
           <div className="space-y-4">
-            {USER_RESERVATIONS.map((res) => (
-              <div
-                key={res.id}
-                className="flex flex-col justify-between gap-4 rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] sm:flex-row sm:items-center"
-              >
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-sm font-bold text-brand dark:text-brand-300">
-                      {res.id}
-                    </span>
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
-                        res.status === "Confirmed"
-                          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400"
-                          : "bg-ink/5 text-ink-700 dark:bg-white/10 dark:text-white/70"
-                      }`}
-                    >
-                      {res.status}
-                    </span>
-                  </div>
-                  <h3 className="mt-2 font-display text-lg font-bold text-ink dark:text-white">
-                    Table for {res.guests} &middot; {res.occasion}
-                  </h3>
-                  <p className="text-xs text-ink-700/60 dark:text-white/60">
-                    <i className="ri-calendar-line mr-1" /> {res.date} at {res.time}
-                  </p>
-                  <p className="mt-1 text-xs font-semibold text-brand dark:text-brand-300">
-                    <i className="ri-restaurant-line mr-1" /> {res.table}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <a href="#book" className="btn-brand text-xs py-2.5! px-4!">
-                    <i className="ri-add-line mr-1" /> New Table Booking
-                  </a>
-                </div>
+            {userReservations.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-ink/20 p-12 text-center dark:border-white/20">
+                <i className="ri-calendar-check-line text-4xl text-ink-700/40 dark:text-white/40" />
+                <h4 className="mt-3 font-display text-lg font-bold text-ink dark:text-white">No table bookings yet</h4>
+                <p className="mt-1 text-xs text-ink-700/60 dark:text-white/60">Reserve a table in advance for an unforgettable dining experience.</p>
+                <Link href="/reservation" className="btn-brand mt-4 inline-flex py-2! text-xs!">
+                  Book a Table <i className="ri-arrow-right-line" />
+                </Link>
               </div>
-            ))}
+            ) : (
+              userReservations.map((res) => (
+                <div
+                  key={res.id}
+                  className="flex flex-col justify-between gap-4 rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] hover:border-brand/40 transition-all"
+                >
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-sm font-bold text-brand dark:text-brand-300">
+                        {res.id}
+                      </span>
+
+                      {/* Status Tag Polish (Task 4.3) */}
+                      {res.status === "Confirmed" ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 ring-1 ring-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-300">
+                          <i className="ri-checkbox-circle-fill text-sm" /> Confirmed &bull; Reserved
+                        </span>
+                      ) : res.status === "Cancelled" ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/10 px-3 py-1 text-xs font-bold text-rose-700 ring-1 ring-rose-500/20 dark:bg-rose-500/20 dark:text-rose-400">
+                          <i className="ri-close-circle-fill text-sm" /> Cancelled
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-800 ring-1 ring-amber-500/20 dark:bg-amber-500/20 dark:text-amber-300">
+                          <i className="ri-time-fill text-sm animate-pulse" /> Pending Host Review
+                        </span>
+                      )}
+
+                      {/* Seating Layout Tag (Task 4.1) */}
+                      <span className="rounded-lg bg-ink/5 px-2.5 py-1 text-[11px] font-semibold text-ink-700 dark:bg-white/10 dark:text-white/80">
+                        <i className="ri-map-pin-2-line mr-1 text-brand" /> {res.seatingZone || "Main Hall"}
+                      </span>
+
+                      {/* Occasion Tag (Task 4.2) */}
+                      <span className="rounded-lg bg-brand/5 px-2.5 py-1 text-[11px] font-semibold text-brand dark:bg-brand/20 dark:text-brand-300">
+                        <i className="ri-sparkling-fill mr-1" /> {res.occasion || "Dining"}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-display text-lg font-bold text-ink dark:text-white">
+                        Table for {res.guests} &middot; {res.guestName}
+                      </h3>
+                      <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-ink-700/70 dark:text-white/60">
+                        <span>
+                          <i className="ri-calendar-line mr-1 text-brand" /> {res.date} at {res.time}
+                        </span>
+                        <span>&bull;</span>
+                        <span className="font-bold text-brand dark:text-brand-300">
+                          <i className="ri-restaurant-line mr-1" /> {res.table}
+                        </span>
+                        {res.phone && (
+                          <>
+                            <span>&bull;</span>
+                            <span><i className="ri-phone-line mr-1" /> {res.phone}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Add-ons & Decoration Notes Display */}
+                    {(res.addOns?.length > 0 || res.decorationNotes) && (
+                      <div className="rounded-2xl bg-[#faf8f5] p-3 text-xs dark:bg-[#22201d] space-y-1">
+                        {res.addOns?.length > 0 && (
+                          <p className="text-ink-700 dark:text-white/70">
+                            <strong>Add-ons:</strong> {res.addOns.join(" &bull; ")}
+                          </p>
+                        )}
+                        {res.decorationNotes && (
+                          <p className="italic text-amber-700 dark:text-amber-300">
+                            <strong>Note:</strong> &ldquo;{res.decorationNotes}&rdquo;
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-2 sm:pt-0 sm:self-center">
+                    {res.status !== "Cancelled" && (
+                      <button
+                        type="button"
+                        onClick={() => updateReservationStatus(res.id, "Cancelled")}
+                        className="rounded-xl border border-rose-500/20 px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition"
+                      >
+                        Cancel Booking
+                      </button>
+                    )}
+                    <Link href="/reservation" className="btn-brand text-xs py-2! px-3.5!">
+                      <i className="ri-add-line mr-1" /> New Booking
+                    </Link>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         ) : null}
 
         {/* TAB 3: SAVED FAVORITES */}
         {activeTab === "favorites" ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {USER_FAVORITES.map((fav) => (
-              <div
-                key={fav.id}
-                className="flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]"
-              >
-                <div className="relative h-44">
-                  <SafeImage
-                    src={fav.image}
-                    alt={fav.name}
-                    className="h-full w-full object-cover"
-                  />
-                  <span className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white text-rose-500 shadow-md dark:bg-[#292522]">
-                    <i className="ri-heart-3-fill" />
-                  </span>
-                </div>
-                <div className="flex flex-1 flex-col p-5">
-                  <h3 className="font-display font-bold text-base text-ink dark:text-white">
-                    {fav.name}
-                  </h3>
-                  <p className="mt-1 flex-1 text-xs text-ink-700/60 dark:text-white/60 line-clamp-2">
-                    {fav.desc}
-                  </p>
-                  <div className="mt-4 flex items-center justify-between border-t border-ink/5 pt-3 dark:border-white/5">
-                    <span className="font-display font-extrabold text-brand dark:text-brand-300">
-                      {fav.price}
-                    </span>
-                    <Link
-                      href="/order"
-                      className="btn-brand text-xs py-1.5! px-3!"
+            {favoriteDishes.length === 0 ? (
+              <div className="col-span-full rounded-3xl border border-dashed border-ink/20 p-12 text-center dark:border-white/20">
+                <i className="ri-heart-3-line text-4xl text-ink-700/40 dark:text-white/40" />
+                <h4 className="mt-3 font-display text-lg font-bold text-ink dark:text-white">No favorite dishes saved</h4>
+                <p className="mt-1 text-xs text-ink-700/60 dark:text-white/60">Explore the menu and save the dishes you love.</p>
+                <Link href="/menu" className="btn-brand mt-4 inline-flex py-2! text-xs!">
+                  Explore Menu <i className="ri-arrow-right-line" />
+                </Link>
+              </div>
+            ) : (
+              favoriteDishes.map((fav) => (
+                <div
+                  key={fav.id || fav.cartId}
+                  className="flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]"
+                >
+                  <div className="relative h-44">
+                    <SafeImage
+                      src={fav.image}
+                      alt={fav.menuItemName}
+                      className="h-full w-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => toggleFavorite(fav.id)}
+                      className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white text-rose-500 shadow-md dark:bg-[#292522]"
+                      title="Toggle Favorite"
                     >
-                      Order <i className="ri-arrow-right-line" />
-                    </Link>
+                      <i className="ri-heart-3-fill" />
+                    </button>
+                  </div>
+                  <div className="flex flex-1 flex-col p-5">
+                    <h3 className="font-display font-bold text-base text-ink dark:text-white">
+                      {fav.menuItemName}
+                    </h3>
+                    <p className="mt-1 flex-1 text-xs text-ink-700/60 dark:text-white/60 line-clamp-2">
+                      {fav.menuItemDesc}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between border-t border-ink/5 pt-3 dark:border-white/5">
+                      <span className="font-display font-extrabold text-brand dark:text-brand-300">
+                        {fav.menuItemPrice}
+                      </span>
+                      <Link
+                        href="/order"
+                        className="btn-brand text-xs py-1.5! px-3!"
+                      >
+                        Order <i className="ri-arrow-right-line" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         ) : null}
 

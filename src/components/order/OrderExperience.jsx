@@ -5,61 +5,38 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { siteConfig } from "@/constants/site";
-import { menu, menuTabs } from "@/data/data";
-
-const allMenuItems = menuTabs.flatMap((tab) =>
-  menu[tab.key].map((item) => ({
-    ...item,
-    category: tab.key,
-    categoryLabel: tab.label,
-    cartId: `${tab.key}-${item.id}`,
-  }))
-);
-
-const getPrice = (price) => Number(price.replace("$", ""));
+import { menuTabs } from "@/data/data";
+import { useStore } from "@/context/StoreContext";
+import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 export const OrderExperience = ({ initialSearch }) => {
+  const {
+    menuItems,
+    quantities,
+    updateQuantity,
+    cartItems,
+    cartCount,
+    cartSubtotal,
+    isFavorite,
+    toggleFavorite,
+  } = useStore();
+
   const [activeCategory, setActiveCategory] = useState("all");
   const [query, setQuery] = useState(initialSearch);
-  const [quantities, setQuantities] = useState({});
 
   const normalizedQuery = query.trim().toLowerCase();
 
-  const filteredItems = allMenuItems.filter((item) => {
+  const filteredItems = menuItems.filter((item) => {
     const matchesCategory =
       activeCategory === "all" || item.category === activeCategory;
     const matchesSearch =
-      `${item.menuItemName} ${item.menuItemDesc} ${item.categoryLabel}`
+      `${item.menuItemName} ${item.menuItemDesc} ${item.categoryLabel || ""}`
         .toLowerCase()
         .includes(normalizedQuery);
     return matchesCategory && matchesSearch;
   });
 
-  const selectedItems = allMenuItems.filter((item) => quantities[item.cartId] > 0);
-  const itemCount = selectedItems.reduce(
-    (total, item) => total + quantities[item.cartId],
-    0
-  );
-  const subtotal = selectedItems.reduce(
-    (total, item) => total + getPrice(item.menuItemPrice) * quantities[item.cartId],
-    0
-  );
   const phoneLink = siteConfig.contact.phone.replace(/[^\d+]/g, "");
-
-  const changeQuantity = (cartId, amount) => {
-    setQuantities((current) => {
-      const quantity = (current[cartId] || 0) + amount;
-      const next = { ...current };
-
-      if (quantity > 0) {
-        next[cartId] = quantity;
-      } else {
-        delete next[cartId];
-      }
-
-      return next;
-    });
-  };
 
   return (
     <>
@@ -184,14 +161,18 @@ export const OrderExperience = ({ initialSearch }) => {
                         <strong className="dark:text-white">
                           {item.menuItemPrice}
                         </strong>
-                        {quantities[item.cartId] ? (
+                        {item.inStock === false ? (
+                          <span className="rounded-lg bg-rose-500/10 px-2 py-1 text-[11px] font-bold text-rose-500 dark:bg-rose-500/20 dark:text-rose-400">
+                            Sold Out
+                          </span>
+                        ) : quantities[item.cartId] ? (
                           <div
                             className="quantity-control dark:bg-[#0f0e0d] dark:border-white/10"
                             aria-label={`${item.menuItemName} quantity`}
                           >
                             <button
                               type="button"
-                              onClick={() => changeQuantity(item.cartId, -1)}
+                              onClick={() => updateQuantity(item.cartId, -1)}
                               aria-label={`Remove one ${item.menuItemName}`}
                               className="dark:bg-[#2c2925] dark:text-white"
                             >
@@ -202,7 +183,7 @@ export const OrderExperience = ({ initialSearch }) => {
                             </span>
                             <button
                               type="button"
-                              onClick={() => changeQuantity(item.cartId, 1)}
+                              onClick={() => updateQuantity(item.cartId, 1)}
                               aria-label={`Add one ${item.menuItemName}`}
                               className="dark:bg-[#2c2925] dark:text-white"
                             >
@@ -213,7 +194,7 @@ export const OrderExperience = ({ initialSearch }) => {
                           <button
                             type="button"
                             className="order-add dark:bg-white/10 dark:text-white dark:hover:bg-brand dark:hover:text-[#171512]"
-                            onClick={() => changeQuantity(item.cartId, 1)}
+                            onClick={() => updateQuantity(item.cartId, 1)}
                             aria-label={`Add ${item.menuItemName} to order`}
                           >
                             Add <i className="ri-add-line" aria-hidden="true" />
@@ -247,13 +228,13 @@ export const OrderExperience = ({ initialSearch }) => {
                   <h2 className="dark:text-white">Your order</h2>
                 </div>
                 <span className="order-count dark:bg-white/10 dark:text-white">
-                  {itemCount}
+                  {cartCount}
                 </span>
               </div>
 
-              {selectedItems.length ? (
+              {cartItems.length ? (
                 <ul className="order-summary-items">
-                  {selectedItems.map((item) => (
+                  {cartItems.map((item) => (
                     <li key={item.cartId}>
                       <span>
                         <strong className="dark:text-white">
@@ -269,18 +250,18 @@ export const OrderExperience = ({ initialSearch }) => {
                       >
                         <button
                           type="button"
-                          onClick={() => changeQuantity(item.cartId, -1)}
+                          onClick={() => updateQuantity(item.cartId, -1)}
                           aria-label={`Remove one ${item.menuItemName}`}
                           className="dark:bg-[#2c2925] dark:text-white"
                         >
                           <i className="ri-subtract-line" aria-hidden="true" />
                         </button>
                         <span className="dark:text-white">
-                          {quantities[item.cartId]}
+                          {item.quantity}
                         </span>
                         <button
                           type="button"
-                          onClick={() => changeQuantity(item.cartId, 1)}
+                          onClick={() => updateQuantity(item.cartId, 1)}
                           aria-label={`Add one ${item.menuItemName}`}
                           className="dark:bg-[#2c2925] dark:text-white"
                         >
@@ -307,28 +288,46 @@ export const OrderExperience = ({ initialSearch }) => {
               <div className="order-subtotal dark:border-white/10 dark:text-white">
                 <span>Subtotal</span>
                 <strong className="dark:text-brand-300">
-                  ${subtotal.toFixed(2)}
+                  ${cartSubtotal.toFixed(2)}
                 </strong>
               </div>
               <p className="order-disclaimer dark:text-white/50">
-                Taxes, delivery, and availability are confirmed when you call.
+                Applicable taxes, delivery fee, and coupons calculated at checkout.
               </p>
-              {itemCount > 0 ? (
-                <a className="btn-brand order-call" href={`tel:${phoneLink}`}>
-                  Call to confirm <i className="ri-phone-line" aria-hidden="true" />
-                </a>
+              {cartCount > 0 ? (
+                <div className="mt-4 flex flex-col gap-2">
+                  <Link
+                    href="/checkout"
+                    className="btn-brand flex w-full items-center justify-center gap-2 py-3 text-xs! font-bold shadow-md"
+                  >
+                    <i className="ri-secure-payment-line text-sm" /> Proceed to Checkout
+                  </Link>
+
+                  <a
+                    href={generateWhatsAppOrderUrl({
+                      items: cartItems,
+                      subtotal: cartSubtotal,
+                      total: cartSubtotal,
+                    })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 py-2.5 text-xs font-bold text-white transition shadow-xs"
+                  >
+                    <i className="ri-whatsapp-line text-base" /> Order via WhatsApp
+                  </a>
+
+                  <a
+                    className="order-phone mt-2 text-center text-xs dark:text-white hover:dark:text-brand-300"
+                    href={`tel:${phoneLink}`}
+                  >
+                    <i className="ri-phone-line" aria-hidden="true" /> Call us: {siteConfig.contact.phone}
+                  </a>
+                </div>
               ) : (
-                <button className="btn-brand order-call" type="button" disabled>
+                <button className="btn-brand order-call mt-4" type="button" disabled>
                   Add items to continue
                 </button>
               )}
-              <a
-                className="order-phone dark:text-white hover:dark:text-brand-300"
-                href={`tel:${phoneLink}`}
-              >
-                <i className="ri-phone-line" aria-hidden="true" />{" "}
-                {siteConfig.contact.phone}
-              </a>
               <p className="order-hours dark:text-white/50">
                 <i className="ri-time-line" aria-hidden="true" />{" "}
                 {siteConfig.contact.hours.join(" · ")}

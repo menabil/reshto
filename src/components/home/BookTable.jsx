@@ -1,29 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { useStore } from "@/context/StoreContext";
+import { useAuth } from "@/context/AuthContext";
 
 const inputClass =
   "w-full rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/50 focus:border-brand-300 focus:bg-white/15 dark:bg-black/25 dark:border-white/15";
 const labelClass = "mb-2 block text-sm font-semibold text-white/90";
 
 export const BookTable = () => {
+  const { addReservation } = useStore();
+  const { user } = useAuth();
   const [done, setDone] = useState(false);
   const [formData, setFormData] = useState({
     people: "2",
     date: "",
-    time: "19:00",
+    time: "19:30",
     name: "",
     email: "",
     phone: "",
+    seatingZone: "Outdoor Garden Patio",
+    occasion: "Casual Dining",
+    notes: "",
   });
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = "2026-01-01"; // or fallback
+
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || user.name || "",
+        email: prev.email || user.email || "",
+        phone: prev.phone || user.phone || "",
+      }));
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.date) return;
+
+    addReservation({
+      guestName: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      guests: Number(formData.people),
+      date: formData.date,
+      time: formData.time,
+      seatingZone: formData.seatingZone,
+      occasion: formData.occasion,
+      decorationNotes: formData.notes,
+      table: `Table ${Math.floor(Math.random() * 10) + 1} (${formData.seatingZone})`,
+      status: "Confirmed",
+    });
+
     setDone(true);
   };
 
@@ -67,9 +103,9 @@ export const BookTable = () => {
                   >
                     Book Another Table
                   </button>
-                  <a href="/dashboard" className="btn-dark">
+                  <Link href="/dashboard" className="btn-dark">
                     View in My Dashboard
-                  </a>
+                  </Link>
                 </div>
               </div>
             ) : (
@@ -155,6 +191,43 @@ export const BookTable = () => {
                     required
                     className={inputClass}
                   />
+                </div>
+
+                <div>
+                  <label className={labelClass} htmlFor="seatingZone">
+                    Seating Layout Zone *
+                  </label>
+                  <select
+                    id="seatingZone"
+                    name="seatingZone"
+                    className={inputClass}
+                    value={formData.seatingZone}
+                    onChange={(e) => setFormData({ ...formData, seatingZone: e.target.value })}
+                  >
+                    <option value="Outdoor Garden Patio" className="text-ink">🌿 Outdoor Garden Patio (Al Fresco)</option>
+                    <option value="Romantic Window Corner" className="text-ink">🪟 Romantic Window Corner (Intimate)</option>
+                    <option value="Indoor Grand Dining" className="text-ink">🏛️ Indoor Grand Dining (Melody Hall)</option>
+                    <option value="Private VIP Lounge" className="text-ink">👑 Private VIP Lounge (Exclusive Booth)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className={labelClass} htmlFor="occasion">
+                    Special Occasion
+                  </label>
+                  <select
+                    id="occasion"
+                    name="occasion"
+                    className={inputClass}
+                    value={formData.occasion}
+                    onChange={(e) => setFormData({ ...formData, occasion: e.target.value })}
+                  >
+                    <option value="Casual Dining" className="text-ink">🍽️ Casual Dining / Regular</option>
+                    <option value="Birthday Celebration" className="text-ink">🎂 Birthday Party (Free Dessert)</option>
+                    <option value="Anniversary" className="text-ink">💍 Anniversary / Date Night</option>
+                    <option value="Business Dinner" className="text-ink">💼 Corporate &amp; Business Lunch</option>
+                    <option value="Family Gathering" className="text-ink">👨‍👩‍👧‍👦 Family Celebration</option>
+                  </select>
                 </div>
 
                 <div className="flex items-end">

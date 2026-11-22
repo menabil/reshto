@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { foodImages } from "@/constants/images";
 
@@ -33,12 +34,12 @@ export const Hero = () => {
             that makes you want to stay for one more course.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#menu" className="btn-brand hero-button">
+            <Link href="/menu" className="btn-brand hero-button">
               Explore Menu <i className="ri-arrow-right-line" aria-hidden="true" />
-            </a>
-            <a href="#book" className="btn-dark hero-button">
+            </Link>
+            <Link href="/reservation" className="btn-dark hero-button">
               Book a Table
-            </a>
+            </Link>
           </div>
           <div className="hero-details">
             <span className="hero-rating">

@@ -4,119 +4,26 @@ import { useState } from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SafeImage } from "@/components/ui/SafeImage";
-import { menu, menuTabs } from "@/data/data";
+import { menuTabs } from "@/data/data";
 import { useAuth } from "@/context/AuthContext";
-
-// Initial Mock Orders
-const INITIAL_ORDERS = [
-  {
-    id: "ORD-9421",
-    customer: "Rahim Chowdhury",
-    email: "rahim@example.com",
-    items: "Classic Margherita Pizza x2, Fresh Mint Lemonade x2",
-    total: "$38.00",
-    status: "Preparing",
-    type: "Delivery",
-    time: "10 mins ago",
-  },
-  {
-    id: "ORD-9420",
-    customer: "Sadia Islam",
-    email: "sadia@example.com",
-    items: "Prime Ribeye Steak x1, Dark Chocolate Cake x1",
-    total: "$36.00",
-    status: "Pending",
-    type: "Dine-in",
-    time: "25 mins ago",
-  },
-  {
-    id: "ORD-9419",
-    customer: "Michael Tan",
-    email: "michael@example.com",
-    items: "Grilled Chicken Sandwich x2, Special Coffee x2",
-    total: "$38.00",
-    status: "Delivered",
-    type: "Delivery",
-    time: "1 hr ago",
-  },
-  {
-    id: "ORD-9418",
-    customer: "Nabila Farhan",
-    email: "nabila@example.com",
-    items: "Pan-Seared Salmon x1, Greek Salad x1",
-    total: "$40.00",
-    status: "Delivered",
-    type: "Delivery",
-    time: "2 hrs ago",
-  },
-  {
-    id: "ORD-9417",
-    customer: "David Warner",
-    email: "david@example.com",
-    items: "Fiery Beef Tacos x3, Cold Brew x2",
-    total: "$69.00",
-    status: "Cancelled",
-    type: "Delivery",
-    time: "4 hrs ago",
-  },
-];
-
-// Initial Mock Reservations
-const INITIAL_RESERVATIONS = [
-  {
-    id: "RES-101",
-    guestName: "Tanvir Ahmed",
-    phone: "+880 1712-345678",
-    guests: 4,
-    date: "Today, 7:30 PM",
-    table: "Table 6 (Patio)",
-    status: "Confirmed",
-  },
-  {
-    id: "RES-102",
-    guestName: "Emma Watson",
-    phone: "+1 415-888-2931",
-    guests: 2,
-    date: "Today, 8:15 PM",
-    table: "Table 2 (Window)",
-    status: "Confirmed",
-  },
-  {
-    id: "RES-103",
-    guestName: "Arifur Rahman",
-    phone: "+880 1819-992211",
-    guests: 6,
-    date: "Tomorrow, 1:00 PM",
-    table: "Table 11 (Private Hall)",
-    status: "Pending",
-  },
-  {
-    id: "RES-104",
-    guestName: "Kazi Nasim",
-    phone: "+880 1911-554433",
-    guests: 3,
-    date: "Nov 21, 8:00 PM",
-    table: "Table 4 (Main Lounge)",
-    status: "Cancelled",
-  },
-];
-
-// Flatten initial menu
-const INITIAL_MENU_ITEMS = menuTabs.flatMap((tab) =>
-  menu[tab.key].map((item) => ({
-    ...item,
-    category: tab.key,
-    categoryLabel: tab.label,
-    inStock: true,
-  }))
-);
+import { useStore } from "@/context/StoreContext";
+import { ReceiptModal } from "@/components/checkout/ReceiptModal";
 
 export const AdminDashboard = () => {
   const { user, isAdmin, mounted, login, logout } = useAuth();
+  const {
+    orders,
+    updateOrderStatus,
+    reservations,
+    updateReservationStatus,
+    menuItems,
+    addMenuItem,
+    deleteMenuItem,
+    toggleMenuItemStock,
+  } = useStore();
+
   const [activeTab, setActiveTab] = useState("overview"); // overview, menu, orders, reservations
-  const [orders, setOrders] = useState(INITIAL_ORDERS);
-  const [reservations, setReservations] = useState(INITIAL_RESERVATIONS);
-  const [menuItems, setMenuItems] = useState(INITIAL_MENU_ITEMS);
+  const [selectedOrderReceipt, setSelectedOrderReceipt] = useState(null);
 
   // Menu Search & Filter
   const [menuSearch, setMenuSearch] = useState("");
@@ -142,37 +49,15 @@ export const AdminDashboard = () => {
     return matchesSearch && matchesCat;
   });
 
-  // Toggle order status
-  const updateOrderStatus = (orderId, newStatus) => {
-    setOrders((current) =>
-      current.map((ord) =>
-        ord.id === orderId ? { ...ord, status: newStatus } : ord
-      )
-    );
-  };
-
-  // Toggle reservation status
-  const updateReservationStatus = (resId, newStatus) => {
-    setReservations((current) =>
-      current.map((res) =>
-        res.id === resId ? { ...res, status: newStatus } : res
-      )
-    );
-  };
-
   // Toggle in-stock
   const toggleStock = (itemId) => {
-    setMenuItems((current) =>
-      current.map((item) =>
-        item.id === itemId ? { ...item, inStock: !item.inStock } : item
-      )
-    );
+    toggleMenuItemStock(itemId);
   };
 
   // Delete dish
   const deleteDish = (itemId) => {
     if (confirm("Are you sure you want to remove this dish from the menu?")) {
-      setMenuItems((current) => current.filter((item) => item.id !== itemId));
+      deleteMenuItem(itemId);
     }
   };
 
@@ -181,25 +66,7 @@ export const AdminDashboard = () => {
     e.preventDefault();
     if (!newDish.name || !newDish.price) return;
 
-    const formattedPrice = newDish.price.startsWith("$")
-      ? newDish.price
-      : `$${newDish.price}`;
-
-    const createdItem = {
-      id: Date.now(),
-      menuItemName: newDish.name,
-      menuItemPrice: formattedPrice,
-      menuItemDesc: newDish.desc || "Prepared fresh in our kitchen with love.",
-      category: newDish.category,
-      categoryLabel:
-        menuTabs.find((t) => t.key === newDish.category)?.label || "Menu",
-      image:
-        newDish.image ||
-        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80",
-      inStock: true,
-    };
-
-    setMenuItems([createdItem, ...menuItems]);
+    addMenuItem(newDish);
     setShowAddModal(false);
     setNewDish({
       name: "",
@@ -250,6 +117,12 @@ export const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#f7f3eb] pb-20 pt-28 transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4]">
+      {selectedOrderReceipt && (
+        <ReceiptModal
+          order={selectedOrderReceipt}
+          onClose={() => setSelectedOrderReceipt(null)}
+        />
+      )}
       <Container>
         {/* Top Header / Breadcrumb */}
         <div className="mb-8 flex flex-col justify-between gap-4 border-b border-ink/10 pb-6 dark:border-white/10 md:flex-row md:items-center">
@@ -435,7 +308,7 @@ export const AdminDashboard = () => {
                           </span>
                         </div>
                         <p className="mt-1 text-xs text-ink-700/70 dark:text-white/60">
-                          {ord.items}
+                          {ord.itemsSummary || (Array.isArray(ord.items) ? ord.items.map((i) => `${i.name} (x${i.qty})`).join(", ") : ord.items)}
                         </p>
                       </div>
                       <div className="flex items-center justify-between gap-3 sm:justify-end">
@@ -703,7 +576,7 @@ export const AdminDashboard = () => {
                           <p className="text-xs text-ink-700/60 dark:text-white/50">{ord.email}</p>
                         </td>
                         <td className="px-5 py-4 text-xs text-ink-700/80 dark:text-white/70 max-w-sm">
-                          {ord.items}
+                          {ord.itemsSummary || (Array.isArray(ord.items) ? ord.items.map((i) => `${i.name} (x${i.qty})`).join(", ") : ord.items)}
                         </td>
                         <td className="px-5 py-4 font-display font-extrabold text-ink dark:text-white">
                           {ord.total}
@@ -714,16 +587,26 @@ export const AdminDashboard = () => {
                           </span>
                         </td>
                         <td className="px-5 py-4">
-                          <select
-                            value={ord.status}
-                            onChange={(e) => updateOrderStatus(ord.id, e.target.value)}
-                            className="rounded-lg border border-ink/15 bg-white px-2.5 py-1 text-xs font-bold text-ink outline-none dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
-                          >
-                            <option value="Pending">Pending</option>
-                            <option value="Preparing">Preparing</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
-                          </select>
+                          <div className="flex items-center gap-2">
+                            <select
+                              value={ord.status}
+                              onChange={(e) => updateOrderStatus(ord.id, e.target.value)}
+                              className="rounded-lg border border-ink/15 bg-white px-2.5 py-1 text-xs font-bold text-ink outline-none dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
+                            >
+                              <option value="Pending">Pending</option>
+                              <option value="Preparing">Preparing</option>
+                              <option value="Delivered">Delivered</option>
+                              <option value="Cancelled">Cancelled</option>
+                            </select>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedOrderReceipt(ord)}
+                              className="grid h-7 w-7 place-items-center rounded-lg border border-ink/15 bg-white text-xs font-bold text-ink hover:bg-ink/5 dark:border-white/15 dark:bg-[#2c2925] dark:text-white transition"
+                              title="Print Invoice / View Receipt"
+                            >
+                              <i className="ri-printer-line" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -751,63 +634,79 @@ export const AdminDashboard = () => {
                 <table className="w-full text-left text-sm">
                   <thead className="border-b border-ink/10 bg-ink/[0.02] text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:border-white/10 dark:bg-white/[0.02] dark:text-white/60">
                     <tr>
-                      <th className="px-5 py-4">Guest</th>
-                      <th className="px-5 py-4">Contact</th>
-                      <th className="px-5 py-4">Party Size</th>
-                      <th className="px-5 py-4">Schedule</th>
-                      <th className="px-5 py-4">Assigned Table</th>
-                      <th className="px-5 py-4">Status &amp; Action</th>
+                      <th className="px-5 py-4">Booking ID &amp; Guest</th>
+                      <th className="px-5 py-4">Seating Zone &amp; Table</th>
+                      <th className="px-5 py-4">Occasion &amp; Add-ons</th>
+                      <th className="px-5 py-4">Party &amp; Schedule</th>
+                      <th className="px-5 py-4">Live Status &amp; Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-ink/5 dark:divide-white/5">
                     {reservations.map((res) => (
                       <tr key={res.id} className="hover:bg-ink/[0.01] dark:hover:bg-white/[0.01]">
-                        <td className="px-5 py-4 font-bold text-ink dark:text-white">
-                          {res.guestName}
+                        <td className="px-5 py-4">
+                          <span className="font-mono text-xs font-extrabold text-brand dark:text-brand-300 block">
+                            {res.id}
+                          </span>
+                          <p className="font-bold text-ink dark:text-white">{res.guestName}</p>
+                          <p className="text-xs text-ink-700/60 dark:text-white/50">{res.phone}</p>
+                          {res.email && <p className="text-[11px] text-ink-700/50 dark:text-white/40">{res.email}</p>}
                         </td>
-                        <td className="px-5 py-4 text-xs text-ink-700/70 dark:text-white/60">
-                          {res.phone}
+
+                        <td className="px-5 py-4">
+                          <span className="rounded-lg bg-ink/5 px-2 py-0.5 text-xs font-semibold text-ink-700 dark:bg-white/10 dark:text-white/80 block w-fit">
+                            {res.seatingZone || "Main Hall"}
+                          </span>
+                          <p className="mt-1 text-xs font-bold text-brand dark:text-brand-300">
+                            {res.table}
+                          </p>
                         </td>
-                        <td className="px-5 py-4 font-semibold">
-                          {res.guests} People
+
+                        <td className="px-5 py-4 max-w-xs text-xs">
+                          <span className="font-bold text-ink dark:text-white block">
+                            {res.occasion || "Casual Dining"}
+                          </span>
+                          {res.addOns?.length > 0 && (
+                            <p className="text-[11px] text-ink-700/70 dark:text-white/60 mt-0.5">
+                              ✨ {res.addOns.join(", ")}
+                            </p>
+                          )}
+                          {res.decorationNotes && (
+                            <p className="italic text-amber-700 dark:text-amber-300 text-[11px] mt-0.5">
+                              &ldquo;{res.decorationNotes}&rdquo;
+                            </p>
+                          )}
                         </td>
-                        <td className="px-5 py-4 text-xs text-ink-700/80 dark:text-white/70">
-                          {res.date}
+
+                        <td className="px-5 py-4">
+                          <p className="font-semibold text-xs text-ink dark:text-white">
+                            {res.guests} Guests
+                          </p>
+                          <p className="text-xs text-ink-700/80 dark:text-white/70">
+                            {res.date}
+                          </p>
+                          <p className="text-[11px] text-ink-700/60 dark:text-white/50">
+                            {res.time}
+                          </p>
                         </td>
-                        <td className="px-5 py-4 font-semibold text-brand dark:text-brand-300">
-                          {res.table}
-                        </td>
+
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-2">
-                            <span
-                              className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                            <select
+                              value={res.status}
+                              onChange={(e) => updateReservationStatus(res.id, e.target.value)}
+                              className={`rounded-lg border px-2.5 py-1 text-xs font-bold outline-none transition ${
                                 res.status === "Confirmed"
-                                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400"
-                                  : res.status === "Pending"
-                                  ? "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400"
-                                  : "bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-400"
+                                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                                  : res.status === "Cancelled"
+                                  ? "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-400"
+                                  : "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300"
                               }`}
                             >
-                              {res.status}
-                            </span>
-                            {res.status !== "Confirmed" ? (
-                              <button
-                                type="button"
-                                onClick={() => updateReservationStatus(res.id, "Confirmed")}
-                                className="text-xs font-bold text-emerald-600 hover:underline dark:text-emerald-400"
-                              >
-                                Confirm
-                              </button>
-                            ) : null}
-                            {res.status !== "Cancelled" ? (
-                              <button
-                                type="button"
-                                onClick={() => updateReservationStatus(res.id, "Cancelled")}
-                                className="text-xs font-bold text-rose-500 hover:underline dark:text-rose-400"
-                              >
-                                Cancel
-                              </button>
-                            ) : null}
+                              <option value="Confirmed" className="text-ink">Confirmed</option>
+                              <option value="Pending" className="text-ink">Pending</option>
+                              <option value="Cancelled" className="text-ink">Cancelled</option>
+                            </select>
                           </div>
                         </td>
                       </tr>

@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     try {
       const stored = localStorage.getItem("reshto-user");
       if (stored) {
@@ -47,6 +48,7 @@ export const AuthProvider = ({ children }) => {
       // fallback
     }
     setMounted(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   const login = ({ email, password, role }) => {

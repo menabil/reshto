@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
@@ -50,6 +51,15 @@ export const Chefs = () => (
             </article>
           </Reveal>
         ))}
+      </div>
+
+      <div className="mt-10 text-center">
+        <Link
+          href="/chefs"
+          className="btn-outline dark:bg-[#1e1c1a] dark:text-white dark:border-white/15 dark:hover:border-brand"
+        >
+          Meet All Chefs &amp; Culinary Story <i className="ri-arrow-right-line" />
+        </Link>
       </div>
     </Container>
   </section>

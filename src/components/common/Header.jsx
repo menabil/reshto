@@ -7,8 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/constants/site";
 import { ThemeToggle } from "@/components/common/ThemeProvider";
 import { useAuth } from "@/context/AuthContext";
-
-const SECTIONS = ["home", "about", "menu", "book", "chefs", "contact"];
+import { useStore } from "@/context/StoreContext";
 
 const POPULAR_SEARCHES = [
   "Margherita Pizza",
@@ -23,13 +22,13 @@ export const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
+  const { cartCount, openCart } = useStore();
 
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
 
   const searchInputRef = useRef(null);
   const userMenuRef = useRef(null);
@@ -41,36 +40,6 @@ export const Header = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  // IntersectionObserver for active section highlighting on homepage
-  useEffect(() => {
-    if (pathname !== "/") {
-      return;
-    }
-
-    const observerOptions = {
-      root: null,
-      rootMargin: "-20% 0px -55% 0px",
-      threshold: 0,
-    };
-
-    const handleIntersect = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersect, observerOptions);
-
-    SECTIONS.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [pathname]);
 
   // Focus search input when search modal opens & handle ESC
   useEffect(() => {
@@ -120,7 +89,7 @@ export const Header = () => {
       >
         <Container className="header-inner">
           <Link
-            href={isHome ? "#home" : "/#home"}
+            href="/"
             className="site-logo"
             aria-label="Reshto home"
           >
@@ -136,13 +105,15 @@ export const Header = () => {
           {/* Desktop Navigation */}
           <nav className="desktop-nav" aria-label="Main navigation">
             {siteConfig.navLinks.map((link) => {
-              const targetId = link.targetId || link.href.replace(/^[/#]+/, "");
-              const isActive = isHome && activeSection === targetId;
+              const isActive =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(link.href);
 
               return (
                 <Link
                   key={link.label}
-                  href={isHome ? link.href : `/${link.href}`}
+                  href={link.href}
                   className={`transition-colors duration-200 ${
                     isActive
                       ? "active font-bold text-brand-300 dark:text-brand-300"
@@ -247,6 +218,22 @@ export const Header = () => {
               )}
             </div>
 
+            {/* Order Cart Icon (Triggers Global Cart Drawer) */}
+            <button
+              type="button"
+              onClick={openCart}
+              className="header-icon relative"
+              aria-label="View Order Cart Drawer"
+              title="Your Shopping Cart"
+            >
+              <i className="ri-shopping-bag-3-line" />
+              {cartCount > 0 ? (
+                <span className="absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-brand text-[10px] font-extrabold text-white animate-pulse">
+                  {cartCount}
+                </span>
+              ) : null}
+            </button>
+
             {/* Order Now button */}
             <Link
               href="/order"
@@ -273,13 +260,15 @@ export const Header = () => {
           <div className="mobile-nav dark:bg-[#0f0e0d] dark:border-white/10">
             <Container>
               {siteConfig.navLinks.map((link) => {
-                const targetId = link.targetId || link.href.replace(/^[/#]+/, "");
-                const isActive = isHome && activeSection === targetId;
+                const isActive =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(link.href);
 
                 return (
                   <Link
                     key={link.label}
-                    href={isHome ? link.href : `/${link.href}`}
+                    href={link.href}
                     onClick={() => setOpen(false)}
                     className={`flex items-center justify-between py-3 text-sm font-semibold transition-colors ${
                       isActive
@@ -346,13 +335,25 @@ export const Header = () => {
                 )}
               </div>
 
-              <Link
-                href="/order"
-                onClick={() => setOpen(false)}
-                className="mobile-order mt-3"
-              >
-                Order Now <i className="ri-arrow-right-line" />
-              </Link>
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    openCart();
+                  }}
+                  className="flex items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/10 py-3 text-xs font-bold text-white transition hover:bg-white/20"
+                >
+                  <i className="ri-shopping-bag-3-line" /> Cart ({cartCount})
+                </button>
+                <Link
+                  href="/order"
+                  onClick={() => setOpen(false)}
+                  className="mobile-order m-0! flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs!"
+                >
+                  Order Menu <i className="ri-arrow-right-line" />
+                </Link>
+              </div>
             </Container>
           </div>
         ) : null}

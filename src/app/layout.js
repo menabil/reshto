@@ -2,8 +2,10 @@ import { Inter, Playfair_Display } from "next/font/google";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { BackToTop } from "@/components/ui/BackToTop";
+import { CartDrawer } from "@/components/cart/CartDrawer";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
+import { StoreProvider } from "@/context/StoreContext";
 import { siteConfig } from "@/constants/site";
 import "./globals.css";
 
@@ -78,10 +80,13 @@ export default function RootLayout({ children }) {
       <body className="flex min-h-screen flex-col bg-[#faf8f5] text-ink transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4]">
         <ThemeProvider>
           <AuthProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <BackToTop />
+            <StoreProvider>
+              <Header />
+              <CartDrawer />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <BackToTop />
+            </StoreProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
