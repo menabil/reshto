@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { useStore } from "@/context/StoreContext";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 const inputClass =
   "w-full rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/50 focus:border-brand-300 focus:bg-white/15 dark:bg-black/25 dark:border-white/15";
@@ -14,6 +15,7 @@ const labelClass = "mb-2 block text-sm font-semibold text-white/90";
 export const BookTable = () => {
   const { addReservation } = useStore();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [done, setDone] = useState(false);
   const [formData, setFormData] = useState({
     people: "2",
@@ -71,7 +73,11 @@ export const BookTable = () => {
 
           <div className="relative z-10">
             <div className="mb-8 flex justify-center">
-              <SectionTitle eyebrow="Reservation" title="Book A Table" light />
+              <SectionTitle
+                eyebrow={t("nav.reservation", "Reservation")}
+                title={t("hero.reserveTable", "Book A Table")}
+                light
+              />
             </div>
 
             {done ? (
@@ -112,7 +118,7 @@ export const BookTable = () => {
               <form onSubmit={handleSubmit} className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <label className={labelClass} htmlFor="people">
-                    Guests / Party Size *
+                    {t("res.guests", "Guests / Party Size *")}
                   </label>
                   <select
                     id="people"
@@ -132,7 +138,7 @@ export const BookTable = () => {
 
                 <div>
                   <label className={labelClass} htmlFor="date">
-                    Reservation Date *
+                    {t("res.date", "Reservation Date *")}
                   </label>
                   <input
                     id="date"
@@ -148,7 +154,7 @@ export const BookTable = () => {
 
                 <div>
                   <label className={labelClass} htmlFor="time">
-                    Reservation Time *
+                    {t("res.time", "Reservation Time *")}
                   </label>
                   <input
                     id="time"
@@ -163,7 +169,7 @@ export const BookTable = () => {
 
                 <div>
                   <label className={labelClass} htmlFor="name">
-                    Full Name *
+                    {t("checkout.name", "Full Name *")}
                   </label>
                   <input
                     id="name"
@@ -179,7 +185,7 @@ export const BookTable = () => {
 
                 <div>
                   <label className={labelClass} htmlFor="email">
-                    Email Address *
+                    {t("checkout.email", "Email Address *")}
                   </label>
                   <input
                     id="email"
@@ -195,7 +201,7 @@ export const BookTable = () => {
 
                 <div>
                   <label className={labelClass} htmlFor="seatingZone">
-                    Seating Layout Zone *
+                    {t("res.step1", "Seating Layout Zone *")}
                   </label>
                   <select
                     id="seatingZone"
@@ -204,16 +210,16 @@ export const BookTable = () => {
                     value={formData.seatingZone}
                     onChange={(e) => setFormData({ ...formData, seatingZone: e.target.value })}
                   >
-                    <option value="Outdoor Garden Patio" className="text-ink">🌿 Outdoor Garden Patio (Al Fresco)</option>
-                    <option value="Romantic Window Corner" className="text-ink">🪟 Romantic Window Corner (Intimate)</option>
-                    <option value="Indoor Grand Dining" className="text-ink">🏛️ Indoor Grand Dining (Melody Hall)</option>
-                    <option value="Private VIP Lounge" className="text-ink">👑 Private VIP Lounge (Exclusive Booth)</option>
+                    <option value="Outdoor Garden Patio" className="text-ink">🌿 {t("res.zonePatio", "Outdoor Garden Patio")}</option>
+                    <option value="Romantic Window Corner" className="text-ink">🪟 {t("res.zoneWindow", "Romantic Window Corner")}</option>
+                    <option value="Indoor Grand Dining" className="text-ink">🏛️ {t("res.zoneIndoor", "Indoor Grand Dining")}</option>
+                    <option value="Private VIP Lounge" className="text-ink">👑 {t("res.zoneVip", "Private VIP Lounge")}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className={labelClass} htmlFor="occasion">
-                    Special Occasion
+                    {t("res.occasion", "Special Occasion")}
                   </label>
                   <select
                     id="occasion"
@@ -223,7 +229,7 @@ export const BookTable = () => {
                     onChange={(e) => setFormData({ ...formData, occasion: e.target.value })}
                   >
                     <option value="Casual Dining" className="text-ink">🍽️ Casual Dining / Regular</option>
-                    <option value="Birthday Celebration" className="text-ink">🎂 Birthday Party (Free Dessert)</option>
+                    <option value="Birthday Celebration" className="text-ink">🎂 Birthday Party</option>
                     <option value="Anniversary" className="text-ink">💍 Anniversary / Date Night</option>
                     <option value="Business Dinner" className="text-ink">💼 Corporate &amp; Business Lunch</option>
                     <option value="Family Gathering" className="text-ink">👨‍👩‍👧‍👦 Family Celebration</option>
@@ -232,8 +238,17 @@ export const BookTable = () => {
 
                 <div className="flex items-end">
                   <button type="submit" className="btn-brand w-full py-3.5! text-base! shadow-lg">
-                    Confirm Reservation <i className="ri-arrow-right-line" />
+                    {t("res.confirmBtn", "Confirm Reservation")} <i className="ri-arrow-right-line" />
                   </button>
+                </div>
+
+                <div className="md:col-span-2 lg:col-span-3 flex justify-center pt-1">
+                  <Link
+                    href="/reservation"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-300 hover:text-white transition"
+                  >
+                    <i className="ri-map-2-line text-sm" /> Want to choose your exact seat? Explore our 2D Restaurant Floor Plan &rarr;
+                  </Link>
                 </div>
               </form>
             )}

@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { useStore } from "@/context/StoreContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { getDishMetadata } from "@/lib/dishMetadata";
 
 export const FoodQuickViewModal = ({ dish, onClose }) => {
   const {
-    quantities,
     updateQuantity,
     isFavorite,
     toggleFavorite,
@@ -15,6 +15,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
     addReview,
     openCart,
   } = useStore();
+  const { t, formatPrice } = useLanguage();
 
   const [quantity, setQuantity] = useState(1);
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -101,21 +102,22 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
         <button
           type="button"
           onClick={() => toggleFavorite(dishId)}
-          aria-label={isFav ? "Remove from wishlist" : "Save to wishlist"}
+          aria-label={isFav ? "Remove from favorites" : "Save to favorites"}
           className={`absolute left-4 top-4 z-20 grid h-9 w-9 place-items-center rounded-full backdrop-blur-md transition shadow-md ${
             isFav
-              ? "bg-rose-500 text-white animate-pulse"
-              : "bg-white/90 text-ink-700 hover:text-rose-500 dark:bg-black/40 dark:text-white"
+              ? "bg-rose-500 text-white"
+              : "bg-black/40 text-white hover:bg-black/60 hover:text-rose-400"
           }`}
+          title={isFav ? "Saved to favorites" : "Add to favorites"}
         >
-          <i className={isFav ? "ri-heart-fill" : "ri-heart-line"} />
+          <i className={isFav ? "ri-heart-fill text-sm" : "ri-heart-line text-sm"} />
         </button>
 
-        {/* Modal Hero Image */}
-        <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-ink/5 dark:bg-white/5">
+        {/* Dish Hero Image Banner */}
+        <div className="relative h-64 sm:h-72 w-full bg-ink/10 dark:bg-white/5 overflow-hidden">
           <SafeImage
             src={dish.image}
-            alt={dish.menuItemName || dish.name || "Dish"}
+            alt={dish.menuItemName || dish.name || "Delicious dish"}
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -131,7 +133,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
             </div>
             <div className="text-right">
               <span className="font-display text-2xl font-black text-amber-300">
-                {dish.menuItemPrice || dish.recipesPrice || "$15.00"}
+                {formatPrice(dish.menuItemPrice || dish.recipesPrice || "$15.00")}
               </span>
             </div>
           </div>
@@ -144,7 +146,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
             <div className="rounded-2xl bg-[#faf8f5] p-3 dark:bg-[#22201d]">
               <span className="text-[10px] font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/50 block">
-                Heat Level
+                {t("modal.heatLevel", "Heat Level")}
               </span>
               <span className="mt-0.5 text-xs font-bold text-ink dark:text-white block">
                 {metadata.spiciness.icon} {metadata.spiciness.label}
@@ -153,7 +155,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
 
             <div className="rounded-2xl bg-[#faf8f5] p-3 dark:bg-[#22201d]">
               <span className="text-[10px] font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/50 block">
-                Calories
+                {t("modal.calories", "Calories")}
               </span>
               <span className="mt-0.5 text-xs font-bold text-ink dark:text-white block">
                 🔥 {metadata.calories}
@@ -162,7 +164,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
 
             <div className="rounded-2xl bg-[#faf8f5] p-3 dark:bg-[#22201d]">
               <span className="text-[10px] font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/50 block">
-                Prep Time
+                {t("modal.prepTime", "Prep Time")}
               </span>
               <span className="mt-0.5 text-xs font-bold text-ink dark:text-white block">
                 ⏱️ {metadata.prepTime}
@@ -171,7 +173,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
 
             <div className="rounded-2xl bg-[#faf8f5] p-3 dark:bg-[#22201d]">
               <span className="text-[10px] font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/50 block">
-                Rating
+                {t("modal.rating", "Rating")}
               </span>
               <span className="mt-0.5 text-xs font-bold text-amber-500 block">
                 ★ {averageRating} ({dishReviews.length + 12})
@@ -182,18 +184,18 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
           {/* Description */}
           <div>
             <h3 className="font-display text-sm font-bold text-ink dark:text-white">
-              Chef&apos;s Description
+              {t("modal.chefDesc", "Chef's Culinary Description")}
             </h3>
             <p className="mt-1 text-xs leading-relaxed text-ink-700 dark:text-white/70">
               {dish.menuItemDesc || dish.desc || dish.recipesSubTitle || "Prepared fresh to order by our culinary masters using locally-sourced organic ingredients."}
             </p>
           </div>
 
-          {/* Ingredients Breakdown (Task 5.1) */}
+          {/* Ingredients Breakdown */}
           <div>
             <h3 className="font-display text-sm font-bold text-ink dark:text-white flex items-center gap-1.5">
               <i className="ri-leaf-line text-emerald-600 dark:text-emerald-400" />
-              Fresh Ingredients &amp; Recipe Blend
+              {t("modal.ingredients", "Fresh Ingredients & Recipe Blend")}
             </h3>
             <div className="mt-2.5 flex flex-wrap gap-2">
               {metadata.ingredients.map((ing, i) => (
@@ -207,89 +209,100 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
             </div>
           </div>
 
-          {/* Allergen & Dietary Information (Task 5.1) */}
+          {/* Allergen & Dietary Information */}
           <div>
             <h3 className="font-display text-sm font-bold text-ink dark:text-white flex items-center gap-1.5">
               <i className="ri-shield-check-line text-brand dark:text-brand-300" />
-              Dietary &amp; Allergen Transparency
+              {t("modal.allergens", "Dietary & Allergen Transparency")}
             </h3>
             <div className="mt-2.5 flex flex-wrap gap-2">
               {metadata.allergens.map((alg, i) => (
                 <span
                   key={i}
                   className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1 text-xs font-bold ${
-                    alg.type === "warning"
-                      ? "bg-amber-500/10 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 border border-amber-500/20"
-                      : "bg-emerald-500/10 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-500/20"
+                    alg.highlight
+                      ? "bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300 border border-amber-500/30"
+                      : "bg-[#faf8f5] text-ink-700 dark:bg-[#22201d] dark:text-white/70 border border-ink/10 dark:border-white/10"
                   }`}
                 >
-                  <span>{alg.icon}</span>
-                  <span>{alg.name}</span>
+                  <i className={alg.icon} /> {alg.label}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Customer Reviews & Star Ratings (Task 5.4) */}
-          <div className="border-t border-ink/10 pt-4 dark:border-white/10">
+          {/* Reviews & Ratings Section */}
+          <div className="border-t border-ink/10 pt-5 dark:border-white/10">
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-sm font-bold text-ink dark:text-white flex items-center gap-1.5">
-                <i className="ri-star-smile-line text-amber-500" />
-                Guest Reviews ({dishReviews.length})
-              </h3>
+              <div>
+                <h3 className="font-display text-sm font-bold text-ink dark:text-white">
+                  {t("modal.reviews", "Guest Reviews & Ratings")}
+                </h3>
+                <p className="text-[11px] text-ink-700/60 dark:text-white/50">
+                  {dishReviews.length} verified reviews from diners
+                </p>
+              </div>
+
               <button
                 type="button"
                 onClick={() => setShowReviewForm((v) => !v)}
-                className="text-xs font-bold text-brand hover:underline dark:text-brand-300"
+                className="rounded-xl border border-brand/30 bg-brand/10 px-3 py-1.5 text-xs font-bold text-brand hover:bg-brand/20 dark:text-brand-300 transition"
               >
-                {showReviewForm ? "Hide Form" : "+ Write a Review"}
+                <i className="ri-edit-line mr-1" />
+                {showReviewForm ? "Cancel" : t("modal.writeReview", "Write a Review")}
               </button>
             </div>
 
-            {/* Review Form */}
-            {showReviewForm && (
-              <form onSubmit={handleSubmitReview} className="mt-3 rounded-2xl bg-[#faf8f5] p-4 dark:bg-[#22201d] space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-ink dark:text-white">Your Star Rating:</span>
-                  <div className="flex items-center gap-1 text-amber-500 text-base cursor-pointer">
+            {/* Review submission feedback */}
+            {reviewSubmitted && (
+              <div className="mt-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-xs font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
+                <i className="ri-checkbox-circle-fill text-base" />
+                Thank you! Your verified rating and review have been recorded.
+              </div>
+            )}
+
+            {/* Write Review Form */}
+            {showReviewForm && !reviewSubmitted && (
+              <form onSubmit={handleSubmitReview} className="mt-3.5 space-y-3 rounded-2xl border border-ink/10 bg-[#faf8f5] p-4 dark:border-white/10 dark:bg-[#22201d]">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-ink dark:text-white">Your Rating:</span>
+                  <div className="flex gap-1 text-amber-400">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <i
+                      <button
                         key={star}
+                        type="button"
                         onClick={() => setReviewRating(star)}
-                        className={star <= reviewRating ? "ri-star-fill" : "ri-star-line"}
-                      />
+                        className="text-lg hover:scale-110 transition"
+                      >
+                        <i className={star <= reviewRating ? "ri-star-fill text-amber-500" : "ri-star-line text-ink-700/30 dark:text-white/30"} />
+                      </button>
                     ))}
                   </div>
                 </div>
 
                 <input
                   type="text"
-                  placeholder="Your Name (e.g. Farhana Ahmed)"
                   value={reviewAuthor}
                   onChange={(e) => setReviewAuthor(e.target.value)}
-                  className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] px-3 py-2 text-xs text-ink outline-none dark:border-white/15 dark:text-white"
+                  placeholder="Your Name (e.g. Ayesha Rahman)"
+                  className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] px-3 py-1.5 text-xs outline-none focus:border-brand"
                 />
 
                 <textarea
-                  rows={2}
-                  required
-                  placeholder="Share your culinary experience with this dish..."
                   value={reviewComment}
                   onChange={(e) => setReviewComment(e.target.value)}
-                  className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] p-2.5 text-xs text-ink outline-none dark:border-white/15 dark:text-white resize-none"
+                  placeholder="How was the flavor, texture, and presentation? Share your thoughts..."
+                  rows={2}
+                  className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] px-3 py-2 text-xs outline-none focus:border-brand"
+                  required
                 />
 
-                <div className="flex justify-between items-center">
-                  {reviewSubmitted ? (
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                      🎉 Review submitted successfully!
-                    </span>
-                  ) : <span />}
+                <div className="flex justify-end">
                   <button
                     type="submit"
                     className="btn-brand py-1.5! px-4! text-xs!"
                   >
-                    Post Review
+                    {t("modal.postReview", "Post Review")}
                   </button>
                 </div>
               </form>
@@ -334,7 +347,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
         <div className="flex items-center justify-between border-t border-ink/10 bg-[#faf8f5] px-6 py-4 dark:border-white/10 dark:bg-[#22201d]">
           {/* Quantity Selector */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-ink dark:text-white">Qty:</span>
+            <span className="text-xs font-bold text-ink dark:text-white">{t("modal.qty", "Qty:")}</span>
             <div className="flex items-center gap-1 rounded-xl border border-ink/15 bg-white p-1 dark:border-white/15 dark:bg-[#1a1816]">
               <button
                 type="button"
@@ -362,7 +375,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
               onClick={handleAddToCart}
               className="btn-brand flex items-center gap-2 py-2.5 px-5 text-xs! font-bold shadow-md"
             >
-              <i className="ri-shopping-bag-3-line text-sm" /> Add to Order
+              <i className="ri-shopping-bag-3-line text-sm" /> {t("modal.addToOrder", "Add to Order")}
             </button>
           </div>
         </div>

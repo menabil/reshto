@@ -6,7 +6,9 @@ import { Container } from "@/components/ui/Container";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { ReceiptModal } from "@/components/checkout/ReceiptModal";
+import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
 
 const USER_MOCK = {
   name: "Tahmid Hassan",
@@ -21,6 +23,7 @@ const USER_MOCK = {
 
 export const UserDashboard = () => {
   const { user: authUser, isAuthenticated, mounted, login } = useAuth();
+  const { t, formatPrice } = useLanguage();
   const {
     orders,
     reservations,
@@ -28,11 +31,22 @@ export const UserDashboard = () => {
     favorites,
     menuItems,
     toggleFavorite,
+    reviews,
+    addReview,
+    updateQuantity,
+    openCart,
   } = useStore();
-  const [activeTab, setActiveTab] = useState("orders"); // orders, bookings, favorites, profile
+  const [activeTab, setActiveTab] = useState("orders"); // orders, bookings, favorites, reviews, profile
   const [user, setUser] = useState(() => (authUser ? { ...USER_MOCK, ...authUser } : USER_MOCK));
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [selectedOrderReceipt, setSelectedOrderReceipt] = useState(null);
+  const [quickViewDish, setQuickViewDish] = useState(null);
+
+  // Review modal state (Task 5.4)
+  const [reviewModalData, setReviewModalData] = useState(null);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState(false);
 
   const userOrders = authUser
     ? orders.filter(
@@ -108,6 +122,120 @@ export const UserDashboard = () => {
           onClose={() => setSelectedOrderReceipt(null)}
         />
       )}
+
+      {/* Food Quick View Modal (Task 5.1) */}
+      {quickViewDish && (
+        <FoodQuickViewModal
+          dish={quickViewDish}
+          onClose={() => setQuickViewDish(null)}
+        />
+      )}
+
+      {/* Client-Side Review & Rating Modal (Task 5.4) */}
+      {reviewModalData && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl dark:bg-[#1a1816] dark:text-white border border-ink/10 dark:border-white/10">
+            <button
+              type="button"
+              onClick={() => setReviewModalData(null)}
+              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full hover:bg-ink/10 dark:hover:bg-white/10"
+            >
+              <i className="ri-close-line text-lg" />
+            </button>
+
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-amber-500/10 text-2xl text-amber-500">
+              <i className="ri-star-smile-fill" />
+            </span>
+
+            <h3 className="mt-3 font-display text-xl font-bold text-ink dark:text-white">
+              Rate &amp; Review Dish
+            </h3>
+            <p className="mt-1 text-xs text-ink-700 dark:text-white/60">
+              Share your feedback on <strong>{reviewModalData.dishName}</strong>
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!reviewComment.trim()) return;
+                addReview({
+                  dishId: reviewModalData.dishId || 1,
+                  dishName: reviewModalData.dishName,
+                  customerName: user.name || "Foodie Patron",
+                  rating: reviewRating,
+                  comment: reviewComment.trim(),
+                });
+                setReviewSuccess(true);
+                setTimeout(() => {
+                  setReviewSuccess(false);
+                  setReviewModalData(null);
+                  setReviewComment("");
+                }, 1800);
+              }}
+              className="mt-4 space-y-4"
+            >
+              <div>
+                <label className="text-xs font-bold text-ink dark:text-white block mb-1">
+                  Overall Rating:
+                </label>
+                <div className="flex items-center gap-2 text-2xl text-amber-500 cursor-pointer">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <i
+                      key={star}
+                      onClick={() => setReviewRating(star)}
+                      className={star <= reviewRating ? "ri-star-fill" : "ri-star-line"}
+                    />
+                  ))}
+                  <span className="text-xs font-bold text-ink-700 dark:text-white/70 ml-2">
+                    {reviewRating} of 5 Stars
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-ink dark:text-white block mb-1">
+                  Your Review / Food Experience:
+                </label>
+                <textarea
+                  rows={3}
+                  required
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  placeholder="How was the flavor, texture, warmth, and culinary presentation?..."
+                  className="w-full rounded-2xl border border-ink/15 bg-[#faf8f5] p-3 text-xs text-ink outline-none focus:border-brand dark:border-white/15 dark:bg-[#22201d] dark:text-white resize-none"
+                />
+              </div>
+
+              {reviewSuccess ? (
+                <div className="rounded-xl bg-emerald-500/10 p-3 text-center text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                  🎉 Thank you! Your review was successfully published.
+                </div>
+              ) : (
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setReviewModalData(null)}
+                    className="rounded-xl border border-ink/15 px-4 py-2 text-xs font-bold text-ink hover:bg-ink/5 dark:border-white/15 dark:text-white"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn-brand py-2! px-5! text-xs!"
+                  >
+                    Submit Review
+                  </button>
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
+      )}
+
       <Container>
         {/* User Profile Header Card */}
         <div className="relative mb-8 overflow-hidden rounded-4xl border border-ink/10 bg-gradient-to-br from-[#171512] via-[#24211d] to-[#171512] p-6 text-white shadow-xl dark:border-white/10 md:p-8">
@@ -200,6 +328,18 @@ export const UserDashboard = () => {
 
           <button
             type="button"
+            onClick={() => setActiveTab("reviews")}
+            className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
+              activeTab === "reviews"
+                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
+                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
+            }`}
+          >
+            <i className="ri-star-smile-line" /> My Reviews &amp; Ratings ({reviews.length})
+          </button>
+
+          <button
+            type="button"
             onClick={() => setActiveTab("profile")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === "profile"
@@ -251,7 +391,7 @@ export const UserDashboard = () => {
                         {order.status}
                       </span>
                       <span className="font-display text-lg font-extrabold text-ink dark:text-white">
-                        {order.total}
+                        {formatPrice(order.total)}
                       </span>
                     </div>
                   </div>
@@ -264,6 +404,27 @@ export const UserDashboard = () => {
                   </div>
 
                   <div className="mt-4 flex flex-wrap justify-end gap-3 pt-2">
+                    <Link
+                      href={`/order-tracking?orderId=${order.id}`}
+                      className="btn-brand text-xs py-2! px-3.5! flex items-center gap-1.5 shadow-xs"
+                    >
+                      <i className="ri-e-bike-2-fill" /> Track Live
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setReviewModalData({
+                          dishId: order.items?.[0]?.id || 1,
+                          dishName:
+                            order.items?.[0]?.name ||
+                            order.itemsSummary?.split(",")[0] ||
+                            "Featured Dish",
+                        })
+                      }
+                      className="btn-outline text-xs py-2! px-3.5! flex items-center gap-1.5 dark:bg-[#1e1c1a] dark:text-amber-400 dark:border-white/10 text-amber-700"
+                    >
+                      <i className="ri-star-smile-line" /> Rate &amp; Review Dish
+                    </button>
                     <button
                       type="button"
                       onClick={() => setSelectedOrderReceipt(order)}
@@ -408,22 +569,29 @@ export const UserDashboard = () => {
               favoriteDishes.map((fav) => (
                 <div
                   key={fav.id || fav.cartId}
-                  className="flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]"
+                  onClick={() => setQuickViewDish(fav)}
+                  className="flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] cursor-pointer hover:border-brand/40 transition-all group"
                 >
                   <div className="relative h-44">
                     <SafeImage
                       src={fav.image}
                       alt={fav.menuItemName}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <button
                       type="button"
-                      onClick={() => toggleFavorite(fav.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(fav.id);
+                      }}
                       className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white text-rose-500 shadow-md dark:bg-[#292522]"
-                      title="Toggle Favorite"
+                      title="Remove from Favorites"
                     >
                       <i className="ri-heart-3-fill" />
                     </button>
+                    <span className="absolute bottom-2 left-2 rounded-md bg-black/50 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur-xs flex items-center gap-1">
+                      <i className="ri-information-line" /> Quick View
+                    </span>
                   </div>
                   <div className="flex flex-1 flex-col p-5">
                     <h3 className="font-display font-bold text-base text-ink dark:text-white">
@@ -432,21 +600,91 @@ export const UserDashboard = () => {
                     <p className="mt-1 flex-1 text-xs text-ink-700/60 dark:text-white/60 line-clamp-2">
                       {fav.menuItemDesc}
                     </p>
-                    <div className="mt-4 flex items-center justify-between border-t border-ink/5 pt-3 dark:border-white/5">
+                    <div
+                      className="mt-4 flex items-center justify-between border-t border-ink/5 pt-3 dark:border-white/5"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <span className="font-display font-extrabold text-brand dark:text-brand-300">
-                        {fav.menuItemPrice}
+                        {formatPrice(fav.menuItemPrice)}
                       </span>
-                      <Link
-                        href="/order"
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const cartId = fav.cartId || `lunch-${fav.id}`;
+                          updateQuantity(cartId, 1);
+                          openCart();
+                        }}
                         className="btn-brand text-xs py-1.5! px-3!"
                       >
-                        Order <i className="ri-arrow-right-line" />
-                      </Link>
+                        + Add to Cart <i className="ri-shopping-bag-3-line ml-0.5" />
+                      </button>
                     </div>
                   </div>
                 </div>
               ))
             )}
+          </div>
+        ) : null}
+
+        {/* TAB 4: MY REVIEWS & RATINGS (Task 5.4) */}
+        {activeTab === "reviews" ? (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-ink/10 pb-4 dark:border-white/10">
+              <div>
+                <h3 className="font-display text-xl font-bold text-ink dark:text-white">
+                  Customer Dish Reviews &amp; Ratings
+                </h3>
+                <p className="text-xs text-ink-700/60 dark:text-white/60">
+                  Read community reviews and share your culinary feedback on dishes you tried.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setReviewModalData({
+                    dishId: 1,
+                    dishName: "Classic Margherita Pizza",
+                  })
+                }
+                className="btn-brand text-xs py-2! px-4! flex items-center gap-1.5"
+              >
+                <i className="ri-edit-line" /> Write a Review
+              </button>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {reviews.map((rev) => (
+                <div
+                  key={rev.id}
+                  className="flex flex-col justify-between rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] hover:border-brand/30 transition-all"
+                >
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span className="rounded-md bg-brand/10 px-2 py-0.5 text-[11px] font-bold text-brand dark:bg-brand/20 dark:text-brand-300">
+                        {rev.dishName}
+                      </span>
+                      <div className="flex items-center gap-0.5 text-amber-500">
+                        {Array.from({ length: rev.rating }).map((_, i) => (
+                          <i key={i} className="ri-star-fill text-xs" />
+                        ))}
+                      </div>
+                    </div>
+
+                    <p className="mt-3 text-xs leading-relaxed text-ink dark:text-white/80 italic">
+                      &ldquo;{rev.comment}&rdquo;
+                    </p>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between border-t border-ink/5 pt-3 text-[11px] text-ink-700/60 dark:border-white/5 dark:text-white/50">
+                    <span className="font-bold text-ink dark:text-white">
+                      By: {rev.customerName}
+                    </span>
+                    <span>{rev.date || "Verified Diner"}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
 

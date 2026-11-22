@@ -29,6 +29,59 @@ export const AdminDashboard = () => {
   const [menuSearch, setMenuSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
+  // Orders Search & Date Filter (Task 5.3)
+  const [orderSearch, setOrderSearch] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("all");
+  const [orderDateFilter, setOrderDateFilter] = useState("");
+
+  // Reservations Search & Date Filter (Task 5.3)
+  const [resSearch, setResSearch] = useState("");
+  const [resStatusFilter, setResStatusFilter] = useState("all");
+  const [resZoneFilter, setResZoneFilter] = useState("all");
+  const [resDateFilter, setResDateFilter] = useState("");
+
+  // Filtered Orders
+  const filteredOrders = orders.filter((ord) => {
+    const q = orderSearch.toLowerCase().trim();
+    const matchesSearch =
+      !q ||
+      ord.customer?.toLowerCase().includes(q) ||
+      ord.email?.toLowerCase().includes(q) ||
+      ord.phone?.includes(q) ||
+      ord.id?.toLowerCase().includes(q);
+
+    const matchesStatus =
+      orderStatusFilter === "all" || ord.status === orderStatusFilter;
+
+    const matchesDate =
+      !orderDateFilter || (ord.date && ord.date.includes(orderDateFilter));
+
+    return matchesSearch && matchesStatus && matchesDate;
+  });
+
+  // Filtered Reservations
+  const filteredReservations = reservations.filter((res) => {
+    const q = resSearch.toLowerCase().trim();
+    const matchesSearch =
+      !q ||
+      res.guestName?.toLowerCase().includes(q) ||
+      res.email?.toLowerCase().includes(q) ||
+      res.phone?.includes(q) ||
+      res.id?.toLowerCase().includes(q);
+
+    const matchesStatus =
+      resStatusFilter === "all" || res.status === resStatusFilter;
+
+    const matchesZone =
+      resZoneFilter === "all" ||
+      (res.seatingZone && res.seatingZone.includes(resZoneFilter));
+
+    const matchesDate =
+      !resDateFilter || (res.date && res.date.includes(resDateFilter));
+
+    return matchesSearch && matchesStatus && matchesZone && matchesDate;
+  });
+
   // Add Item Modal
   const [showAddModal, setShowAddModal] = useState(false);
   const [newDish, setNewDish] = useState({
@@ -544,13 +597,64 @@ export const AdminDashboard = () => {
         {activeTab === "orders" ? (
           <div className="space-y-6">
             <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
-              <div className="border-b border-ink/10 p-5 dark:border-white/10">
-                <h3 className="font-display text-lg font-bold text-ink dark:text-white">
-                  Incoming &amp; Recent Orders
-                </h3>
-                <p className="text-xs text-ink-700/60 dark:text-white/60">
-                  Live updates directly from digital ordering experience.
-                </p>
+              <div className="border-b border-ink/10 p-5 dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h3 className="font-display text-lg font-bold text-ink dark:text-white">
+                    Incoming &amp; Recent Orders ({filteredOrders.length})
+                  </h3>
+                  <p className="text-xs text-ink-700/60 dark:text-white/60">
+                    Live updates with search by customer, phone, ID or date.
+                  </p>
+                </div>
+
+                {/* Filter & Search Toolbar (Task 5.3) */}
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="flex items-center gap-2 rounded-xl border border-ink/15 bg-white px-3 py-1.5 text-xs text-ink dark:border-white/15 dark:bg-[#171614] dark:text-white">
+                    <i className="ri-search-line text-ink-700/60 dark:text-white/40" />
+                    <input
+                      type="text"
+                      placeholder="Search customer, ID, phone..."
+                      value={orderSearch}
+                      onChange={(e) => setOrderSearch(e.target.value)}
+                      className="bg-transparent outline-none text-xs w-36 sm:w-48 placeholder:text-ink-700/50 dark:placeholder:text-white/40"
+                    />
+                    {orderSearch && (
+                      <button
+                        type="button"
+                        onClick={() => setOrderSearch("")}
+                        className="text-ink-700/50 hover:text-ink dark:text-white/40"
+                      >
+                        <i className="ri-close-line" />
+                      </button>
+                    )}
+                  </div>
+
+                  <select
+                    value={orderStatusFilter}
+                    onChange={(e) => setOrderStatusFilter(e.target.value)}
+                    className="rounded-xl border border-ink/15 bg-white px-3 py-1.5 text-xs font-bold text-ink outline-none dark:border-white/15 dark:bg-[#171614] dark:text-white"
+                  >
+                    <option value="all">All Statuses</option>
+                    <option value="Preparing">Preparing</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+
+                  {(orderSearch || orderStatusFilter !== "all" || orderDateFilter) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOrderSearch("");
+                        setOrderStatusFilter("all");
+                        setOrderDateFilter("");
+                      }}
+                      className="rounded-xl bg-ink/5 px-2.5 py-1.5 text-xs font-semibold text-rose-500 hover:bg-rose-50 dark:bg-white/5 dark:hover:bg-white/10"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="overflow-x-auto">
@@ -566,7 +670,15 @@ export const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-ink/5 dark:divide-white/5">
-                    {orders.map((ord) => (
+                    {filteredOrders.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="px-5 py-12 text-center text-xs text-ink-700/60 dark:text-white/50">
+                          <i className="ri-search-line text-2xl block mb-2" />
+                          No orders matched your search or filters.
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredOrders.map((ord) => (
                       <tr key={ord.id} className="hover:bg-ink/[0.01] dark:hover:bg-white/[0.01]">
                         <td className="px-5 py-4 font-mono font-bold text-xs text-brand dark:text-brand-300">
                           {ord.id}
@@ -609,7 +721,7 @@ export const AdminDashboard = () => {
                           </div>
                         </td>
                       </tr>
-                    ))}
+                    )))}
                   </tbody>
                 </table>
               </div>
@@ -621,13 +733,76 @@ export const AdminDashboard = () => {
         {activeTab === "reservations" ? (
           <div className="space-y-6">
             <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
-              <div className="border-b border-ink/10 p-5 dark:border-white/10">
-                <h3 className="font-display text-lg font-bold text-ink dark:text-white">
-                  Table Reservations
-                </h3>
-                <p className="text-xs text-ink-700/60 dark:text-white/60">
-                  Manage guest bookings submitted from the homepage reservation widget.
-                </p>
+              <div className="border-b border-ink/10 p-5 dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h3 className="font-display text-lg font-bold text-ink dark:text-white">
+                    Table Reservations ({filteredReservations.length})
+                  </h3>
+                  <p className="text-xs text-ink-700/60 dark:text-white/60">
+                    Manage guest bookings with filter by guest name, phone, zone, or status.
+                  </p>
+                </div>
+
+                {/* Filter & Search Toolbar (Task 5.3) */}
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="flex items-center gap-2 rounded-xl border border-ink/15 bg-white px-3 py-1.5 text-xs text-ink dark:border-white/15 dark:bg-[#171614] dark:text-white">
+                    <i className="ri-search-line text-ink-700/60 dark:text-white/40" />
+                    <input
+                      type="text"
+                      placeholder="Search guest, ID, phone..."
+                      value={resSearch}
+                      onChange={(e) => setResSearch(e.target.value)}
+                      className="bg-transparent outline-none text-xs w-36 sm:w-48 placeholder:text-ink-700/50 dark:placeholder:text-white/40"
+                    />
+                    {resSearch && (
+                      <button
+                        type="button"
+                        onClick={() => setResSearch("")}
+                        className="text-ink-700/50 hover:text-ink dark:text-white/40"
+                      >
+                        <i className="ri-close-line" />
+                      </button>
+                    )}
+                  </div>
+
+                  <select
+                    value={resZoneFilter}
+                    onChange={(e) => setResZoneFilter(e.target.value)}
+                    className="rounded-xl border border-ink/15 bg-white px-3 py-1.5 text-xs font-bold text-ink outline-none dark:border-white/15 dark:bg-[#171614] dark:text-white"
+                  >
+                    <option value="all">All Seating Zones</option>
+                    <option value="Outdoor Garden Patio">Outdoor Patio</option>
+                    <option value="Romantic Window Corner">Window Corner</option>
+                    <option value="Indoor Grand Dining">Indoor Hall</option>
+                    <option value="Private VIP Lounge">VIP Lounge</option>
+                  </select>
+
+                  <select
+                    value={resStatusFilter}
+                    onChange={(e) => setResStatusFilter(e.target.value)}
+                    className="rounded-xl border border-ink/15 bg-white px-3 py-1.5 text-xs font-bold text-ink outline-none dark:border-white/15 dark:bg-[#171614] dark:text-white"
+                  >
+                    <option value="all">All Statuses</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+
+                  {(resSearch || resStatusFilter !== "all" || resZoneFilter !== "all") && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setResSearch("");
+                        setResStatusFilter("all");
+                        setResZoneFilter("all");
+                        setResDateFilter("");
+                      }}
+                      className="rounded-xl bg-ink/5 px-2.5 py-1.5 text-xs font-semibold text-rose-500 hover:bg-rose-50 dark:bg-white/5 dark:hover:bg-white/10"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="overflow-x-auto">
@@ -642,7 +817,15 @@ export const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-ink/5 dark:divide-white/5">
-                    {reservations.map((res) => (
+                    {filteredReservations.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-5 py-12 text-center text-xs text-ink-700/60 dark:text-white/50">
+                          <i className="ri-search-line text-2xl block mb-2" />
+                          No table bookings matched your search or filters.
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredReservations.map((res) => (
                       <tr key={res.id} className="hover:bg-ink/[0.01] dark:hover:bg-white/[0.01]">
                         <td className="px-5 py-4">
                           <span className="font-mono text-xs font-extrabold text-brand dark:text-brand-300 block">
@@ -710,7 +893,7 @@ export const AdminDashboard = () => {
                           </div>
                         </td>
                       </tr>
-                    ))}
+                    )))}
                   </tbody>
                 </table>
               </div>

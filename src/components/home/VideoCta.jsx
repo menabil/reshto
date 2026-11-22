@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { foodImages } from "@/constants/images";
 
@@ -19,7 +20,13 @@ export const VideoCta = () => {
           <button type="button" onClick={() => setOpen(true)} className="story-link mt-7">Step inside <i className="ri-arrow-right-line" /></button>
         </div>
         <div className="story-image-wrap">
-          <img src={foodImages.restaurant} alt="Inside the Reshto dining room" loading="lazy" />
+          <Image
+            src={foodImages.restaurant}
+            alt="Inside the Reshto dining room"
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+          />
           <button type="button" onClick={() => setOpen(true)} className="story-play" aria-label="Play Reshto restaurant story"><i className="ri-play-fill" /></button>
           <span className="story-image-caption"><i className="ri-map-pin-2-fill" /> An evening made for lingering</span>
         </div>

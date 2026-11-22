@@ -6,11 +6,13 @@ import { Container } from "@/components/ui/Container";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 import { ReceiptModal } from "@/components/checkout/ReceiptModal";
 
 export const CheckoutExperience = () => {
   const { user, isAuthenticated } = useAuth();
+  const { t, formatPrice } = useLanguage();
   const {
     cartItems,
     cartCount,
@@ -85,12 +87,12 @@ export const CheckoutExperience = () => {
     address: fullAddress,
     orderType,
     notes: formData.notes,
-    subtotal: cartSubtotal,
-    discount: couponDiscount > 0 ? `-$${couponDiscount.toFixed(2)}` : "$0.00",
+    subtotal: formatPrice(cartSubtotal),
+    discount: couponDiscount > 0 ? `-${formatPrice(couponDiscount)}` : "$0.00",
     coupon: appliedCoupon?.code,
-    deliveryFee: currentDeliveryFee === 0 ? "FREE" : `$${currentDeliveryFee.toFixed(2)}`,
-    tax: `$${taxAmount.toFixed(2)}`,
-    total: currentTotal,
+    deliveryFee: currentDeliveryFee === 0 ? "FREE" : formatPrice(currentDeliveryFee),
+    tax: formatPrice(taxAmount),
+    total: formatPrice(currentTotal),
   });
 
   const handleSubmitOrder = (e) => {
@@ -187,12 +189,19 @@ export const CheckoutExperience = () => {
 
               {/* CTA Buttons */}
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href={`/order-tracking?orderId=${confirmedOrder.id}`}
+                  className="flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-3 text-xs font-bold text-white transition shadow-sm"
+                >
+                  <i className="ri-e-bike-2-fill text-base" /> Track Live Delivery 🛵
+                </Link>
+
                 <button
                   type="button"
                   onClick={() => setShowReceiptModal(true)}
                   className="btn-brand flex items-center gap-2 px-6 py-3 text-xs! font-bold"
                 >
-                  <i className="ri-printer-line text-base" /> View &amp; Print Digital Receipt
+                  <i className="ri-printer-line text-base" /> View &amp; Print Receipt
                 </button>
 
                 <a
@@ -201,14 +210,14 @@ export const CheckoutExperience = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-6 py-3 text-xs font-bold text-white transition shadow-sm"
                 >
-                  <i className="ri-whatsapp-line text-base" /> Send to Kitchen WhatsApp
+                  <i className="ri-whatsapp-line text-base" /> Kitchen WhatsApp
                 </a>
 
                 <Link
                   href="/dashboard"
                   className="rounded-xl border border-ink/15 bg-transparent px-5 py-3 text-xs font-bold text-ink hover:bg-ink/5 dark:border-white/15 dark:text-white dark:hover:bg-white/5 transition"
                 >
-                  Track in Dashboard &rarr;
+                  My Dashboard &rarr;
                 </Link>
               </div>
             </div>
@@ -606,7 +615,7 @@ export const CheckoutExperience = () => {
                     </>
                   ) : (
                     <>
-                      <i className="ri-checkbox-circle-line text-base" /> Place Order &bull; ${currentTotal.toFixed(2)}
+                      <i className="ri-checkbox-circle-line text-base" /> {t("checkout.placeOrder", "Confirm & Place Order")} &bull; {formatPrice(currentTotal)}
                     </>
                   )}
                 </button>
@@ -648,7 +657,7 @@ export const CheckoutExperience = () => {
                             {item.menuItemName}
                           </h4>
                           <span className="text-[11px] text-ink-700 dark:text-white/60">
-                            {item.menuItemPrice} &times; {item.quantity}
+                            {formatPrice(item.menuItemPrice)} &times; {item.quantity}
                           </span>
                         </div>
 
@@ -674,7 +683,7 @@ export const CheckoutExperience = () => {
                         </div>
 
                         <span className="text-xs font-bold text-ink dark:text-white">
-                          ${item.itemTotal.toFixed(2)}
+                          {formatPrice(item.itemTotal)}
                         </span>
                       </div>
                     ))}
@@ -684,10 +693,10 @@ export const CheckoutExperience = () => {
                   <div className="border-t border-ink/10 pt-4 dark:border-white/10">
                     <span className="text-xs font-bold text-ink dark:text-white flex items-center justify-between mb-2">
                       <span className="flex items-center gap-1">
-                        <i className="ri-coupon-3-line text-brand" /> Promo Coupon
+                        <i className="ri-coupon-3-line text-brand" /> {t("cart.promoCoupon", "Promo Coupon")}
                       </span>
                       <span className="text-[10px] text-ink-700/60 dark:text-white/50">
-                        Try <strong>SAVE20</strong> or <strong>FREESHIP</strong>
+                        {t("cart.tryCoupons", "Try: SAVE20 or FREESHIP")}
                       </span>
                     </span>
 
@@ -702,7 +711,7 @@ export const CheckoutExperience = () => {
                           onClick={removeCoupon}
                           className="text-xs text-rose-500 hover:underline"
                         >
-                          Remove
+                          {t("cart.remove", "Remove")}
                         </button>
                       </div>
                     ) : (
@@ -711,14 +720,14 @@ export const CheckoutExperience = () => {
                           type="text"
                           value={couponCodeInput}
                           onChange={(e) => setCouponCodeInput(e.target.value)}
-                          placeholder="Enter coupon code"
+                          placeholder="SAVE20"
                           className="flex-1 rounded-xl border border-ink/15 bg-transparent px-3 py-2 text-xs font-semibold uppercase text-ink outline-none focus:border-brand dark:border-white/15 dark:text-white"
                         />
                         <button
                           type="submit"
                           className="rounded-xl bg-brand px-4 py-2 text-xs font-bold text-white transition hover:bg-brand/90"
                         >
-                          Apply
+                          {t("cart.apply", "Apply")}
                         </button>
                       </form>
                     )}
@@ -737,41 +746,41 @@ export const CheckoutExperience = () => {
                   {/* Price Breakdown */}
                   <div className="border-t border-ink/10 pt-4 space-y-2 text-xs dark:border-white/10">
                     <div className="flex justify-between text-ink-700 dark:text-white/70">
-                      <span>Food Subtotal</span>
+                      <span>{t("cart.subtotal", "Food Subtotal")}</span>
                       <span className="font-bold text-ink dark:text-white">
-                        ${cartSubtotal.toFixed(2)}
+                        {formatPrice(cartSubtotal)}
                       </span>
                     </div>
 
                     {couponDiscount > 0 && (
                       <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
-                        <span>Discount ({appliedCoupon?.code})</span>
-                        <span>-${couponDiscount.toFixed(2)}</span>
+                        <span>{t("cart.discount", "Discount")} ({appliedCoupon?.code})</span>
+                        <span>-{formatPrice(couponDiscount)}</span>
                       </div>
                     )}
 
                     <div className="flex justify-between text-ink-700 dark:text-white/70">
-                      <span>Delivery Service Fee</span>
+                      <span>{t("cart.deliveryFee", "Delivery Service Fee")}</span>
                       <span className="font-bold text-ink dark:text-white">
                         {currentDeliveryFee === 0 ? (
-                          <span className="text-emerald-600 font-bold">FREE</span>
+                          <span className="text-emerald-600 font-bold">{t("cart.free", "FREE")}</span>
                         ) : (
-                          `$${currentDeliveryFee.toFixed(2)}`
+                          formatPrice(currentDeliveryFee)
                         )}
                       </span>
                     </div>
 
                     <div className="flex justify-between text-ink-700 dark:text-white/70">
-                      <span>Estimated Tax (5%)</span>
+                      <span>{t("cart.tax", "Estimated Tax (5%)")}</span>
                       <span className="font-bold text-ink dark:text-white">
-                        ${taxAmount.toFixed(2)}
+                        {formatPrice(taxAmount)}
                       </span>
                     </div>
 
                     <div className="flex justify-between border-t border-ink/10 pt-3 text-base font-black text-ink dark:border-white/10 dark:text-white">
-                      <span>Total Amount</span>
+                      <span>{t("cart.total", "Total Amount")}</span>
                       <span className="font-display text-lg text-brand dark:text-brand-300">
-                        ${currentTotal.toFixed(2)}
+                        {formatPrice(currentTotal)}
                       </span>
                     </div>
                   </div>

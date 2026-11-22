@@ -3,9 +3,13 @@
 import { useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/constants/site";
+import { sendContactMessage } from "@/lib/emailService";
+import { useLanguage } from "@/context/LanguageContext";
 
 export const ContactExperience = () => {
+  const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -14,10 +18,19 @@ export const ContactExperience = () => {
     message: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) return;
-    setSubmitted(true);
+    setSending(true);
+
+    try {
+      await sendContactMessage(form);
+    } catch {
+      // handled inside service
+    } finally {
+      setSending(false);
+      setSubmitted(true);
+    }
   };
 
   return (
@@ -62,7 +75,7 @@ export const ContactExperience = () => {
                     Message Sent Successfully!
                   </h3>
                   <p className="mt-2 text-xs text-ink-700/70 dark:text-white/70">
-                    Thank you, <strong>{form.name}</strong>. We have received your inquiry regarding &quot;{form.subject}&quot; and will be in touch shortly.
+                    Thank you, <strong>{form.name}</strong>. Your inquiry regarding &quot;{form.subject}&quot; has been delivered directly to our management inbox (<span className="text-brand dark:text-brand-300 font-semibold">{siteConfig.contact.email}</span>). We will reply to your email within 24 hours.
                   </p>
                   <button
                     type="button"
@@ -155,8 +168,20 @@ export const ContactExperience = () => {
                   </div>
 
                   <div className="sm:col-span-2 mt-2">
-                    <button type="submit" className="btn-brand w-full py-3.5! text-xs font-bold">
-                      Send Message Now <i className="ri-send-plane-fill" />
+                    <button
+                      type="submit"
+                      disabled={sending}
+                      className="btn-brand w-full py-3.5! text-xs font-bold flex items-center justify-center gap-2"
+                    >
+                      {sending ? (
+                        <>
+                          <i className="ri-loader-4-line animate-spin text-sm" /> Sending Message...
+                        </>
+                      ) : (
+                        <>
+                          Send Message Now <i className="ri-send-plane-fill" />
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>

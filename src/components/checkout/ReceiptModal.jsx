@@ -3,9 +3,11 @@
 import { useRef } from "react";
 import { siteConfig } from "@/constants/site";
 import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
+import { useLanguage } from "@/context/LanguageContext";
 
 export const ReceiptModal = ({ order, onClose }) => {
   const receiptRef = useRef(null);
+  const { formatPrice } = useLanguage();
 
   if (!order) return null;
 
@@ -176,10 +178,10 @@ export const ReceiptModal = ({ order, onClose }) => {
                         {qty}
                       </td>
                       <td className="py-2.5 text-right text-ink-700 dark:text-white/70">
-                        ${unitPrice.toFixed(2)}
+                        {formatPrice(unitPrice)}
                       </td>
                       <td className="py-2.5 text-right font-bold text-ink dark:text-white">
-                        ${lineTotal}
+                        {formatPrice(lineTotal)}
                       </td>
                     </tr>
                   );
@@ -194,7 +196,7 @@ export const ReceiptModal = ({ order, onClose }) => {
               <div className="flex justify-between text-ink-700 dark:text-white/70">
                 <span>Items Subtotal:</span>
                 <span className="font-semibold text-ink dark:text-white">
-                  {order.subtotal}
+                  {formatPrice(order.subtotal)}
                 </span>
               </div>
 
@@ -203,14 +205,14 @@ export const ReceiptModal = ({ order, onClose }) => {
                   <span>
                     Discount {order.coupon ? `(${order.coupon})` : ""}:
                   </span>
-                  <span>{order.discount}</span>
+                  <span>-{formatPrice(order.discount)}</span>
                 </div>
               )}
 
               <div className="flex justify-between text-ink-700 dark:text-white/70">
                 <span>Delivery Charge:</span>
                 <span className="font-semibold text-ink dark:text-white">
-                  {order.deliveryFee || "FREE"}
+                  {order.deliveryFee === "FREE" || order.deliveryFee === 0 || order.deliveryFee === "$0.00" ? "FREE" : formatPrice(order.deliveryFee)}
                 </span>
               </div>
 
@@ -218,7 +220,7 @@ export const ReceiptModal = ({ order, onClose }) => {
                 <div className="flex justify-between text-ink-700 dark:text-white/70">
                   <span>Estimated Tax (5%):</span>
                   <span className="font-semibold text-ink dark:text-white">
-                    {order.tax}
+                    {formatPrice(order.tax)}
                   </span>
                 </div>
               )}
@@ -226,7 +228,7 @@ export const ReceiptModal = ({ order, onClose }) => {
               <div className="flex justify-between border-t border-ink/10 pt-2 text-base font-extrabold text-ink dark:border-white/10 dark:text-white">
                 <span>Grand Total:</span>
                 <span className="font-display text-lg text-brand dark:text-brand-300">
-                  {order.total}
+                  {formatPrice(order.total)}
                 </span>
               </div>
             </div>

@@ -13,6 +13,7 @@ export default function sitemap() {
     { path: "/menu", priority: 0.9 },
     { path: "/order", priority: 0.9 },
     { path: "/checkout", priority: 0.8 },
+    { path: "/order-tracking", priority: 0.8 },
     { path: "/reservation", priority: 0.8 },
     { path: "/chefs", priority: 0.7 },
     { path: "/gallery", priority: 0.7 },

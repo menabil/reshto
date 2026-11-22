@@ -6,6 +6,9 @@ import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/constants/site";
 import { useStore } from "@/context/StoreContext";
 import { useAuth } from "@/context/AuthContext";
+import { sendBookingNotification } from "@/lib/emailService";
+import { TableFloorPlan } from "@/components/reservation/TableFloorPlan";
+import { RESTAURANT_TABLES } from "@/constants/tableData";
 
 const SEATING_ZONES = [
   {
@@ -69,10 +72,12 @@ const POPULAR_TIME_SLOTS = [
 ];
 
 export const ReservationExperience = () => {
-  const { addReservation } = useStore();
+  const { addReservation, reservations } = useStore();
   const { user } = useAuth();
 
   const [seatingZone, setSeatingZone] = useState("Outdoor Garden Patio");
+  const [selectedTableId, setSelectedTableId] = useState("T-01");
+  const [viewMode, setViewMode] = useState("map"); // "map" | "cards"
   const [occasion, setOccasion] = useState("Casual Dining");
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [guests, setGuests] = useState("2");
@@ -102,6 +107,34 @@ export const ReservationExperience = () => {
     }
   }, [user]);
 
+  // Extract booked tables from existing reservations
+  const bookedTableIds = (reservations || [])
+    .filter((r) => r.status !== "Cancelled" && (r.date === date || !date))
+    .map((r) => {
+      if (r.tableId) return r.tableId;
+      const match = r.table?.match(/(T-\d+|VIP-\d+)/);
+      return match ? match[1] : null;
+    })
+    .filter(Boolean);
+
+  const handleSelectTable = (table) => {
+    setSelectedTableId(table.id);
+    setSeatingZone(table.zone);
+    if (table.capacity && Number(guests) > table.capacity) {
+      setGuests(String(table.capacity));
+    }
+  };
+
+  const handleSelectZone = (zoneId) => {
+    setSeatingZone(zoneId);
+    const firstTable = RESTAURANT_TABLES.find(
+      (t) => t.zone === zoneId && !t.defaultOccupied && !bookedTableIds.includes(t.id)
+    );
+    if (firstTable) {
+      setSelectedTableId(firstTable.id);
+    }
+  };
+
   const toggleAddon = (addonId) => {
     setSelectedAddons((prev) =>
       prev.includes(addonId)
@@ -126,8 +159,10 @@ export const ReservationExperience = () => {
       return;
     }
 
-    const assignedTableNum = Math.floor(Math.random() * 12) + 1;
-    const tableString = `Table ${assignedTableNum} (${seatingZone})`;
+    const selectedTableObj = RESTAURANT_TABLES.find((t) => t.id === selectedTableId);
+    const tableString = selectedTableObj
+      ? `${selectedTableObj.label} (${selectedTableObj.id} • ${selectedTableObj.zone})`
+      : `Table ${Math.floor(Math.random() * 12) + 1} (${seatingZone})`;
 
     const resolvedAddonLabels = selectedAddons
       .map((id) => ADDONS.find((a) => a.id === id)?.label)
@@ -141,12 +176,17 @@ export const ReservationExperience = () => {
       date,
       time,
       seatingZone,
+      tableId: selectedTableObj?.id || "T-01",
+      tableNumber: selectedTableObj?.number || "01",
+      table: tableString,
       occasion,
       addOns: resolvedAddonLabels,
       decorationNotes,
-      table: tableString,
       status: "Confirmed",
     });
+
+    // Zero-backend email notification to restaurant inbox (Task 6.1)
+    sendBookingNotification(newRes);
 
     setConfirmedReservation(newRes);
   };
@@ -289,71 +329,144 @@ export const ReservationExperience = () => {
             /* Booking Form */
             <form onSubmit={handleSubmit} className="space-y-8">
               
-              {/* STEP 1: SEATING ZONE SELECTION (Task 4.1) */}
+              {/* STEP 1: SEATING ZONE & INTERACTIVE TABLE SELECTION */}
               <div className="rounded-4xl border border-ink/10 bg-white p-6 md:p-8 shadow-sm dark:border-white/10 dark:bg-[#1a1816]">
-                <div className="flex items-center justify-between border-b border-ink/10 pb-4 dark:border-white/10">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-ink/10 pb-4 dark:border-white/10">
                   <div>
                     <h2 className="font-display text-xl font-bold text-ink dark:text-white flex items-center gap-2">
                       <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-white text-xs font-bold">1</span>
-                      Select Your Preferred Seating Zone
+                      Select Seating Zone &amp; Interactive Table
                     </h2>
                     <p className="mt-1 text-xs text-ink-700 dark:text-white/60">
-                      Choose the perfect ambiance and zone for your dining party.
+                      Pick your exact table on the restaurant map or choose by dining zone.
                     </p>
                   </div>
-                  <span className="hidden sm:inline-block rounded-full bg-brand/10 px-3 py-1 text-xs font-bold text-brand dark:bg-brand/20 dark:text-brand-300">
-                    Step 1 of 4
-                  </span>
+
+                  {/* View Mode Switcher */}
+                  <div className="flex items-center gap-1 rounded-2xl bg-ink/5 p-1 dark:bg-white/10 self-start sm:self-auto">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("map")}
+                      className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                        viewMode === "map"
+                          ? "bg-brand text-white shadow-xs"
+                          : "text-ink-700 hover:text-ink dark:text-white/70 dark:hover:text-white"
+                      }`}
+                    >
+                      <i className="ri-map-2-line" /> 2D Floor Plan
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("cards")}
+                      className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                        viewMode === "cards"
+                          ? "bg-brand text-white shadow-xs"
+                          : "text-ink-700 hover:text-ink dark:text-white/70 dark:hover:text-white"
+                      }`}
+                    >
+                      <i className="ri-layout-grid-line" /> Zone Cards
+                    </button>
+                  </div>
                 </div>
 
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {SEATING_ZONES.map((zone) => {
-                    const isSelected = seatingZone === zone.id;
-                    return (
-                      <div
-                        key={zone.id}
-                        onClick={() => setSeatingZone(zone.id)}
-                        className={`group relative flex cursor-pointer flex-col justify-between rounded-3xl border p-5 transition-all ${
-                          isSelected
-                            ? "border-brand bg-brand/5 shadow-md dark:border-brand-300 dark:bg-brand/10"
-                            : "border-ink/10 hover:border-brand/40 dark:border-white/10 dark:hover:border-white/30"
-                        }`}
-                      >
-                        <div className="flex items-start justify-between">
-                          <span
-                            className={`grid h-12 w-12 place-items-center rounded-2xl text-2xl transition ${
-                              isSelected
-                                ? "bg-brand text-white shadow-sm"
-                                : "bg-ink/5 text-ink dark:bg-white/10 dark:text-white"
-                            }`}
-                          >
-                            <i className={zone.icon} />
-                          </span>
-
-                          <div className="flex items-center gap-1.5">
-                            <span className="rounded-full bg-ink/5 px-2.5 py-0.5 text-[10px] font-bold text-ink-700 dark:bg-white/10 dark:text-white/70">
-                              {zone.badge}
+                {/* View 1: 2D Floor Plan */}
+                {viewMode === "map" ? (
+                  <div className="mt-6">
+                    <TableFloorPlan
+                      selectedTableId={selectedTableId}
+                      selectedZone={seatingZone}
+                      onSelectTable={handleSelectTable}
+                      guests={guests}
+                      date={date}
+                      time={time}
+                      bookedTableIds={bookedTableIds}
+                    />
+                  </div>
+                ) : (
+                  /* View 2: Zone Overview Cards */
+                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {SEATING_ZONES.map((zone) => {
+                      const isSelected = seatingZone === zone.id;
+                      return (
+                        <div
+                          key={zone.id}
+                          onClick={() => handleSelectZone(zone.id)}
+                          className={`group relative flex cursor-pointer flex-col justify-between rounded-3xl border p-5 transition-all ${
+                            isSelected
+                              ? "border-brand bg-brand/5 shadow-md dark:border-brand-300 dark:bg-brand/10"
+                              : "border-ink/10 hover:border-brand/40 dark:border-white/10 dark:hover:border-white/30"
+                          }`}
+                        >
+                          <div className="flex items-start justify-between">
+                            <span
+                              className={`grid h-12 w-12 place-items-center rounded-2xl text-2xl transition ${
+                                isSelected
+                                  ? "bg-brand text-white shadow-sm"
+                                  : "bg-ink/5 text-ink dark:bg-white/10 dark:text-white"
+                              }`}
+                            >
+                              <i className={zone.icon} />
                             </span>
-                            {isSelected && (
-                              <span className="grid h-5 w-5 place-items-center rounded-full bg-brand text-[10px] text-white">
-                                <i className="ri-check-line" />
+
+                            <div className="flex items-center gap-1.5">
+                              <span className="rounded-full bg-ink/5 px-2.5 py-0.5 text-[10px] font-bold text-ink-700 dark:bg-white/10 dark:text-white/70">
+                                {zone.badge}
                               </span>
-                            )}
+                              {isSelected && (
+                                <span className="grid h-5 w-5 place-items-center rounded-full bg-brand text-[10px] text-white">
+                                  <i className="ri-check-line" />
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="mt-4">
+                            <h3 className="font-display text-base font-bold text-ink dark:text-white">
+                              {zone.name}
+                            </h3>
+                            <p className="mt-1 text-xs leading-relaxed text-ink-700/80 dark:text-white/60">
+                              {zone.desc}
+                            </p>
                           </div>
                         </div>
+                      );
+                    })}
+                  </div>
+                )}
 
-                        <div className="mt-4">
-                          <h3 className="font-display text-base font-bold text-ink dark:text-white">
-                            {zone.name}
-                          </h3>
-                          <p className="mt-1 text-xs leading-relaxed text-ink-700/80 dark:text-white/60">
-                            {zone.desc}
-                          </p>
+                {/* Selected Table Summary Banner */}
+                {(() => {
+                  const selectedTableObj = RESTAURANT_TABLES.find((t) => t.id === selectedTableId);
+                  return (
+                    <div className="mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl bg-brand/5 border border-brand/20 p-4 dark:bg-brand/10 dark:border-brand-400/20">
+                      <div className="flex items-center gap-3">
+                        <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand text-white font-mono font-bold text-sm shadow-xs">
+                          {selectedTableObj?.number || "01"}
+                        </span>
+                        <div>
+                          <span className="text-[10px] font-extrabold text-brand uppercase tracking-wider block">
+                            Your Selected Reservation Seat:
+                          </span>
+                          <strong className="text-sm font-bold text-ink dark:text-white">
+                            {selectedTableObj?.label || `Table (${seatingZone})`}
+                          </strong>
+                          <span className="text-xs text-ink-700/70 dark:text-white/60 ml-2">
+                            ({selectedTableObj?.type || "Standard Table"} &bull; {selectedTableObj?.capacity || 2} Seats &bull; {selectedTableObj?.view || seatingZone})
+                          </span>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setViewMode(viewMode === "map" ? "cards" : "map")}
+                        className="text-xs font-bold text-brand hover:underline self-start sm:self-auto flex items-center gap-1"
+                      >
+                        {viewMode === "map" ? "Switch to Zone Cards" : "View on Floor Map"}
+                        <i className="ri-arrow-right-line" />
+                      </button>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* STEP 2: PARTY SIZE, DATE & TIME */}
