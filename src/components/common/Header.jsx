@@ -8,19 +8,7 @@ import { siteConfig } from "@/constants/site";
 import { ThemeToggle } from "@/components/common/ThemeProvider";
 import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
-import { useLanguage } from "@/context/LanguageContext";
-import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
-
-const NAV_KEYS = {
-  "/": "nav.home",
-  "/about": "nav.about",
-  "/menu": "nav.menu",
-  "/order": "nav.order",
-  "/reservation": "nav.reservation",
-  "/chefs": "nav.chefs",
-  "/gallery": "nav.gallery",
-  "/contact": "nav.contact",
-};
+import { CurrencySwitcher } from "@/components/common/CurrencySwitcher";
 
 const POPULAR_SEARCHES = [
   "Margherita Pizza",
@@ -36,7 +24,6 @@ export const Header = () => {
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount, openCart } = useStore();
-  const { t } = useLanguage();
 
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -123,7 +110,6 @@ export const Header = () => {
                 link.href === "/"
                   ? pathname === "/"
                   : pathname.startsWith(link.href);
-              const label = t(NAV_KEYS[link.href], link.label);
 
               return (
                 <Link
@@ -135,7 +121,7 @@ export const Header = () => {
                       : "text-white/80 hover:text-white"
                   }`}
                 >
-                  {label}
+                  {link.label}
                 </Link>
               );
             })}
@@ -143,8 +129,8 @@ export const Header = () => {
 
           {/* Actions */}
           <div className="header-actions">
-            {/* Language & Currency Switcher */}
-            <LanguageSwitcher />
+            {/* Currency Switcher ($ USD ⇄ ৳ BDT) */}
+            <CurrencySwitcher />
 
             {/* Dark Mode Toggle */}
             <ThemeToggle />
@@ -285,7 +271,7 @@ export const Header = () => {
           <div className="mobile-nav dark:bg-[#0f0e0d] dark:border-white/10">
             <Container>
               <div className="mb-3">
-                <LanguageSwitcher mobile />
+                <CurrencySwitcher mobile />
               </div>
 
               {siteConfig.navLinks.map((link) => {
@@ -293,7 +279,6 @@ export const Header = () => {
                   link.href === "/"
                     ? pathname === "/"
                     : pathname.startsWith(link.href);
-                const label = t(NAV_KEYS[link.href], link.label);
 
                 return (
                   <Link
@@ -306,7 +291,7 @@ export const Header = () => {
                         : "text-white/80 hover:text-white"
                     }`}
                   >
-                    <span>{label}</span>
+                    <span>{link.label}</span>
                     <i className="ri-arrow-right-s-line" />
                   </Link>
                 );
@@ -316,7 +301,7 @@ export const Header = () => {
                 {isAuthenticated ? (
                   <>
                     <div className="px-1 py-1 text-xs text-white/60">
-                      {t("nav.signedInAs", "Signed in as:")} <strong className="text-white">{user.name}</strong>
+                      Signed in as: <strong className="text-white">{user.name}</strong>
                     </div>
                     <Link
                       href="/dashboard"
@@ -324,7 +309,7 @@ export const Header = () => {
                       className="flex items-center justify-between py-2 text-sm font-medium text-amber-200"
                     >
                       <span className="flex items-center gap-2">
-                        <i className="ri-user-smile-line" /> {t("nav.dashboard", "User Dashboard")}
+                        <i className="ri-user-smile-line" /> User Dashboard
                       </span>
                       <i className="ri-arrow-right-s-line" />
                     </Link>
@@ -334,7 +319,7 @@ export const Header = () => {
                       className="flex items-center justify-between py-2 text-sm font-medium text-emerald-300"
                     >
                       <span className="flex items-center gap-2">
-                        <i className="ri-e-bike-2-line" /> {t("nav.trackOrder", "Track Live Order")}
+                        <i className="ri-e-bike-2-line" /> Track Live Order
                       </span>
                       <i className="ri-arrow-right-s-line" />
                     </Link>
@@ -345,7 +330,7 @@ export const Header = () => {
                         className="flex items-center justify-between py-2 text-sm font-medium text-amber-200"
                       >
                         <span className="flex items-center gap-2">
-                          <i className="ri-dashboard-line" /> {t("nav.admin", "Admin Portal")}
+                          <i className="ri-dashboard-line" /> Admin Portal
                         </span>
                         <i className="ri-arrow-right-s-line" />
                       </Link>
@@ -358,7 +343,7 @@ export const Header = () => {
                       }}
                       className="flex items-center gap-2 py-2 text-sm font-medium text-rose-400"
                     >
-                      <i className="ri-logout-box-r-line" /> {t("nav.signOut", "Sign Out")}
+                      <i className="ri-logout-box-r-line" /> Sign Out
                     </button>
                   </>
                 ) : (
@@ -368,7 +353,7 @@ export const Header = () => {
                     className="flex items-center justify-between py-2.5 text-sm font-semibold text-amber-300"
                   >
                     <span className="flex items-center gap-2">
-                      <i className="ri-user-add-line" /> {t("nav.signIn", "Sign In / Register")}
+                      <i className="ri-user-add-line" /> Sign In / Register
                     </span>
                     <i className="ri-arrow-right-s-line" />
                   </Link>
@@ -384,14 +369,14 @@ export const Header = () => {
                   }}
                   className="flex items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/10 py-3 text-xs font-bold text-white transition hover:bg-white/20"
                 >
-                  <i className="ri-shopping-bag-3-line" /> {t("cart.title", "Cart")} ({cartCount})
+                  <i className="ri-shopping-bag-3-line" /> Cart ({cartCount})
                 </button>
                 <Link
                   href="/order"
                   onClick={() => setOpen(false)}
                   className="mobile-order m-0! flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs!"
                 >
-                  {t("nav.order", "Order Menu")} <i className="ri-arrow-right-line" />
+                  Order Menu <i className="ri-arrow-right-line" />
                 </Link>
               </div>
             </Container>
@@ -434,21 +419,21 @@ export const Header = () => {
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t("nav.searchPlaceholder", "Search pizza, ribeye steak, salmon, salad, desserts...")}
+                placeholder="Search pizza, ribeye steak, salmon, salad, desserts..."
                 className="w-full rounded-2xl border border-ink/15 bg-soft-primary py-4 pl-12 pr-28 text-base text-ink placeholder:text-ink-700/60 outline-none transition focus:border-brand focus:bg-[var(--theme-surface)] dark:border-white/10"
               />
               <button
                 type="submit"
                 className="btn-brand absolute right-2 top-1/2 -translate-y-1/2 py-2! px-4! text-xs!"
               >
-                {t("nav.searchBtn", "Search")}
+                Search
               </button>
             </form>
 
             {/* Quick Popular Searches */}
             <div className="mt-5 border-t border-ink/10 pt-4 dark:border-white/10">
               <span className="mb-2 block text-xs font-semibold text-ink-700">
-                {t("nav.popularSearches", "Popular Searches")}:
+                Popular Searches:
               </span>
               <div className="flex flex-wrap gap-2">
                 {POPULAR_SEARCHES.map((term) => (

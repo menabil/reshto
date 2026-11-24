@@ -7,17 +7,9 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { siteConfig } from "@/constants/site";
 import { menuTabs } from "@/data/data";
 import { useStore } from "@/context/StoreContext";
-import { useLanguage } from "@/context/LanguageContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
-
-const TAB_KEYS = {
-  breakfast: "cat.breakfast",
-  lunch: "cat.lunch",
-  dinner: "cat.dinner",
-  dessert: "cat.desserts",
-  drinks: "cat.drinks",
-};
 
 export const OrderExperience = ({ initialSearch }) => {
   const {
@@ -30,7 +22,7 @@ export const OrderExperience = ({ initialSearch }) => {
     isFavorite,
     toggleFavorite,
   } = useStore();
-  const { t, formatPrice } = useLanguage();
+  const { formatPrice } = useCurrency();
 
   const [activeCategory, setActiveCategory] = useState("all");
   const [query, setQuery] = useState(initialSearch);
@@ -61,12 +53,12 @@ export const OrderExperience = ({ initialSearch }) => {
       <section className="subpage-hero order-hero">
         <Container>
           <span className="hero-eyebrow">
-            <i className="ri-restaurant-2-fill" /> {t("hero.eyebrow", "Fresh from our kitchen")}
+            <i className="ri-restaurant-2-fill" /> Fresh from our kitchen
           </span>
           <h1>
-            {t("hero.title1", "Make it a")} <span>Reshto</span> {t("hero.title2", "moment.")}
+            Make it a <span>Reshto</span> moment.
           </h1>
-          <p>{t("hero.subtitle", "Pick your favorites, build your order, and call us or check out online.")}</p>
+          <p>Pick your favorites, build your order, and call us or check out online.</p>
         </Container>
       </section>
 
@@ -75,20 +67,20 @@ export const OrderExperience = ({ initialSearch }) => {
           <div className="order-intro">
             <div>
               <span className="section-pill dark:bg-brand-900/40 dark:text-brand-300">
-                <i className="ri-leaf-line" /> {t("menu.eyebrow", "Made fresh to order")}
+                <i className="ri-leaf-line" /> Made fresh to order
               </span>
               <h2 className="mt-4 font-display text-3xl font-extrabold text-ink dark:text-white md:text-4xl">
-                {t("menu.title", "What sounds good?")}
+                What sounds good?
               </h2>
               <p className="mt-2 text-sm leading-6 text-ink-700/65 dark:text-white/60">
-                {t("cart.browseMenu", "Explore the menu and add your favorite dishes.")}
+                Explore the menu and add your favorite dishes.
               </p>
             </div>
             <Link
               href="/#menu"
               className="order-back-link dark:text-white/70 hover:dark:text-brand-300"
             >
-              <i className="ri-arrow-left-line" /> {t("nav.home", "Back to home")}
+              <i className="ri-arrow-left-line" /> Back to home
             </Link>
           </div>
 
@@ -101,7 +93,7 @@ export const OrderExperience = ({ initialSearch }) => {
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder={t("menu.searchPlaceholder", "Search dishes or ingredients...")}
+                  placeholder="Search dishes or ingredients..."
                   aria-label="Search order menu"
                   className="dark:text-white placeholder:dark:text-white/40"
                 />
@@ -109,7 +101,7 @@ export const OrderExperience = ({ initialSearch }) => {
                   <button
                     type="button"
                     onClick={() => setQuery("")}
-                    aria-label={t("menu.clear", "Clear search")}
+                    aria-label="Clear search"
                     className="dark:bg-white/10 dark:text-white"
                   >
                     <i className="ri-close-line" aria-hidden="true" />
@@ -133,30 +125,27 @@ export const OrderExperience = ({ initialSearch }) => {
                   aria-pressed={activeCategory === "all"}
                   onClick={() => setActiveCategory("all")}
                 >
-                  {t("cat.all", "All dishes")}
+                  All dishes
                 </button>
-                {menuTabs.map((tab) => {
-                  const label = t(TAB_KEYS[tab.key] || tab.label, tab.label);
-                  return (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      className={
-                        activeCategory === tab.key
-                          ? "order-category active"
-                          : "order-category dark:bg-[#1e1c1a] dark:text-white/70 dark:border-white/10"
-                      }
-                      aria-pressed={activeCategory === tab.key}
-                      onClick={() => setActiveCategory(tab.key)}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
+                {menuTabs.map((tab) => (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    className={
+                      activeCategory === tab.key
+                        ? "order-category active"
+                        : "order-category dark:bg-[#1e1c1a] dark:text-white/70 dark:border-white/10"
+                    }
+                    aria-pressed={activeCategory === tab.key}
+                    onClick={() => setActiveCategory(tab.key)}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
 
               <p className="order-result-count dark:text-white/60" role="status">
-                {filteredItems.length} {t("cat.all", "dishes")}
+                {filteredItems.length} {filteredItems.length === 1 ? "dish" : "dishes"}
                 {normalizedQuery ? ` matching "${query.trim()}"` : ""}
               </p>
 
@@ -198,10 +187,10 @@ export const OrderExperience = ({ initialSearch }) => {
                       <div className="order-card-content">
                         <div className="flex items-center justify-between">
                           <span className="order-card-category dark:text-brand-300">
-                            {t(TAB_KEYS[item.category] || item.categoryLabel, item.categoryLabel)}
+                            {item.categoryLabel}
                           </span>
                           <span className="text-[10px] text-ink-700/60 dark:text-white/40 flex items-center gap-0.5">
-                            <i className="ri-information-line" /> {t("menu.details", "details")}
+                            <i className="ri-information-line" /> details
                           </span>
                         </div>
                         <h3 className="dark:text-white">{item.menuItemName}</h3>
@@ -215,7 +204,7 @@ export const OrderExperience = ({ initialSearch }) => {
                           </strong>
                           {item.inStock === false ? (
                             <span className="rounded-lg bg-rose-500/10 px-2 py-1 text-[11px] font-bold text-rose-500 dark:bg-rose-500/20 dark:text-rose-400">
-                              {t("menu.soldOut", "Sold Out")}
+                              Sold Out
                             </span>
                           ) : quantities[item.cartId] ? (
                             <div
@@ -248,7 +237,7 @@ export const OrderExperience = ({ initialSearch }) => {
                               onClick={() => updateQuantity(item.cartId, 1)}
                               className="btn-brand order-button"
                             >
-                              {t("dish.addToCart", "Add to Cart")}
+                              Add to Cart
                             </button>
                           )}
                         </div>
@@ -259,7 +248,7 @@ export const OrderExperience = ({ initialSearch }) => {
 
                 {!filteredItems.length && (
                   <div className="order-empty dark:border-white/10 dark:text-white/60">
-                    <p>{t("menu.noDishes", "No dishes found. Try another search.")}</p>
+                    <p>No dishes found. Try another search.</p>
                   </div>
                 )}
               </div>
@@ -269,9 +258,9 @@ export const OrderExperience = ({ initialSearch }) => {
             <aside className="order-summary dark:bg-[#1e1c1a] dark:border-white/10">
               <div className="order-summary-header">
                 <div>
-                  <h2 className="dark:text-white">{t("checkout.orderSummary", "Order Summary")}</h2>
+                  <h2 className="dark:text-white">Order Summary</h2>
                   <p className="dark:text-white/60">
-                    {cartCount ? `${cartCount} ${t("cart.itemsSelected", "items selected")}` : t("cart.emptyTitle", "Your tray is empty")}
+                    {cartCount ? `${cartCount} items selected` : "Your tray is empty"}
                   </p>
                 </div>
                 <span className="order-count dark:bg-white/10 dark:text-white">
@@ -288,7 +277,7 @@ export const OrderExperience = ({ initialSearch }) => {
                           {item.menuItemName}
                         </strong>
                         <small className="dark:text-white/60">
-                          {formatPrice(item.menuItemPrice)} {t("menu.each", "each")}
+                          {formatPrice(item.menuItemPrice)} each
                         </small>
                       </span>
                       <div
@@ -324,22 +313,22 @@ export const OrderExperience = ({ initialSearch }) => {
                     <i className="ri-shopping-bag-3-line" aria-hidden="true" />
                   </span>
                   <p className="dark:text-white">
-                    {t("cart.emptyDesc", "Your order is waiting for something delicious.")}
+                    Your order is waiting for something delicious.
                   </p>
                   <small className="dark:text-white/60">
-                    {t("cart.browseMenu", "Add a dish to get started.")}
+                    Add a dish to get started.
                   </small>
                 </div>
               )}
 
               <div className="order-subtotal dark:border-white/10 dark:text-white">
-                <span>{t("cart.subtotal", "Subtotal")}</span>
+                <span>Subtotal</span>
                 <strong className="dark:text-brand-300">
                   {formatPrice(cartSubtotal)}
                 </strong>
               </div>
               <p className="order-disclaimer dark:text-white/50">
-                {t("cart.tax", "Applicable taxes, delivery fee, and coupons calculated at checkout.")}
+                Applicable taxes, delivery fee, and coupons calculated at checkout.
               </p>
               {cartCount > 0 ? (
                 <div className="mt-4 flex flex-col gap-2">
@@ -347,7 +336,7 @@ export const OrderExperience = ({ initialSearch }) => {
                     href="/checkout"
                     className="btn-brand flex w-full items-center justify-center gap-2 py-3 text-xs! font-bold shadow-md"
                   >
-                    <i className="ri-secure-payment-line text-sm" /> {t("cart.proceedCheckout", "Proceed to Checkout")}
+                    <i className="ri-secure-payment-line text-sm" /> Proceed to Checkout
                   </Link>
 
                   <a
@@ -360,19 +349,19 @@ export const OrderExperience = ({ initialSearch }) => {
                     rel="noopener noreferrer"
                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 py-2.5 text-xs font-bold text-white transition shadow-xs"
                   >
-                    <i className="ri-whatsapp-line text-base" /> {t("cart.orderWhatsApp", "Order via WhatsApp")}
+                    <i className="ri-whatsapp-line text-base" /> Order via WhatsApp
                   </a>
 
                   <a
                     className="order-phone mt-2 text-center text-xs dark:text-white hover:dark:text-brand-300"
                     href={`tel:${phoneLink}`}
                   >
-                    <i className="ri-phone-line" aria-hidden="true" /> {t("contact.phone", "Call us")}: {siteConfig.contact.phone}
+                    <i className="ri-phone-line" aria-hidden="true" /> Call us: {siteConfig.contact.phone}
                   </a>
                 </div>
               ) : (
                 <button className="btn-brand order-call mt-4" type="button" disabled>
-                  {t("cart.browseMenu", "Add items to continue")}
+                  Add items to continue
                 </button>
               )}
               <p className="order-hours dark:text-white/50">

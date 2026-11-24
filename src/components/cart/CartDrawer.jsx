@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/context/StoreContext";
-import { useLanguage } from "@/context/LanguageContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 
@@ -25,7 +25,7 @@ export const CartDrawer = () => {
     clearCart,
     orders,
   } = useStore();
-  const { t, formatPrice } = useLanguage();
+  const { formatPrice } = useCurrency();
 
   const [couponInput, setCouponInput] = useState("");
   const [couponMessage, setCouponMessage] = useState(null);
@@ -96,10 +96,10 @@ export const CartDrawer = () => {
               </span>
               <div>
                 <h2 className="font-display text-lg font-bold text-ink dark:text-white">
-                  {t("cart.title", "Your Cart")}
+                  Your Cart
                 </h2>
                 <p className="text-[11px] text-ink-700 dark:text-white/50">
-                  {cartCount} {t("cart.itemsSelected", "items selected")}
+                  {cartCount} items selected
                 </p>
               </div>
             </div>
@@ -112,7 +112,7 @@ export const CartDrawer = () => {
                   className="rounded-lg px-2.5 py-1 text-xs font-semibold text-rose-500 hover:bg-rose-500/10 transition"
                   title="Clear all items"
                 >
-                  {t("cart.clear", "Clear")}
+                  Clear
                 </button>
               )}
               <button
@@ -137,7 +137,7 @@ export const CartDrawer = () => {
                   </span>
                   <div>
                     <span className="text-[10px] font-bold text-brand uppercase tracking-wider block">
-                      {t("cart.activeOrder", "Active Order in Progress")} #{orders[0].id}
+                      Active Order #{orders[0].id}
                     </span>
                     <strong className="text-xs text-ink dark:text-white">
                       Status: {orders[0].status}
@@ -150,7 +150,7 @@ export const CartDrawer = () => {
                   onClick={closeCart}
                   className="rounded-xl bg-brand px-3 py-1.5 text-[11px] font-bold text-white hover:bg-brand-600 transition shadow-xs whitespace-nowrap"
                 >
-                  {t("cart.trackLive", "Track Live")} &rarr;
+                  Track Live &rarr;
                 </Link>
               </div>
             )}
@@ -211,7 +211,7 @@ export const CartDrawer = () => {
                     type="button"
                     onClick={() => removeFromCart(item.cartId)}
                     className="grid h-7 w-7 place-items-center rounded-lg text-ink-700/50 hover:bg-rose-50 hover:text-rose-600 dark:text-white/40 dark:hover:bg-rose-500/10 dark:hover:text-rose-400 transition"
-                    title={t("cart.remove", "Remove item")}
+                    title="Remove item"
                   >
                     <i className="ri-delete-bin-line text-sm" />
                   </button>
@@ -223,17 +223,17 @@ export const CartDrawer = () => {
                   <i className="ri-shopping-cart-2-line" />
                 </span>
                 <h3 className="mt-4 font-display text-lg font-bold text-ink dark:text-white">
-                  {t("cart.emptyTitle", "Your cart is empty")}
+                  Your cart is empty
                 </h3>
                 <p className="mt-1 max-w-[240px] text-xs text-ink-700 dark:text-white/60">
-                  {t("cart.emptyDesc", "Looks like you haven't added any delicious dishes to your tray yet.")}
+                  Looks like you haven&apos;t added any delicious dishes to your tray yet.
                 </p>
                 <Link
                   href="/order"
                   onClick={closeCart}
                   className="btn-brand mt-5 py-2.5 px-5 text-xs!"
                 >
-                  {t("cart.browseMenu", "Browse Menu & Order")} <i className="ri-arrow-right-line" />
+                  Browse Menu &amp; Order <i className="ri-arrow-right-line" />
                 </Link>
               </div>
             )}
@@ -244,10 +244,10 @@ export const CartDrawer = () => {
                 <div className="rounded-2xl border border-ink/10 bg-white p-3.5 dark:border-white/10 dark:bg-[#22201d]">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-ink dark:text-white flex items-center gap-1.5">
-                      <i className="ri-ticket-2-line text-brand" /> {t("cart.promoCoupon", "Promo Coupon")}
+                      <i className="ri-ticket-2-line text-brand" /> Promo Coupon
                     </span>
                     <span className="text-[10px] text-ink-700/70 dark:text-white/50">
-                      {t("cart.tryCoupons", "Try: SAVE20 or FREESHIP")}
+                      Try: <strong>SAVE20</strong> or <strong>FREESHIP</strong>
                     </span>
                   </div>
 
@@ -262,7 +262,7 @@ export const CartDrawer = () => {
                         onClick={removeCoupon}
                         className="text-xs text-rose-500 hover:underline"
                       >
-                        {t("cart.remove", "Remove")}
+                        Remove
                       </button>
                     </div>
                   ) : (
@@ -278,7 +278,7 @@ export const CartDrawer = () => {
                         type="submit"
                         className="rounded-xl bg-brand px-3 py-1.5 text-xs font-bold text-white transition hover:bg-brand/90"
                       >
-                        {t("cart.apply", "Apply")}
+                        Apply
                       </button>
                     </form>
                   )}
@@ -303,7 +303,7 @@ export const CartDrawer = () => {
               {/* Cost Summary */}
               <div className="space-y-1.5 text-xs">
                 <div className="flex justify-between text-ink-700 dark:text-white/70">
-                  <span>{t("cart.subtotal", "Subtotal")}</span>
+                  <span>Subtotal</span>
                   <span className="font-semibold text-ink dark:text-white">
                     {formatPrice(cartSubtotal)}
                   </span>
@@ -311,16 +311,16 @@ export const CartDrawer = () => {
 
                 {couponDiscount > 0 && (
                   <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
-                    <span>{t("cart.discount", "Discount")} ({appliedCoupon?.code})</span>
+                    <span>Discount ({appliedCoupon?.code})</span>
                     <span>-{formatPrice(couponDiscount)}</span>
                   </div>
                 )}
 
                 <div className="flex justify-between text-ink-700 dark:text-white/70">
-                  <span>{t("cart.deliveryFee", "Delivery Fee")}</span>
+                  <span>Delivery Fee</span>
                   <span className="font-semibold text-ink dark:text-white">
                     {deliveryFee === 0 ? (
-                      <span className="text-emerald-600 font-bold">{t("cart.free", "FREE")}</span>
+                      <span className="text-emerald-600 font-bold">FREE</span>
                     ) : (
                       formatPrice(deliveryFee)
                     )}
@@ -328,7 +328,7 @@ export const CartDrawer = () => {
                 </div>
 
                 <div className="flex justify-between pt-2 text-sm font-extrabold text-ink dark:text-white border-t border-ink/8 dark:border-white/10">
-                  <span>{t("cart.total", "Total Amount")}</span>
+                  <span>Total Amount</span>
                   <span className="text-base text-brand dark:text-brand-300 font-display">
                     {formatPrice(cartTotal)}
                   </span>
@@ -342,7 +342,7 @@ export const CartDrawer = () => {
                   onClick={closeCart}
                   className="btn-brand flex w-full items-center justify-center gap-2 py-3 text-xs! font-bold shadow-md"
                 >
-                  <i className="ri-secure-payment-line text-sm" /> {t("cart.proceedCheckout", "Proceed to Checkout")}
+                  <i className="ri-secure-payment-line text-sm" /> Proceed to Checkout
                 </Link>
 
                 {/* WhatsApp Direct Order Button */}
@@ -352,7 +352,7 @@ export const CartDrawer = () => {
                   rel="noopener noreferrer"
                   className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-4 py-2.5 text-xs font-bold text-white transition shadow-xs"
                 >
-                  <i className="ri-whatsapp-line text-base" /> {t("cart.orderWhatsApp", "Order via WhatsApp")}
+                  <i className="ri-whatsapp-line text-base" /> Order via WhatsApp
                 </a>
               </div>
 
@@ -362,7 +362,7 @@ export const CartDrawer = () => {
                   onClick={closeCart}
                   className="text-[11px] font-semibold text-ink-700/60 hover:text-brand dark:text-white/50 dark:hover:text-brand-300"
                 >
-                  {t("cart.catalogLink", "Or view full interactive order catalog")} &rarr;
+                  Or view full interactive order catalog &rarr;
                 </Link>
               </div>
             </div>

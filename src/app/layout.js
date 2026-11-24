@@ -6,7 +6,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
 import { StoreProvider } from "@/context/StoreContext";
-import { LanguageProvider } from "@/context/LanguageContext";
+import { CurrencyProvider } from "@/context/CurrencyContext";
 import { siteConfig } from "@/constants/site";
 import "./globals.css";
 
@@ -82,13 +82,13 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <AuthProvider>
             <StoreProvider>
-              <LanguageProvider>
+              <CurrencyProvider>
                 <Header />
                 <CartDrawer />
                 <main className="flex-1">{children}</main>
                 <Footer />
                 <BackToTop />
-              </LanguageProvider>
+              </CurrencyProvider>
             </StoreProvider>
           </AuthProvider>
         </ThemeProvider>

@@ -4,11 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { foodImages } from "@/constants/images";
-import { useLanguage } from "@/context/LanguageContext";
 
 export const Hero = () => {
-  const { t } = useLanguage();
-
   const handleScrollToNext = (event) => {
     event.preventDefault();
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
@@ -33,22 +30,22 @@ export const Hero = () => {
         <div className="hero-copy max-w-3xl">
           <span className="hero-eyebrow">
             <i className="ri-sparkling-2-line" aria-hidden="true" />
-            {t("hero.eyebrow", "A dining experience to remember")}
+            A dining experience to remember
           </span>
           <h1>
-            {t("hero.title1", "Gather around")}
+            Gather around
             <br />
-            <span>{t("hero.titleSpan", "something")}</span> {t("hero.title2", "wonderful.")}
+            <span>something</span> wonderful.
           </h1>
           <p>
-            {t("hero.subtitle", "Seasonal ingredients, a thoughtful pour, and the kind of welcome that makes you want to stay for one more course.")}
+            Seasonal ingredients, a thoughtful pour, and the kind of welcome that makes you want to stay for one more course.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/menu" className="btn-brand hero-button">
-              {t("hero.exploreMenu", "Explore Menu")} <i className="ri-arrow-right-line" aria-hidden="true" />
+              Explore Menu <i className="ri-arrow-right-line" aria-hidden="true" />
             </Link>
             <Link href="/reservation" className="btn-dark hero-button">
-              {t("hero.reserveTable", "Book a Table")}
+              Book a Table
             </Link>
           </div>
           <div className="hero-details">

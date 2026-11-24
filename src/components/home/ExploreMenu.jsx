@@ -7,20 +7,12 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { menu, menuTabs } from "@/data/data";
 import { useStore } from "@/context/StoreContext";
-import { useLanguage } from "@/context/LanguageContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
-
-const TAB_KEYS = {
-  breakfast: "cat.breakfast",
-  lunch: "cat.lunch",
-  dinner: "cat.dinner",
-  dessert: "cat.desserts",
-  drinks: "cat.drinks",
-};
 
 export const ExploreMenu = () => {
   const { isFavorite, toggleFavorite, updateQuantity, openCart } = useStore();
-  const { t, formatPrice } = useLanguage();
+  const { formatPrice } = useCurrency();
   const [activeTab, setActiveTab] = useState("breakfast");
   const [query, setQuery] = useState("");
   const [quickViewDish, setQuickViewDish] = useState(null);
@@ -44,8 +36,8 @@ export const ExploreMenu = () => {
       <Container>
         <div className="mb-10 flex flex-col items-center gap-6 text-center">
           <SectionTitle
-            eyebrow={t("menu.eyebrow", "Tasty & Delicious")}
-            title={t("menu.title", "Explore Our Menu")}
+            eyebrow="Tasty &amp; Delicious"
+            title="Explore Our Menu"
           />
 
           {/* Search bar */}
@@ -55,7 +47,7 @@ export const ExploreMenu = () => {
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder={t("menu.searchPlaceholder", "Search dishes by name or ingredient...")}
+              placeholder="Search dishes by name or ingredient..."
               aria-label="Filter menu dishes"
               className="dark:text-white placeholder:dark:text-white/40"
             />
@@ -63,7 +55,7 @@ export const ExploreMenu = () => {
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                aria-label={t("menu.clear", "Clear search")}
+                aria-label="Clear search"
                 className="dark:bg-white/10 dark:text-white"
               >
                 <i className="ri-close-line" aria-hidden="true" />
@@ -77,24 +69,21 @@ export const ExploreMenu = () => {
             role="group"
             aria-label="Filter menu by meal"
           >
-            {menuTabs.map((tab) => {
-              const label = t(TAB_KEYS[tab.key] || tab.label, tab.label);
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  onClick={() => setActiveTab(tab.key)}
-                  aria-pressed={activeTab === tab.key}
-                  className={
-                    activeTab === tab.key
-                      ? "menu-tab active"
-                      : "menu-tab dark:text-white/70 hover:dark:text-white"
-                  }
-                >
-                  {label}
-                </button>
-              );
-            })}
+            {menuTabs.map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTab(tab.key)}
+                aria-pressed={activeTab === tab.key}
+                className={
+                  activeTab === tab.key
+                    ? "menu-tab active"
+                    : "menu-tab dark:text-white/70 hover:dark:text-white"
+                }
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -150,7 +139,7 @@ export const ExploreMenu = () => {
 
                   <div className="mt-3 flex items-center justify-between border-t border-ink/5 pt-2.5 dark:border-white/5">
                     <span className="text-[11px] font-bold text-ink-700/60 dark:text-white/50 flex items-center gap-1">
-                      <i className="ri-information-line" /> {t("menu.quickView", "Quick View")}
+                      <i className="ri-information-line" /> Quick View
                     </span>
                     <button
                       type="button"
@@ -161,7 +150,7 @@ export const ExploreMenu = () => {
                       }}
                       className="menu-order hover:underline text-xs font-bold text-brand"
                     >
-                      {t("menu.addToCart", "+ Add to Cart")} <i className="ri-shopping-bag-3-line ml-0.5" />
+                      + Add to Cart <i className="ri-shopping-bag-3-line ml-0.5" />
                     </button>
                   </div>
                 </div>
@@ -174,7 +163,7 @@ export const ExploreMenu = () => {
               className="menu-empty md:col-span-2 dark:border-white/15 dark:text-white/60"
               role="status"
             >
-              {t("menu.noDishes", `No dishes found for "${query}". Try another search.`)}
+              No dishes found for &quot;{query}&quot;. Try another search.
             </p>
           ) : null}
         </div>
@@ -184,7 +173,7 @@ export const ExploreMenu = () => {
             href="/order"
             className="btn-outline dark:bg-[#1e1c1a] dark:text-white dark:border-white/15 dark:hover:border-brand"
           >
-            {t("menu.fullCatalogBtn", "Order from the Full Menu")} <i className="ri-arrow-right-line" />
+            Order from the Full Menu <i className="ri-arrow-right-line" />
           </Link>
         </div>
       </Container>
