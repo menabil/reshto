@@ -618,7 +618,7 @@ export const OrderTrackingExperience = () => {
 
               <div className="flex items-center gap-3">
                 <Link
-                  href="/menu"
+                  href="/about#menu"
                   className="btn-outline text-xs! py-2.5! px-4! dark:bg-[#201d1a] dark:text-white dark:border-white/15"
                 >
                   Order More Food

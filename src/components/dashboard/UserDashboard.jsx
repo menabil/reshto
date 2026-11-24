@@ -561,7 +561,7 @@ export const UserDashboard = () => {
                 <i className="ri-heart-3-line text-4xl text-ink-700/40 dark:text-white/40" />
                 <h4 className="mt-3 font-display text-lg font-bold text-ink dark:text-white">No favorite dishes saved</h4>
                 <p className="mt-1 text-xs text-ink-700/60 dark:text-white/60">Explore the menu and save the dishes you love.</p>
-                <Link href="/menu" className="btn-brand mt-4 inline-flex py-2! text-xs!">
+                <Link href="/about#menu" className="btn-brand mt-4 inline-flex py-2! text-xs!">
                   Explore Menu <i className="ri-arrow-right-line" />
                 </Link>
               </div>

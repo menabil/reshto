@@ -8,7 +8,19 @@ import { siteConfig } from "@/constants/site";
 import { ThemeToggle } from "@/components/common/ThemeProvider";
 import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
-import { CurrencySwitcher } from "@/components/common/CurrencySwitcher";
+import { useLanguage } from "@/context/LanguageContext";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
+
+const NAV_KEYS = {
+  "/": "nav.home",
+  "/about": "nav.about",
+  "/menu": "nav.menu",
+  "/order": "nav.order",
+  "/reservation": "nav.reservation",
+  "/chefs": "nav.chefs",
+  "/gallery": "nav.gallery",
+  "/contact": "nav.contact",
+};
 
 const POPULAR_SEARCHES = [
   "Margherita Pizza",
@@ -129,8 +141,8 @@ export const Header = () => {
 
           {/* Actions */}
           <div className="header-actions">
-            {/* Currency Switcher ($ USD ⇄ ৳ BDT) */}
-            <CurrencySwitcher />
+            {/* Language & Currency Switcher */}
+            <LanguageSwitcher />
 
             {/* Dark Mode Toggle */}
             <ThemeToggle />

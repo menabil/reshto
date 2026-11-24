@@ -36,7 +36,7 @@ export const PopularCategories = () => {
             </span>
             <h2>Signatures worth<br className="hidden sm:block" /> slowing down for.</h2>
           </div>
-          <Link href="/menu" className="story-text-link">
+          <Link href="/about#menu" className="story-text-link">
             See the full menu <i className="ri-arrow-right-line" aria-hidden="true" />
           </Link>
         </Reveal>

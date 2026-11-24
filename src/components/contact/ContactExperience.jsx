@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/constants/site";
 import { sendContactMessage } from "@/lib/emailService";
 import { useLanguage } from "@/context/LanguageContext";
+import InstagramFeed from "../home/InstagramFeed";
 
 export const ContactExperience = () => {
   const { t } = useLanguage();
@@ -41,12 +42,13 @@ export const ContactExperience = () => {
             <i className="ri-mail-send-line" /> Let&apos;s Connect
           </span>
           <h1>
-            We&apos;re always happy to<br />
+            We&apos;re always happy to
+            <br />
             <span>hear from you.</span>
           </h1>
           <p>
-            Whether you have a question about our menu, need private dining catering, or simply
-            want to say hello, reach out anytime.
+            Whether you have a question about our menu, need private dining
+            catering, or simply want to say hello, reach out anytime.
           </p>
         </Container>
       </section>
@@ -63,7 +65,8 @@ export const ContactExperience = () => {
                 Leave us a message
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-ink-700/70 dark:text-white/60">
-                Fill in the form below and our management team will reply within 24 hours.
+                Fill in the form below and our management team will reply within
+                24 hours.
               </p>
 
               {submitted ? (
@@ -75,7 +78,13 @@ export const ContactExperience = () => {
                     Message Sent Successfully!
                   </h3>
                   <p className="mt-2 text-xs text-ink-700/70 dark:text-white/70">
-                    Thank you, <strong>{form.name}</strong>. Your inquiry regarding &quot;{form.subject}&quot; has been delivered directly to our management inbox (<span className="text-brand dark:text-brand-300 font-semibold">{siteConfig.contact.email}</span>). We will reply to your email within 24 hours.
+                    Thank you, <strong>{form.name}</strong>. Your inquiry
+                    regarding &quot;{form.subject}&quot; has been delivered
+                    directly to our management inbox (
+                    <span className="text-brand dark:text-brand-300 font-semibold">
+                      {siteConfig.contact.email}
+                    </span>
+                    ). We will reply to your email within 24 hours.
                   </p>
                   <button
                     type="button"
@@ -95,7 +104,10 @@ export const ContactExperience = () => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="mt-8 grid gap-4 sm:grid-cols-2">
+                <form
+                  onSubmit={handleSubmit}
+                  className="mt-8 grid gap-4 sm:grid-cols-2"
+                >
                   <div className="sm:col-span-1">
                     <label className="mb-1.5 block text-xs font-bold text-ink dark:text-white">
                       Your Full Name *
@@ -104,7 +116,9 @@ export const ContactExperience = () => {
                       type="text"
                       required
                       value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, name: e.target.value })
+                      }
                       placeholder="e.g. John Doe"
                       className="w-full rounded-2xl border border-ink/15 bg-ink/5 px-4 py-3 text-xs text-ink outline-none transition focus:border-brand dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-brand-300"
                     />
@@ -118,7 +132,9 @@ export const ContactExperience = () => {
                       type="email"
                       required
                       value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, email: e.target.value })
+                      }
                       placeholder="e.g. john@example.com"
                       className="w-full rounded-2xl border border-ink/15 bg-ink/5 px-4 py-3 text-xs text-ink outline-none transition focus:border-brand dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-brand-300"
                     />
@@ -131,7 +147,9 @@ export const ContactExperience = () => {
                     <input
                       type="tel"
                       value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, phone: e.target.value })
+                      }
                       placeholder="e.g. +1 415-555-1234"
                       className="w-full rounded-2xl border border-ink/15 bg-ink/5 px-4 py-3 text-xs text-ink outline-none transition focus:border-brand dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-brand-300"
                     />
@@ -143,13 +161,21 @@ export const ContactExperience = () => {
                     </label>
                     <select
                       value={form.subject}
-                      onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, subject: e.target.value })
+                      }
                       className="w-full rounded-2xl border border-ink/15 bg-ink/5 px-4 py-3 text-xs text-ink outline-none transition focus:border-brand dark:border-white/10 dark:bg-[#171614] dark:text-white dark:focus:border-brand-300"
                     >
                       <option value="General Inquiry">General Inquiry</option>
-                      <option value="Private Event & Catering">Private Event &amp; Catering</option>
-                      <option value="Feedback / Compliment">Feedback &amp; Dining Review</option>
-                      <option value="Career Opportunities">Career Opportunities</option>
+                      <option value="Private Event & Catering">
+                        Private Event &amp; Catering
+                      </option>
+                      <option value="Feedback / Compliment">
+                        Feedback &amp; Dining Review
+                      </option>
+                      <option value="Career Opportunities">
+                        Career Opportunities
+                      </option>
                     </select>
                   </div>
 
@@ -161,7 +187,9 @@ export const ContactExperience = () => {
                       required
                       rows={5}
                       value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, message: e.target.value })
+                      }
                       placeholder="Write your note, request, or questions here..."
                       className="w-full rounded-2xl border border-ink/15 bg-ink/5 p-4 text-xs text-ink outline-none transition focus:border-brand dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-brand-300"
                     />
@@ -175,7 +203,8 @@ export const ContactExperience = () => {
                     >
                       {sending ? (
                         <>
-                          <i className="ri-loader-4-line animate-spin text-sm" /> Sending Message...
+                          <i className="ri-loader-4-line animate-spin text-sm" />{" "}
+                          Sending Message...
                         </>
                       ) : (
                         <>
@@ -201,7 +230,9 @@ export const ContactExperience = () => {
                       <i className="ri-map-pin-line" />
                     </span>
                     <div>
-                      <strong className="block text-xs font-bold text-ink dark:text-white">Restaurant Location</strong>
+                      <strong className="block text-xs font-bold text-ink dark:text-white">
+                        Restaurant Location
+                      </strong>
                       <p className="mt-0.5 text-xs text-ink-700/70 dark:text-white/60">
                         {siteConfig.contact.address}
                       </p>
@@ -213,8 +244,13 @@ export const ContactExperience = () => {
                       <i className="ri-phone-line" />
                     </span>
                     <div>
-                      <strong className="block text-xs font-bold text-ink dark:text-white">Phone &amp; Hotline</strong>
-                      <a href={`tel:${siteConfig.contact.phone.replace(/[^\d+]/g, "")}`} className="mt-0.5 block text-xs text-brand hover:underline dark:text-brand-300">
+                      <strong className="block text-xs font-bold text-ink dark:text-white">
+                        Phone &amp; Hotline
+                      </strong>
+                      <a
+                        href={`tel:${siteConfig.contact.phone.replace(/[^\d+]/g, "")}`}
+                        className="mt-0.5 block text-xs text-brand hover:underline dark:text-brand-300"
+                      >
                         {siteConfig.contact.phone}
                       </a>
                     </div>
@@ -225,8 +261,13 @@ export const ContactExperience = () => {
                       <i className="ri-mail-line" />
                     </span>
                     <div>
-                      <strong className="block text-xs font-bold text-ink dark:text-white">Email Address</strong>
-                      <a href={`mailto:${siteConfig.contact.email}`} className="mt-0.5 block text-xs text-brand hover:underline dark:text-brand-300">
+                      <strong className="block text-xs font-bold text-ink dark:text-white">
+                        Email Address
+                      </strong>
+                      <a
+                        href={`mailto:${siteConfig.contact.email}`}
+                        className="mt-0.5 block text-xs text-brand hover:underline dark:text-brand-300"
+                      >
                         {siteConfig.contact.email}
                       </a>
                     </div>
@@ -241,16 +282,28 @@ export const ContactExperience = () => {
                 </h3>
                 <div className="mt-4 divide-y divide-ink/5 text-xs dark:divide-white/5">
                   <div className="flex justify-between py-2.5">
-                    <span className="text-ink-700/70 dark:text-white/60">Monday &ndash; Thursday</span>
-                    <strong className="text-ink dark:text-white">10:00 AM &ndash; 10:00 PM</strong>
+                    <span className="text-ink-700/70 dark:text-white/60">
+                      Monday &ndash; Thursday
+                    </span>
+                    <strong className="text-ink dark:text-white">
+                      10:00 AM &ndash; 10:00 PM
+                    </strong>
                   </div>
                   <div className="flex justify-between py-2.5">
-                    <span className="text-ink-700/70 dark:text-white/60">Friday &ndash; Saturday</span>
-                    <strong className="text-ink dark:text-white">09:00 AM &ndash; 11:30 PM</strong>
+                    <span className="text-ink-700/70 dark:text-white/60">
+                      Friday &ndash; Saturday
+                    </span>
+                    <strong className="text-ink dark:text-white">
+                      09:00 AM &ndash; 11:30 PM
+                    </strong>
                   </div>
                   <div className="flex justify-between py-2.5">
-                    <span className="text-ink-700/70 dark:text-white/60">Sunday Brunch &amp; Dinner</span>
-                    <strong className="text-ink dark:text-white">10:00 AM &ndash; 10:00 PM</strong>
+                    <span className="text-ink-700/70 dark:text-white/60">
+                      Sunday Brunch &amp; Dinner
+                    </span>
+                    <strong className="text-ink dark:text-white">
+                      10:00 AM &ndash; 10:00 PM
+                    </strong>
                   </div>
                 </div>
               </div>
@@ -273,6 +326,8 @@ export const ContactExperience = () => {
           </div>
         </Container>
       </section>
+
+      <InstagramFeed />
     </>
   );
 };

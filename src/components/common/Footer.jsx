@@ -65,7 +65,7 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/menu" className="text-sm text-white/60 transition hover:text-brand">
+                <Link href="/about#menu" className="text-sm text-white/60 transition hover:text-brand">
                   {t("nav.menu", "Our Menu")}
                 </Link>
               </li>
@@ -85,7 +85,7 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/gallery" className="text-sm text-white/60 transition hover:text-brand">
+                <Link href="/chefs#gallery" className="text-sm text-white/60 transition hover:text-brand">
                   {t("nav.gallery", "Photo Gallery")}
                 </Link>
               </li>

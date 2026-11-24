@@ -42,7 +42,7 @@ export const Hero = () => {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/menu" className="btn-brand hero-button">
-              Explore Menu <i className="ri-arrow-right-line" aria-hidden="true" />
+              {t("hero.exploreMenu", "Explore Menu")} <i className="ri-arrow-right-line" aria-hidden="true" />
             </Link>
             <Link href="/reservation" className="btn-dark hero-button">
               Book a Table
