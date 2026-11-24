@@ -1,8 +1,8 @@
 import { AuthExperience } from "@/components/auth/AuthExperience";
 
 export const metadata = {
-  title: "Sign In & Register",
-  description: "Sign in to your Reshto account or access the Admin Management Portal.",
+  title: "Sign In",
+  description: "Sign in to your Reshto account.",
 };
 
 export default function LoginPage() {

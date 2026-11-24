@@ -8,7 +8,6 @@ import { siteConfig } from "@/constants/site";
 import { menuTabs } from "@/data/data";
 import { useStore } from "@/context/StoreContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
 
 export const OrderExperience = ({ initialSearch }) => {
@@ -19,8 +18,6 @@ export const OrderExperience = ({ initialSearch }) => {
     cartItems,
     cartCount,
     cartSubtotal,
-    isFavorite,
-    toggleFavorite,
   } = useStore();
   const { formatPrice } = useLanguage();
 
@@ -58,7 +55,7 @@ export const OrderExperience = ({ initialSearch }) => {
           <h1>
             Make it a <span>Reshto</span> moment.
           </h1>
-          <p>Pick your favorites, build your order, and call us or check out online.</p>
+          <p>Choose your dishes, build your order, and call us or check out online.</p>
         </Container>
       </section>
 
@@ -77,10 +74,10 @@ export const OrderExperience = ({ initialSearch }) => {
               </p>
             </div>
             <Link
-              href="/#menu"
+              href="/menu"
               className="order-back-link dark:text-white/70 hover:dark:text-brand-300"
             >
-              <i className="ri-arrow-left-line" /> Back to home
+              <i className="ri-arrow-left-line" /> Back to menu
             </Link>
           </div>
 
@@ -152,33 +149,12 @@ export const OrderExperience = ({ initialSearch }) => {
               {/* Dish list */}
               <div className="order-menu-grid">
                 {filteredItems.map((item) => {
-                  const dishId = item.id || item.cartId;
-                  const isFav = isFavorite(dishId);
-
                   return (
                     <article
                       className="order-card relative dark:bg-[#1e1c1a] dark:border-white/10 group cursor-pointer"
                       key={item.cartId}
                       onClick={() => setQuickViewDish(item)}
                     >
-                      {/* Floating Wishlist Heart Button */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFavorite(dishId);
-                        }}
-                        aria-label={isFav ? "Remove from favorites" : "Save to favorites"}
-                        className={`absolute top-2.5 left-2.5 z-10 grid h-7 w-7 place-items-center rounded-full backdrop-blur-md transition shadow-xs ${
-                          isFav
-                            ? "bg-rose-500 text-white animate-pulse"
-                            : "bg-black/35 text-white/90 hover:bg-black/60 hover:text-rose-400"
-                        }`}
-                        title={isFav ? "Saved to favorites" : "Add to favorites"}
-                      >
-                        <i className={isFav ? "ri-heart-fill text-xs" : "ri-heart-line text-xs"} />
-                      </button>
-
                       <SafeImage
                         src={item.image}
                         alt={item.menuItemName}
@@ -338,19 +314,6 @@ export const OrderExperience = ({ initialSearch }) => {
                   >
                     <i className="ri-secure-payment-line text-sm" /> Proceed to Checkout
                   </Link>
-
-                  <a
-                    href={generateWhatsAppOrderUrl({
-                      items: cartItems,
-                      subtotal: formatPrice(cartSubtotal),
-                      total: formatPrice(cartSubtotal),
-                    })}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 py-2.5 text-xs font-bold text-white transition shadow-xs"
-                  >
-                    <i className="ri-whatsapp-line text-base" /> Order via WhatsApp
-                  </a>
 
                   <a
                     className="order-phone mt-2 text-center text-xs dark:text-white hover:dark:text-brand-300"

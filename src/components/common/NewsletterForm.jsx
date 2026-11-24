@@ -67,7 +67,7 @@ export const NewsletterForm = () => {
         <button
           type="submit"
           disabled={loading}
-          className="btn-brand px-5! py-2.5! text-xs! shrink-0 font-bold"
+          className="btn-brand shrink-0 whitespace-nowrap rounded-full px-5! py-2.5! text-xs! font-bold disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loading ? (
             <i className="ri-loader-4-line animate-spin" />

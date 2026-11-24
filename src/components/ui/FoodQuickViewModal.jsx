@@ -9,8 +9,6 @@ import { getDishMetadata } from "@/lib/dishMetadata";
 export const FoodQuickViewModal = ({ dish, onClose }) => {
   const {
     updateQuantity,
-    isFavorite,
-    toggleFavorite,
     reviews,
     addReview,
     openCart,
@@ -36,8 +34,6 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
   if (!dish) return null;
 
   const metadata = getDishMetadata(dish);
-  const dishId = dish.id || dish.cartId;
-  const isFav = isFavorite(dish.id) || isFavorite(dish.cartId);
 
   // Filter reviews matching this dish
   const dishReviews = reviews.filter(
@@ -96,21 +92,6 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
           className="absolute right-4 top-4 z-20 grid h-9 w-9 place-items-center rounded-full bg-black/40 text-white backdrop-blur-md hover:bg-black/60 transition"
         >
           <i className="ri-close-line text-xl" />
-        </button>
-
-        {/* Wishlist Heart Button */}
-        <button
-          type="button"
-          onClick={() => toggleFavorite(dishId)}
-          aria-label={isFav ? "Remove from favorites" : "Save to favorites"}
-          className={`absolute left-4 top-4 z-20 grid h-9 w-9 place-items-center rounded-full backdrop-blur-md transition shadow-md ${
-            isFav
-              ? "bg-rose-500 text-white"
-              : "bg-black/40 text-white hover:bg-black/60 hover:text-rose-400"
-          }`}
-          title={isFav ? "Saved to favorites" : "Add to favorites"}
-        >
-          <i className={isFav ? "ri-heart-fill text-sm" : "ri-heart-line text-sm"} />
         </button>
 
         {/* Dish Hero Image Banner */}

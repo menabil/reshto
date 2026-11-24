@@ -8,7 +8,6 @@ import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { ReceiptModal } from "@/components/checkout/ReceiptModal";
-import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
 
 const USER_MOCK = {
   name: "Tahmid Hassan",
@@ -22,25 +21,19 @@ const USER_MOCK = {
 };
 
 export const UserDashboard = () => {
-  const { user: authUser, isAuthenticated, mounted, login } = useAuth();
+  const { user: authUser, isAuthenticated, mounted } = useAuth();
   const { t, formatPrice } = useLanguage();
   const {
     orders,
     reservations,
     updateReservationStatus,
-    favorites,
-    menuItems,
-    toggleFavorite,
     reviews,
     addReview,
-    updateQuantity,
-    openCart,
   } = useStore();
-  const [activeTab, setActiveTab] = useState("orders"); // orders, bookings, favorites, reviews, profile
+  const [activeTab, setActiveTab] = useState("orders"); // orders, bookings, reviews, profile
   const [user, setUser] = useState(() => (authUser ? { ...USER_MOCK, ...authUser } : USER_MOCK));
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [selectedOrderReceipt, setSelectedOrderReceipt] = useState(null);
-  const [quickViewDish, setQuickViewDish] = useState(null);
 
   // Review modal state (Task 5.4)
   const [reviewModalData, setReviewModalData] = useState(null);
@@ -66,10 +59,6 @@ export const UserDashboard = () => {
       )
     : reservations;
 
-  const favoriteDishes = menuItems.filter(
-    (item) => favorites.includes(item.id) || favorites.includes(item.cartId)
-  );
-
   const handleProfileSave = (e) => {
     e.preventDefault();
     setSavedSuccess(true);
@@ -88,19 +77,12 @@ export const UserDashboard = () => {
               Customer Sign In
             </h2>
             <p className="mt-2 text-xs leading-relaxed text-ink-700/70 dark:text-white/60">
-              Please sign in or register to view your order history, manage table reservations, and view saved favorite dishes.
+              Please sign in or register to view your order history and manage table reservations.
             </p>
             <div className="mt-6 flex flex-col gap-2.5">
               <Link href="/login" className="btn-brand py-3! text-xs!">
                 Sign In / Register <i className="ri-arrow-right-line" />
               </Link>
-              <button
-                type="button"
-                onClick={() => login({ email: "user@reshto.com", role: "user" })}
-                className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 py-2.5 text-xs font-bold text-emerald-700 hover:bg-emerald-500/20 dark:text-emerald-300 transition"
-              >
-                <i className="ri-user-smile-fill mr-1" /> Quick One-Click Customer Login
-              </button>
               <Link
                 href="/"
                 className="mt-2 text-xs font-semibold text-ink-700/60 hover:text-brand dark:text-white/50"
@@ -120,14 +102,6 @@ export const UserDashboard = () => {
         <ReceiptModal
           order={selectedOrderReceipt}
           onClose={() => setSelectedOrderReceipt(null)}
-        />
-      )}
-
-      {/* Food Quick View Modal (Task 5.1) */}
-      {quickViewDish && (
-        <FoodQuickViewModal
-          dish={quickViewDish}
-          onClose={() => setQuickViewDish(null)}
         />
       )}
 
@@ -312,18 +286,6 @@ export const UserDashboard = () => {
             }`}
           >
             <i className="ri-calendar-check-line" /> My Reservations ({userReservations.length})
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("favorites")}
-            className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
-              activeTab === "favorites"
-                ? "bg-brand text-white shadow-sm dark:text-[#171512]"
-                : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
-            }`}
-          >
-            <i className="ri-heart-3-line" /> Saved Favorites ({favoriteDishes.length})
           </button>
 
           <button
@@ -553,80 +515,7 @@ export const UserDashboard = () => {
           </div>
         ) : null}
 
-        {/* TAB 3: SAVED FAVORITES */}
-        {activeTab === "favorites" ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {favoriteDishes.length === 0 ? (
-              <div className="col-span-full rounded-3xl border border-dashed border-ink/20 p-12 text-center dark:border-white/20">
-                <i className="ri-heart-3-line text-4xl text-ink-700/40 dark:text-white/40" />
-                <h4 className="mt-3 font-display text-lg font-bold text-ink dark:text-white">No favorite dishes saved</h4>
-                <p className="mt-1 text-xs text-ink-700/60 dark:text-white/60">Explore the menu and save the dishes you love.</p>
-                <Link href="/about#menu" className="btn-brand mt-4 inline-flex py-2! text-xs!">
-                  Explore Menu <i className="ri-arrow-right-line" />
-                </Link>
-              </div>
-            ) : (
-              favoriteDishes.map((fav) => (
-                <div
-                  key={fav.id || fav.cartId}
-                  onClick={() => setQuickViewDish(fav)}
-                  className="flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] cursor-pointer hover:border-brand/40 transition-all group"
-                >
-                  <div className="relative h-44">
-                    <SafeImage
-                      src={fav.image}
-                      alt={fav.menuItemName}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(fav.id);
-                      }}
-                      className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white text-rose-500 shadow-md dark:bg-[#292522]"
-                      title="Remove from Favorites"
-                    >
-                      <i className="ri-heart-3-fill" />
-                    </button>
-                    <span className="absolute bottom-2 left-2 rounded-md bg-black/50 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur-xs flex items-center gap-1">
-                      <i className="ri-information-line" /> Quick View
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col p-5">
-                    <h3 className="font-display font-bold text-base text-ink dark:text-white">
-                      {fav.menuItemName}
-                    </h3>
-                    <p className="mt-1 flex-1 text-xs text-ink-700/60 dark:text-white/60 line-clamp-2">
-                      {fav.menuItemDesc}
-                    </p>
-                    <div
-                      className="mt-4 flex items-center justify-between border-t border-ink/5 pt-3 dark:border-white/5"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <span className="font-display font-extrabold text-brand dark:text-brand-300">
-                        {formatPrice(fav.menuItemPrice)}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const cartId = fav.cartId || `lunch-${fav.id}`;
-                          updateQuantity(cartId, 1);
-                          openCart();
-                        }}
-                        className="btn-brand text-xs py-1.5! px-3!"
-                      >
-                        + Add to Cart <i className="ri-shopping-bag-3-line ml-0.5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        ) : null}
-
-        {/* TAB 4: MY REVIEWS & RATINGS (Task 5.4) */}
+        {/* TAB 3: MY REVIEWS & RATINGS (Task 5.4) */}
         {activeTab === "reviews" ? (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-ink/10 pb-4 dark:border-white/10">

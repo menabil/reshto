@@ -21,9 +21,7 @@ export default function ErrorBoundary({ error, reset }) {
         <div className="mt-8 flex justify-center gap-4">
           <Button onClick={() => reset()}>Try Again</Button>
           <Link href="/">
-            <Button className="border border-ink/15 bg-white text-ink hover:bg-white/80 dark:border-white/10 dark:bg-[#1e1c1a] dark:text-white dark:hover:bg-white/10">
-              Go Home
-            </Button>
+            <Button variant="outline">Go Home</Button>
           </Link>
         </div>
       </Container>

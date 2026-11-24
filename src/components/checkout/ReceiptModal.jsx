@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { siteConfig } from "@/constants/site";
-import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const ReceiptModal = ({ order, onClose }) => {
@@ -15,32 +14,16 @@ export const ReceiptModal = ({ order, onClose }) => {
     window.print();
   };
 
-  const whatsAppUrl = generateWhatsAppOrderUrl({
-    items: order.items || [],
-    customer: order.customer,
-    phone: order.phone,
-    address: order.address,
-    orderType: order.orderType || order.type,
-    notes: order.notes,
-    subtotal: order.subtotal,
-    discount: order.discount,
-    coupon: order.coupon,
-    deliveryFee: order.deliveryFee,
-    tax: order.tax,
-    total: order.total,
-    orderId: order.id,
-  });
-
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/75 backdrop-blur-sm animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 p-3 backdrop-blur-sm animate-in fade-in sm:p-5"
       role="dialog"
       aria-modal="true"
     >
-      <div className="relative w-full max-w-2xl rounded-3xl bg-white shadow-2xl dark:bg-[#1a1816] text-ink dark:text-white border border-ink/10 dark:border-white/10 overflow-hidden my-8">
+      <div className="relative my-auto flex max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-ink/10 bg-white text-ink shadow-2xl dark:border-white/10 dark:bg-[#1a1816] dark:text-white sm:max-h-[calc(100dvh-2.5rem)] print:my-0 print:max-h-none print:max-w-none print:overflow-visible print:rounded-none print:border-0 print:shadow-none">
         
         {/* Top Control Bar (Hidden when printing) */}
-        <div className="flex items-center justify-between border-b border-ink/10 bg-[#faf8f5] px-6 py-4 dark:border-white/10 dark:bg-[#22201d] print:hidden">
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-ink/10 bg-[#faf8f5] px-4 py-3 dark:border-white/10 dark:bg-[#22201d] sm:px-6 sm:py-4 print:hidden">
           <div className="flex items-center gap-2">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400 font-bold">
               <i className="ri-bill-line" />
@@ -50,7 +33,7 @@ export const ReceiptModal = ({ order, onClose }) => {
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             <button
               type="button"
               onClick={handlePrint}
@@ -59,15 +42,6 @@ export const ReceiptModal = ({ order, onClose }) => {
             >
               <i className="ri-printer-line" /> Print / PDF
             </button>
-            <a
-              href={whatsAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 text-xs font-bold text-white transition"
-              title="Share receipt on WhatsApp"
-            >
-              <i className="ri-whatsapp-line" /> WhatsApp
-            </a>
             <button
               type="button"
               onClick={onClose}
@@ -80,7 +54,7 @@ export const ReceiptModal = ({ order, onClose }) => {
         </div>
 
         {/* Printable Invoice Container */}
-        <div ref={receiptRef} className="p-6 md:p-8 space-y-6 print:p-0 print:m-0">
+        <div ref={receiptRef} className="min-h-0 flex-1 space-y-5 overflow-y-auto p-5 sm:p-7 print:m-0 print:overflow-visible print:p-0">
           
           {/* Invoice Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-ink/10 pb-6 dark:border-white/10">
@@ -244,22 +218,22 @@ export const ReceiptModal = ({ order, onClose }) => {
         </div>
 
         {/* Modal Bottom Actions (Hidden when printing) */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-ink/10 bg-[#faf8f5] px-6 py-4 dark:border-white/10 dark:bg-[#22201d] print:hidden">
+        <div className="flex shrink-0 flex-col items-center justify-between gap-3 border-t border-ink/10 bg-[#faf8f5] px-4 py-3 dark:border-white/10 dark:bg-[#22201d] sm:flex-row sm:px-6 sm:py-4 print:hidden">
           <p className="text-xs text-ink-700 dark:text-white/60">
             Receipt saved in your order history.
           </p>
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="flex w-full items-center gap-2 sm:w-auto">
             <button
               type="button"
               onClick={handlePrint}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 rounded-xl bg-ink text-white dark:bg-white dark:text-ink px-4 py-2.5 text-xs font-bold transition hover:opacity-90"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-ink px-4 py-2.5 text-xs font-bold text-white transition hover:opacity-90 dark:bg-brand dark:text-[#171512] sm:flex-none"
             >
               <i className="ri-printer-line" /> Print Receipt
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 sm:flex-none rounded-xl border border-ink/15 bg-white px-4 py-2.5 text-xs font-bold text-ink hover:bg-ink/5 dark:border-white/15 dark:bg-[#1a1816] dark:text-white transition"
+              className="flex flex-1 items-center justify-center rounded-xl border border-ink/15 bg-white px-4 py-2.5 text-xs font-bold text-ink transition hover:bg-ink/5 dark:border-white/15 dark:bg-[#1a1816] dark:text-white sm:flex-none"
             >
               Close
             </button>

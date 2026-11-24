@@ -17,7 +17,7 @@ export const Hero = () => {
   return (
     <section
       id="home"
-      className="hero-section relative isolate min-h-[720px] overflow-hidden text-white"
+      className="hero-section relative isolate overflow-hidden text-white"
     >
       <div className="hero-background" aria-hidden="true">
         <Image
@@ -29,7 +29,7 @@ export const Hero = () => {
           className="object-cover object-[center_52%]"
         />
       </div>
-      <Container className="hero-content relative z-10 flex min-h-[720px] items-center">
+      <Container className="hero-content relative z-10 flex items-center">
         <div className="hero-copy max-w-3xl">
           <span className="hero-eyebrow">
             <i className="ri-sparkling-2-line" aria-hidden="true" />
@@ -44,7 +44,7 @@ export const Hero = () => {
             Seasonal ingredients, a thoughtful pour, and the kind of welcome that makes you want to stay for one more course.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/order" className="btn-brand hero-button">
+            <Link href="/menu" className="btn-brand hero-button">
               {t("hero.exploreMenu", "Explore Menu")} <i className="ri-arrow-right-line" aria-hidden="true" />
             </Link>
             <Link href="/reservation" className="btn-dark hero-button">

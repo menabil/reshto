@@ -185,7 +185,7 @@ export const Header = () => {
             >
               <i className="ri-shopping-bag-3-line" />
               {cartCount > 0 ? (
-                <span className="absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-brand text-[10px] font-extrabold text-white animate-pulse">
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand text-center text-[10px] font-extrabold leading-none text-black">
                   {cartCount}
                 </span>
               ) : null}

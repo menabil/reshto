@@ -136,7 +136,7 @@ export default function ChefsPage() {
                           <i className="ri-twitter-x-line" />
                         </a>
                       </div>
-                      <Link href="/about#menu" className="text-xs font-bold text-brand hover:underline dark:text-brand-300">
+                      <Link href="/menu" className="text-xs font-bold text-brand hover:underline dark:text-brand-300">
                         View Creations &rarr;
                       </Link>
                     </div>

@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/context/StoreContext";
+import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { SafeImage } from "@/components/ui/SafeImage";
-import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 export const CartDrawer = () => {
   const {
@@ -25,10 +25,12 @@ export const CartDrawer = () => {
     clearCart,
     orders,
   } = useStore();
+  const { isAuthenticated } = useAuth();
   const { formatPrice } = useLanguage();
 
   const [couponInput, setCouponInput] = useState("");
   const [couponMessage, setCouponMessage] = useState(null);
+  const activeOrder = orders?.find((order) => order.isCustomerOrder);
 
   // Close drawer on ESC key
   useEffect(() => {
@@ -63,15 +65,6 @@ export const CartDrawer = () => {
     }
     setTimeout(() => setCouponMessage(null), 4000);
   };
-
-  const whatsAppUrl = generateWhatsAppOrderUrl({
-    items: cartItems,
-    subtotal: formatPrice(cartSubtotal),
-    discount: couponDiscount > 0 ? `-${formatPrice(couponDiscount)}` : "$0.00",
-    coupon: appliedCoupon?.code,
-    deliveryFee: deliveryFee === 0 ? "FREE" : formatPrice(deliveryFee),
-    total: formatPrice(cartTotal),
-  });
 
   if (!isCartOpen) return null;
 
@@ -129,31 +122,44 @@ export const CartDrawer = () => {
           {/* Drawer Body - Items List */}
           <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
             {/* Active Order Tracker Pill */}
-            {orders && orders.length > 0 && (
-              <div className="rounded-2xl border border-brand/20 bg-brand/5 p-3 dark:border-brand-400/20 dark:bg-brand/10 flex items-center justify-between gap-2 shadow-xs">
-                <div className="flex items-center gap-2.5">
-                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-brand text-white text-sm shadow-xs">
-                    <i className="ri-e-bike-2-fill" />
+            <div className="rounded-2xl border border-brand/20 bg-brand/5 p-3 dark:border-brand-400/20 dark:bg-brand/10 flex items-center justify-between gap-2 shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="grid h-8 w-8 place-items-center rounded-xl bg-brand text-white text-sm shadow-xs">
+                  <i className="ri-e-bike-2-fill" />
+                </span>
+                <div>
+                  <span className="text-[10px] font-bold text-brand uppercase tracking-wider block">
+                    {activeOrder
+                      ? `Active Order #${activeOrder.id}`
+                      : "No order to track yet"}
                   </span>
-                  <div>
-                    <span className="text-[10px] font-bold text-brand uppercase tracking-wider block">
-                      Active Order #{orders[0].id}
-                    </span>
+                  {activeOrder ? (
                     <strong className="text-xs text-ink dark:text-white">
-                      Status: {orders[0].status}
+                      Status: {activeOrder.status}
                     </strong>
-                  </div>
+                  ) : null}
                 </div>
+              </div>
 
+              {activeOrder ? (
                 <Link
-                  href={`/order-tracking?orderId=${orders[0].id}`}
+                  href={`/order-tracking?orderId=${activeOrder.id}`}
                   onClick={closeCart}
                   className="rounded-xl bg-brand px-3 py-1.5 text-[11px] font-bold text-white hover:bg-brand-600 transition shadow-xs whitespace-nowrap"
                 >
                   Track Live &rarr;
                 </Link>
-              </div>
-            )}
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  className="cursor-not-allowed whitespace-nowrap rounded-xl bg-ink/10 px-3 py-1.5 text-[11px] font-bold text-ink/40 dark:bg-white/10 dark:text-white/40"
+                  aria-label="Track order unavailable until you place an order"
+                >
+                  Track Live &rarr;
+                </button>
+              )}
+            </div>
 
             {cartItems.length > 0 ? (
               cartItems.map((item) => (
@@ -338,22 +344,13 @@ export const CartDrawer = () => {
               {/* Action Buttons */}
               <div className="mt-4 flex flex-col gap-2">
                 <Link
-                  href="/checkout"
+                  href={isAuthenticated ? "/checkout" : "/login?next=%2Fcheckout"}
                   onClick={closeCart}
                   className="btn-brand flex w-full items-center justify-center gap-2 py-3 text-xs! font-bold shadow-md"
                 >
-                  <i className="ri-secure-payment-line text-sm" /> Proceed to Checkout
+                  <i className="ri-secure-payment-line text-sm" />
+                  {isAuthenticated ? "Proceed to Payment" : "Sign In to Continue"}
                 </Link>
-
-                {/* WhatsApp Direct Order Button */}
-                <a
-                  href={whatsAppUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-4 py-2.5 text-xs font-bold text-white transition shadow-xs"
-                >
-                  <i className="ri-whatsapp-line text-base" /> Order via WhatsApp
-                </a>
               </div>
 
               <div className="mt-2.5 text-center">

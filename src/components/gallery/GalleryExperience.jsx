@@ -201,7 +201,7 @@ export const GalleryExperience = () => {
                   {selectedPhoto.desc}
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <Link href="/about#menu" className="btn-brand py-2.5! text-xs!">
+                  <Link href="/menu" className="btn-brand py-2.5! text-xs!">
                     Explore Menu <i className="ri-arrow-right-line" />
                   </Link>
                   <Link href="/reservation" className="btn-dark py-2.5! text-xs!">

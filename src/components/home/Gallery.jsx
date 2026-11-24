@@ -72,7 +72,7 @@ export const Gallery = () => (
 
       <div className="mt-10 text-center">
         <Link
-          href="/chefs#gallery"
+          href="/gallery"
           className="btn-outline dark:bg-[#1e1c1a] dark:text-white dark:border-white/15 dark:hover:border-brand"
         >
           View Full Photo Gallery <i className="ri-arrow-right-line" />

@@ -10,6 +10,8 @@ export default function sitemap() {
   const routes = [
     { path: "", priority: 1.0 },
     { path: "/about", priority: 0.8 },
+    { path: "/menu", priority: 0.9 },
+    { path: "/gallery", priority: 0.7 },
     { path: "/order", priority: 0.9 },
     { path: "/checkout", priority: 0.8 },
     { path: "/order-tracking", priority: 0.8 },

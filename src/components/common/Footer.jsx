@@ -65,7 +65,7 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/about#menu" className="text-sm text-white/60 transition hover:text-brand">
+                <Link href="/menu" className="text-sm text-white/60 transition hover:text-brand">
                   {t("nav.menu", "Our Menu")}
                 </Link>
               </li>
@@ -75,17 +75,12 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/reservation" className="text-sm text-white/60 transition hover:text-brand">
-                  {t("nav.reservation", "Book A Table")}
-                </Link>
-              </li>
-              <li>
                 <Link href="/chefs" className="text-sm text-white/60 transition hover:text-brand">
                   {t("nav.chefs", "Our Chefs")}
                 </Link>
               </li>
               <li>
-                <Link href="/chefs#gallery" className="text-sm text-white/60 transition hover:text-brand">
+                <Link href="/gallery" className="text-sm text-white/60 transition hover:text-brand">
                   {t("nav.gallery", "Photo Gallery")}
                 </Link>
               </li>
@@ -101,23 +96,18 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/reservation" className="text-sm text-white/60 transition hover:text-brand">
+                  {t("nav.reservation", "Book A Table")}
+                </Link>
+              </li>
+              <li>
                 <Link href="/login" className="text-sm text-white/60 transition hover:text-brand">
-                  {t("nav.signIn", "Sign In / Register")}
+                  Sign In
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="text-sm text-amber-300/80 transition hover:text-amber-200">
-                  {t("nav.dashboard", "User Dashboard")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/order-tracking" className="text-sm text-emerald-300/80 transition hover:text-emerald-200">
-                  {t("nav.trackOrder", "Track Live Order")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin" className="text-sm text-amber-300/80 transition hover:text-amber-200">
-                  {t("nav.admin", "Admin Portal")}
+                <Link href="/register" className="text-sm text-white/60 transition hover:text-brand">
+                  Register
                 </Link>
               </li>
             </ul>
@@ -154,14 +144,6 @@ export const Footer = () => {
             </Link>
             . {t("footer.rights", "All rights reserved.")} &bull; {t("footer.madeWith", "Crafted with passion for exquisite gastronomy.")}
           </p>
-          <div className="flex gap-4">
-            <Link href="/dashboard" className="transition hover:text-brand">
-              {t("nav.dashboard", "Dashboard")}
-            </Link>
-            <Link href="/order-tracking" className="transition hover:text-brand">
-              {t("nav.trackOrder", "Track Order")}
-            </Link>
-          </div>
         </div>
       </Container>
     </footer>

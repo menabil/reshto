@@ -422,21 +422,18 @@ export const whyChoose = [
   {
     id: 1,
     icon: "ri-truck-line",
-    tone: "primary",
     title: "Swift & Reliable Delivery",
     text: "Your favorite meals delivered hot and fresh, right when you need them.",
   },
   {
     id: 2,
     icon: "ri-time-line",
-    tone: "success",
     title: "Customized for You",
     text: "Flexible dining solutions tailored to your taste, schedule, and lifestyle.",
   },
   {
     id: 3,
     icon: "ri-discount-percent-line",
-    tone: "warning",
     title: "Exceptional Value",
     text: "Save big with exclusive deals while enjoying premium-quality meals.",
   },

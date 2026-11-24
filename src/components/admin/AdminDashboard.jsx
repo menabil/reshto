@@ -10,7 +10,7 @@ import { useStore } from "@/context/StoreContext";
 import { ReceiptModal } from "@/components/checkout/ReceiptModal";
 
 export const AdminDashboard = () => {
-  const { user, isAdmin, mounted, login, logout } = useAuth();
+  const { user, isAdmin, mounted, logout } = useAuth();
   const {
     orders,
     updateOrderStatus,
@@ -148,13 +148,6 @@ export const AdminDashboard = () => {
               <Link href="/login" className="btn-brand py-3! text-xs!">
                 Go to Login Page <i className="ri-arrow-right-line" />
               </Link>
-              <button
-                type="button"
-                onClick={() => login({ email: "admin@reshto.com", role: "admin" })}
-                className="rounded-xl border border-amber-500/30 bg-amber-500/10 py-2.5 text-xs font-bold text-amber-700 hover:bg-amber-500/20 dark:text-amber-300 transition"
-              >
-                <i className="ri-vip-crown-fill mr-1" /> Quick One-Click Admin Access
-              </button>
               <Link
                 href="/"
                 className="mt-2 text-xs font-semibold text-ink-700/60 hover:text-brand dark:text-white/50"

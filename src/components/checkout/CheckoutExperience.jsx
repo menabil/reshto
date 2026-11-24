@@ -7,11 +7,10 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 import { ReceiptModal } from "@/components/checkout/ReceiptModal";
 
 export const CheckoutExperience = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, mounted } = useAuth();
   const { t, formatPrice } = useLanguage();
   const {
     cartItems,
@@ -30,13 +29,11 @@ export const CheckoutExperience = () => {
 
   const [orderType, setOrderType] = useState("Delivery"); // "Delivery" or "Pickup"
   const [formData, setFormData] = useState({
-    name: user?.name || "",
-    phone: user?.phone || "+880 1711-234567",
-    email: user?.email || "",
-    address: "House 24, Road 7, Banani, Dhaka",
-    city: "Dhaka",
-    zip: "1213",
-    notes: "Please make the pizza crust slightly crispy and pack extra mint dip.",
+    phone: "",
+    address: "",
+    city: "",
+    zip: "",
+    notes: "",
     paymentMethod: "Cash on Delivery",
   });
 
@@ -75,25 +72,11 @@ export const CheckoutExperience = () => {
         }`
       : "Pickup at Reshto Restaurant Counter (3667 Nutters Washington Barn, IA)";
 
-  const whatsAppUrl = generateWhatsAppOrderUrl({
-    items: cartItems,
-    customer: formData.name || "Valued Customer",
-    phone: formData.phone,
-    address: fullAddress,
-    orderType,
-    notes: formData.notes,
-    subtotal: formatPrice(cartSubtotal),
-    discount: couponDiscount > 0 ? `-${formatPrice(couponDiscount)}` : "$0.00",
-    coupon: appliedCoupon?.code,
-    deliveryFee: currentDeliveryFee === 0 ? "FREE" : formatPrice(currentDeliveryFee),
-    tax: formatPrice(taxAmount),
-    total: formatPrice(currentTotal),
-  });
-
   const handleSubmitOrder = (e) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.phone.trim()) {
-      alert("Please provide your name and contact phone number.");
+    const customerPhone = user?.phone || formData.phone;
+    if (!user?.name?.trim() || !customerPhone.trim()) {
+      alert("Please provide your account name and a contact phone number.");
       return;
     }
     if (orderType === "Delivery" && !formData.address.trim()) {
@@ -105,9 +88,9 @@ export const CheckoutExperience = () => {
 
     setTimeout(() => {
       const newOrder = placeOrder({
-        customer: formData.name,
-        email: formData.email,
-        phone: formData.phone,
+        customer: user.name,
+        email: user.email,
+        phone: customerPhone,
         address: fullAddress,
         orderType,
         paymentMethod: formData.paymentMethod,
@@ -188,7 +171,7 @@ export const CheckoutExperience = () => {
                   href={`/order-tracking?orderId=${confirmedOrder.id}`}
                   className="flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-3 text-xs font-bold text-white transition shadow-sm"
                 >
-                  <i className="ri-e-bike-2-fill text-base" /> Track Live Delivery 🛵
+                  <i className="ri-e-bike-2-fill text-base" /> Track Live Delivery
                 </Link>
 
                 <button
@@ -198,15 +181,6 @@ export const CheckoutExperience = () => {
                 >
                   <i className="ri-printer-line text-base" /> View &amp; Print Receipt
                 </button>
-
-                <a
-                  href={whatsAppUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-6 py-3 text-xs font-bold text-white transition shadow-sm"
-                >
-                  <i className="ri-whatsapp-line text-base" /> Kitchen WhatsApp
-                </a>
 
                 <Link
                   href="/dashboard"
@@ -254,6 +228,50 @@ export const CheckoutExperience = () => {
     );
   }
 
+  if (!mounted) {
+    return (
+      <div
+        className="min-h-screen bg-[#faf8f5] dark:bg-[#0f0e0d]"
+        aria-busy="true"
+        aria-label="Loading checkout"
+      />
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#faf8f5] pb-24 pt-36 transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4]">
+        <Container className="max-w-md text-center">
+          <div className="rounded-4xl border border-ink/10 bg-white p-8 shadow-xl dark:border-white/10 dark:bg-[#1a1816]">
+            <span className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-brand/10 text-3xl text-brand dark:bg-white/5 dark:text-brand-300">
+              <i className="ri-user-line" />
+            </span>
+            <h1 className="mt-4 font-display text-2xl font-bold text-ink dark:text-white">
+              Sign In to Continue
+            </h1>
+            <p className="mt-2 text-xs text-ink-700 dark:text-white/60">
+              Please sign in or create an account before checking out.
+            </p>
+            <div className="mt-6 flex flex-col gap-2">
+              <Link
+                href="/login?next=%2Fcheckout"
+                className="btn-brand py-3! text-xs!"
+              >
+                Sign In <i className="ri-arrow-right-line" />
+              </Link>
+              <Link
+                href="/register?next=%2Fcheckout"
+                className="btn-outline py-3! text-xs!"
+              >
+                Create Account
+              </Link>
+            </div>
+          </div>
+        </Container>
+      </div>
+    );
+  }
+
   return (
     <>
       {showReceiptModal && confirmedOrder && (
@@ -285,7 +303,11 @@ export const CheckoutExperience = () => {
             
             {/* Left Column: Delivery & Customer Info Form */}
             <div className="lg:col-span-7">
-              <form onSubmit={handleSubmitOrder} className="space-y-6">
+              <form
+                id="checkout-form"
+                onSubmit={handleSubmitOrder}
+                className="space-y-6"
+              >
                 
                 {/* 1. Fulfillment Type (Delivery vs Pickup) */}
                 <div className="rounded-3xl border border-ink/10 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-[#1a1816]">
@@ -336,49 +358,43 @@ export const CheckoutExperience = () => {
                     Customer Information
                   </h2>
 
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="mt-4 grid grid-cols-1 gap-4 rounded-2xl bg-[#faf8f5] p-4 text-xs dark:bg-[#22201d] sm:grid-cols-3">
                     <div>
-                      <label className="text-xs font-bold text-ink dark:text-white block mb-1">
-                        Full Name <span className="text-rose-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        required
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="e.g. Tahmid Hassan"
-                        className="w-full rounded-xl border border-ink/15 bg-transparent px-3.5 py-2.5 text-xs text-ink outline-none focus:border-brand dark:border-white/15 dark:text-white"
-                      />
+                      <span className="block text-[10px] font-bold uppercase tracking-wide text-ink-700/60 dark:text-white/50">
+                        Name
+                      </span>
+                      <strong className="mt-1 block text-ink dark:text-white">
+                        {user?.name || "Not provided"}
+                      </strong>
                     </div>
-
                     <div>
-                      <label className="text-xs font-bold text-ink dark:text-white block mb-1">
-                        Phone Number <span className="text-rose-500">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        required
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder="e.g. +880 1711-234567"
-                        className="w-full rounded-xl border border-ink/15 bg-transparent px-3.5 py-2.5 text-xs text-ink outline-none focus:border-brand dark:border-white/15 dark:text-white"
-                      />
+                      <span className="block text-[10px] font-bold uppercase tracking-wide text-ink-700/60 dark:text-white/50">
+                        Phone
+                      </span>
+                      {user?.phone ? (
+                        <strong className="mt-1 block text-ink dark:text-white">
+                          {user.phone}
+                        </strong>
+                      ) : (
+                        <input
+                          type="tel"
+                          name="phone"
+                          required
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="Add a contact phone number"
+                          aria-label="Contact phone number"
+                          className="mt-1 w-full rounded-lg border border-ink/15 bg-transparent px-2.5 py-2 text-xs text-ink outline-none focus:border-brand dark:border-white/15 dark:text-white"
+                        />
+                      )}
                     </div>
-
-                    <div className="sm:col-span-2">
-                      <label className="text-xs font-bold text-ink dark:text-white block mb-1">
-                        Email Address (for order receipt)
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="e.g. customer@example.com"
-                        className="w-full rounded-xl border border-ink/15 bg-transparent px-3.5 py-2.5 text-xs text-ink outline-none focus:border-brand dark:border-white/15 dark:text-white"
-                      />
+                    <div>
+                      <span className="block text-[10px] font-bold uppercase tracking-wide text-ink-700/60 dark:text-white/50">
+                        Email
+                      </span>
+                      <strong className="mt-1 block break-all text-ink dark:text-white">
+                        {user?.email || "Not provided"}
+                      </strong>
                     </div>
                   </div>
                 </div>
@@ -515,22 +531,6 @@ export const CheckoutExperience = () => {
                   </div>
                 </div>
 
-                {/* Submit Form Button (Desktop + Mobile) */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="btn-brand w-full py-4 text-sm! font-bold shadow-xl flex items-center justify-center gap-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <i className="ri-loader-4-line animate-spin" /> Processing Order...
-                    </>
-                  ) : (
-                    <>
-                      <i className="ri-checkbox-circle-line text-base" /> {t("checkout.placeOrder", "Confirm & Place Order")} &bull; {formatPrice(currentTotal)}
-                    </>
-                  )}
-                </button>
               </form>
             </div>
 
@@ -697,20 +697,24 @@ export const CheckoutExperience = () => {
                     </div>
                   </div>
 
-                  {/* WhatsApp Direct Order Alternative Button */}
-                  <div className="mt-5 pt-4 border-t border-ink/10 dark:border-white/10">
-                    <a
-                      href={whatsAppUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-4 py-3 text-xs font-bold text-white transition shadow-sm"
-                    >
-                      <i className="ri-whatsapp-line text-lg" /> Order via WhatsApp Direct
-                    </a>
-                    <p className="mt-2 text-center text-[10px] text-ink-700/60 dark:text-white/50">
-                      Instantly sends your selected dishes &amp; details to our kitchen WhatsApp.
-                    </p>
-                  </div>
+                  <button
+                    type="submit"
+                    form="checkout-form"
+                    disabled={isSubmitting}
+                    className="btn-brand mt-5 flex w-full items-center justify-center gap-2 py-4 text-sm! font-bold shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <i className="ri-loader-4-line animate-spin" /> Processing Order...
+                      </>
+                    ) : (
+                      <>
+                        <i className="ri-checkbox-circle-line text-base" />
+                        {t("checkout.placeOrder", "Confirm & Place Order")} &bull;{" "}
+                        {formatPrice(currentTotal)}
+                      </>
+                    )}
+                  </button>
                 </div>
 
                 {/* Guarantee Banner */}
@@ -727,6 +731,7 @@ export const CheckoutExperience = () => {
                     </span>
                   </div>
                 </div>
+
               </aside>
             </div>
           </div>

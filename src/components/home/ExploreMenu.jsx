@@ -11,7 +11,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
 
 export const ExploreMenu = () => {
-  const { isFavorite, toggleFavorite, updateQuantity, openCart } = useStore();
+  const { updateQuantity, openCart } = useStore();
   const { formatPrice } = useLanguage();
   const [activeTab, setActiveTab] = useState("breakfast");
   const [query, setQuery] = useState("");
@@ -90,8 +90,6 @@ export const ExploreMenu = () => {
         {/* Menu Cards Grid */}
         <div className="grid gap-4 md:grid-cols-2">
           {items.map((item) => {
-            const dishId = item.id;
-            const isFav = isFavorite(dishId);
             const enrichedItem = { ...item, category: activeTab };
 
             return (
@@ -100,24 +98,6 @@ export const ExploreMenu = () => {
                 onClick={() => setQuickViewDish(enrichedItem)}
                 className="menu-item relative dark:bg-[#1e1c1a] dark:border-white/10 group cursor-pointer hover:border-brand/40 transition-all"
               >
-                {/* Floating Wishlist Heart Button */}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleFavorite(dishId);
-                  }}
-                  aria-label={isFav ? "Remove from wishlist" : "Save to wishlist"}
-                  className={`absolute top-3 left-3 z-10 grid h-7 w-7 place-items-center rounded-full backdrop-blur-md transition shadow-xs ${
-                    isFav
-                      ? "bg-rose-500 text-white animate-pulse"
-                      : "bg-black/35 text-white/90 hover:bg-black/60 hover:text-rose-400"
-                  }`}
-                  title={isFav ? "Saved to favorites" : "Add to favorites"}
-                >
-                  <i className={isFav ? "ri-heart-fill text-xs" : "ri-heart-line text-xs"} />
-                </button>
-
                 <SafeImage
                   className="menu-item-image rounded-xl group-hover:scale-105 transition-transform duration-300"
                   src={item.image}

@@ -132,8 +132,6 @@ const INITIAL_RESERVATIONS = [
   },
 ];
 
-const INITIAL_FAVORITES = [1, 4, 7];
-
 const INITIAL_REVIEWS = [
   {
     id: "REV-101",
@@ -172,7 +170,6 @@ export const StoreProvider = ({ children }) => {
   const [quantities, setQuantities] = useState({});
   const [orders, setOrders] = useState(INITIAL_ORDERS);
   const [reservations, setReservations] = useState(INITIAL_RESERVATIONS);
-  const [favorites, setFavorites] = useState(INITIAL_FAVORITES);
   const [reviews, setReviews] = useState(INITIAL_REVIEWS);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -193,9 +190,6 @@ export const StoreProvider = ({ children }) => {
 
       const savedReservations = localStorage.getItem("reshto-reservations");
       if (savedReservations) setReservations(JSON.parse(savedReservations));
-
-      const savedFavorites = localStorage.getItem("reshto-favorites");
-      if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
 
       const savedReviews = localStorage.getItem("reshto-reviews");
       if (savedReviews) setReviews(JSON.parse(savedReviews));
@@ -350,6 +344,7 @@ export const StoreProvider = ({ children }) => {
 
     const newOrder = {
       id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
+      isCustomerOrder: true,
       customer: orderData.customer || "Guest Customer",
       email: orderData.email || "guest@example.com",
       phone: orderData.phone || "+1 555-0192",
@@ -484,19 +479,6 @@ export const StoreProvider = ({ children }) => {
     saveToStorage("reshto-menu", nextMenu);
   };
 
-  // --- FAVORITES OPERATIONS ---
-  const toggleFavorite = (dishId) => {
-    setFavorites((current) => {
-      const next = current.includes(dishId)
-        ? current.filter((id) => id !== dishId)
-        : [...current, dishId];
-      saveToStorage("reshto-favorites", next);
-      return next;
-    });
-  };
-
-  const isFavorite = (dishId) => favorites.includes(dishId);
-
   // --- REVIEWS OPERATIONS ---
   const addReview = (reviewData) => {
     const newRev = {
@@ -548,9 +530,6 @@ export const StoreProvider = ({ children }) => {
         addMenuItem,
         deleteMenuItem,
         toggleMenuItemStock,
-        favorites,
-        toggleFavorite,
-        isFavorite,
         reviews,
         addReview,
       }}

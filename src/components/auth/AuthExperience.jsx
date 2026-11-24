@@ -7,14 +7,21 @@ import { Container } from "@/components/ui/Container";
 import { useAuth } from "@/context/AuthContext";
 import { siteConfig } from "@/constants/site";
 
-export const AuthExperience = () => {
-  const router = useRouter();
-  const { login, register, isAuthenticated, user, logout } = useAuth();
+const getRequestedRedirect = () => {
+  const requestedPath = new URLSearchParams(window.location.search).get("next");
+  return requestedPath?.startsWith("/") && !requestedPath.startsWith("//")
+    ? requestedPath
+    : null;
+};
 
-  const [mode, setMode] = useState("login"); // 'login' | 'register'
+export const AuthExperience = ({ initialMode = "login" }) => {
+  const router = useRouter();
+  const { login, register } = useAuth();
+
+  const [mode, setMode] = useState(initialMode);
 
   // Login form state
-  const [loginEmail, setLoginEmail] = useState("");
+  const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
   // Register form state
@@ -31,38 +38,31 @@ export const AuthExperience = () => {
     setErrorMsg("");
 
     const loggedInUser = login({
-      email: loginEmail,
+      id: loginId.trim(),
       password: loginPassword,
     });
+
+    if (!loggedInUser) {
+      setErrorMsg(
+        process.env.NODE_ENV === "development"
+          ? "Invalid account ID or password."
+          : "Sign-in is unavailable in this frontend-only production build.",
+      );
+      return;
+    }
 
     setSuccessMsg(`Welcome back, ${loggedInUser.name}!`);
 
     setTimeout(() => {
-      if (loggedInUser.role === "admin") {
+      const requestedRedirect = getRequestedRedirect();
+      if (requestedRedirect) {
+        router.push(requestedRedirect);
+      } else if (loggedInUser.role === "admin") {
         router.push("/admin");
       } else {
         router.push("/dashboard");
       }
     }, 600);
-  };
-
-  const handleQuickDemo = (demoRole) => {
-    const demoEmail = demoRole === "admin" ? "admin@reshto.com" : "customer@reshto.com";
-    const loggedInUser = login({
-      email: demoEmail,
-      password: "demo123",
-      role: demoRole,
-    });
-
-    setSuccessMsg(`Signed in as ${loggedInUser.name} (${demoRole.toUpperCase()})`);
-
-    setTimeout(() => {
-      if (demoRole === "admin") {
-        router.push("/admin");
-      } else {
-        router.push("/dashboard");
-      }
-    }, 500);
   };
 
   const handleRegisterSubmit = (e) => {
@@ -80,14 +80,21 @@ export const AuthExperience = () => {
       phone: regPhone,
     });
 
+    if (!newUser) {
+      setErrorMsg(
+        "Account creation is unavailable in this frontend-only production build.",
+      );
+      return;
+    }
+
     setSuccessMsg(`Welcome to Reshto, ${newUser.name}! Redirecting to your dashboard...`);
     setTimeout(() => {
-      router.push("/dashboard");
+      router.push(getRequestedRedirect() || "/dashboard");
     }, 600);
   };
 
   return (
-    <main className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[var(--theme-page)] px-4 py-24 transition-colors duration-300 dark:bg-[#0f0e0d] md:py-28">
+    <main className="relative isolate flex min-h-svh items-center justify-center overflow-hidden bg-[var(--theme-page)] px-4 pt-28 pb-8 transition-colors duration-300 dark:bg-[#0f0e0d] md:pb-10">
       <div className="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full bg-brand/10 blur-3xl dark:bg-brand/5" />
       <div className="pointer-events-none absolute -bottom-40 -right-32 h-[30rem] w-[30rem] rounded-full bg-brand/5 blur-3xl" />
 
@@ -122,9 +129,9 @@ export const AuthExperience = () => {
 
               <div className="mt-8 hidden space-y-4 lg:block">
                 {[
-                  ["ri-heart-3-line", "Keep your favorites close"],
+                  ["ri-list-check", "Keep your orders organized"],
                   ["ri-user-settings-line", "Manage your account"],
-                  ["ri-restaurant-line", "Find your next favorite"],
+                  ["ri-restaurant-line", "Discover signature dishes"],
                 ].map(([icon, text]) => (
                   <div key={text} className="flex items-center gap-3 text-sm font-semibold text-white/80">
                     <span className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/5 text-white/80">
@@ -141,7 +148,7 @@ export const AuthExperience = () => {
             </div>
           </aside>
 
-          <section className="p-6 sm:p-9 lg:p-12" aria-labelledby="auth-heading">
+          <section className="flex flex-col justify-center p-6 sm:p-9 lg:p-12" aria-labelledby="auth-heading">
             <div className="flex items-center justify-between gap-4">
               <span className="section-pill"><i className="ri-shield-user-line" /> Member access</span>
               <Link href="/" className="inline-flex items-center gap-1.5 text-xs font-bold text-ink transition hover:text-brand dark:text-white/80 dark:hover:text-brand-300">
@@ -190,44 +197,19 @@ export const AuthExperience = () => {
               ) : null}
             </div>
 
-            {isAuthenticated ? (
-              <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-brand/20 bg-brand/5 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand/10 text-lg text-brand dark:text-brand-300">
-                    <i className={user.role === "admin" ? "ri-shield-user-line" : "ri-user-smile-line"} />
-                  </span>
-                  <span>
-                    <strong className="block text-sm text-ink dark:text-white">{user.name}</strong>
-                    <small className="mt-0.5 block text-xs text-ink-700/60 dark:text-white/55">{user.role === "admin" ? "Restaurant admin" : "Reshto customer"}</small>
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Link href={user.role === "admin" ? "/admin" : "/dashboard"} className="btn-brand px-3! py-2! text-xs!">
-                    Dashboard <i className="ri-arrow-right-line" />
-                  </Link>
-                  <button type="button" onClick={logout} className="rounded-xl border border-ink/15 px-3 py-2 text-xs font-bold text-ink transition hover:bg-black/5 dark:border-white/15 dark:text-white dark:hover:bg-white/5">
-                    Sign Out
-                  </button>
-                </div>
-              </div>
-            ) : null}
-
             {mode === "login" ? (
               <div className="mt-6 space-y-5">
                 <form onSubmit={handleLoginSubmit} className="space-y-4">
                   <div>
-                    <label htmlFor="login-email" className="mb-1.5 block text-xs font-extrabold text-ink-700 dark:text-white/80">Email address</label>
+                    <label htmlFor="login-id" className="mb-1.5 block text-xs font-extrabold text-ink-700 dark:text-white/80">Account ID</label>
                     <div className="relative">
                       <i aria-hidden="true" className="ri-mail-line absolute left-4 top-1/2 -translate-y-1/2 text-ink-700/45 dark:text-white/40" />
-                      <input id="login-email" name="email" type="email" autoComplete="email" required placeholder="you@example.com" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} className="w-full rounded-xl border border-ink/15 bg-white py-3.5 pl-11 pr-4 text-sm text-ink outline-none transition placeholder:text-ink-700/35 focus:border-brand focus:ring-4 focus:ring-brand/10 dark:border-white/10 dark:bg-[#151412] dark:text-white dark:placeholder:text-white/45" />
+                      <input id="login-id" name="username" type="text" inputMode="numeric" autoComplete="username" required placeholder="Enter your account ID" value={loginId} onChange={(e) => setLoginId(e.target.value)} className="w-full rounded-xl border border-ink/15 bg-white py-3.5 pl-11 pr-4 text-sm text-ink outline-none transition placeholder:text-ink-700/35 focus:border-brand focus:ring-4 focus:ring-brand/10 dark:border-white/10 dark:bg-[#151412] dark:text-white dark:placeholder:text-white/45" />
                     </div>
                   </div>
 
                   <div>
-                    <div className="mb-1.5 flex items-center justify-between gap-3">
-                      <label htmlFor="login-password" className="block text-xs font-extrabold text-ink-700 dark:text-white/80">Password</label>
-                      <button type="button" onClick={() => alert("Demo Mode: Any password or 'demo123' will log you in.")} className="text-[11px] font-bold text-brand transition hover:underline dark:text-brand-300">Forgot password?</button>
-                    </div>
+                    <label htmlFor="login-password" className="mb-1.5 block text-xs font-extrabold text-ink-700 dark:text-white/80">Password</label>
                     <div className="relative">
                       <i aria-hidden="true" className="ri-lock-line absolute left-4 top-1/2 -translate-y-1/2 text-ink-700/45 dark:text-white/40" />
                       <input id="login-password" name="password" type="password" autoComplete="current-password" required placeholder="Enter your password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} className="w-full rounded-xl border border-ink/15 bg-white py-3.5 pl-11 pr-4 text-sm text-ink outline-none transition placeholder:text-ink-700/35 focus:border-brand focus:ring-4 focus:ring-brand/10 dark:border-white/10 dark:bg-[#151412] dark:text-white dark:placeholder:text-white/45" />
@@ -239,20 +221,6 @@ export const AuthExperience = () => {
                   </button>
                 </form>
 
-                <div className="pt-4">
-                  <div className="relative flex items-center justify-center">
-                    <span className="h-px w-full bg-ink/10 dark:bg-white/10" />
-                    <span className="absolute bg-white px-3 text-[10px] font-extrabold uppercase tracking-[.16em] text-ink-700/45 dark:bg-[#1e1c1a] dark:text-white/60">Demo access</span>
-                  </div>
-                  <div className="mt-5 grid grid-cols-2 gap-2.5">
-                    <button type="button" onClick={() => handleQuickDemo("admin")} className="flex items-center justify-center gap-2 rounded-xl border border-brand/20 bg-brand/5 px-3 py-3 text-xs font-extrabold text-brand transition hover:bg-brand/10 dark:text-brand-300">
-                      <i className="ri-vip-crown-line text-base" /> Demo Admin
-                    </button>
-                    <button type="button" onClick={() => handleQuickDemo("user")} className="flex items-center justify-center gap-2 rounded-xl border border-brand/20 bg-brand/5 px-3 py-3 text-xs font-extrabold text-brand transition hover:bg-brand/10 dark:text-brand-300">
-                      <i className="ri-user-smile-line text-base" /> Demo Customer
-                    </button>
-                  </div>
-                </div>
               </div>
             ) : (
               <form onSubmit={handleRegisterSubmit} className="mt-6 space-y-4">
