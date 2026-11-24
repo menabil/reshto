@@ -13,8 +13,6 @@ const USER_MOCK = {
   name: "Tahmid Hassan",
   email: "tahmid.hassan@example.com",
   phone: "+880 1711-234567",
-  membership: "Gold VIP Foodie",
-  points: 480,
   joined: "March 2025",
   avatar:
     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
@@ -233,9 +231,6 @@ export const UserDashboard = () => {
                   <h1 className="font-display text-2xl font-extrabold md:text-3xl">
                     {user.name}
                   </h1>
-                  <span className="rounded-full bg-amber-400/20 px-3 py-0.5 text-xs font-bold text-amber-300 border border-amber-400/30">
-                    <i className="ri-vip-crown-fill mr-1" /> {user.membership}
-                  </span>
                 </div>
                 <p className="mt-1 text-sm text-white/70">
                   {user.email} &middot; {user.phone}
@@ -246,19 +241,9 @@ export const UserDashboard = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-center backdrop-blur-md">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-amber-300">
-                  Foodie Points
-                </span>
-                <span className="font-display text-xl font-extrabold">
-                  {user.points} pts
-                </span>
-              </div>
-              <Link href="/order" className="btn-brand py-2.5! px-4! text-xs!">
-                Order Food <i className="ri-arrow-right-line" />
-              </Link>
-            </div>
+            <Link href="/order" className="btn-brand py-2.5! px-4! text-xs!">
+              Order Food <i className="ri-arrow-right-line" />
+            </Link>
           </div>
         </div>
 

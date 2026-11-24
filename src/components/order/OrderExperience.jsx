@@ -37,8 +37,6 @@ export const OrderExperience = ({ initialSearch }) => {
     return matchesCategory && matchesSearch;
   });
 
-  const phoneLink = siteConfig.contact.phone.replace(/[^\d+]/g, "");
-
   return (
     <>
       {quickViewDish && (
@@ -232,7 +230,7 @@ export const OrderExperience = ({ initialSearch }) => {
 
             {/* Sidebar Order Summary */}
             <aside className="order-summary dark:bg-[#1e1c1a] dark:border-white/10">
-              <div className="order-summary-header">
+              <div className="order-summary-heading">
                 <div>
                   <h2 className="dark:text-white">Order Summary</h2>
                   <p className="dark:text-white/60">
@@ -314,18 +312,12 @@ export const OrderExperience = ({ initialSearch }) => {
                   >
                     <i className="ri-secure-payment-line text-sm" /> Proceed to Checkout
                   </Link>
-
-                  <a
-                    className="order-phone mt-2 text-center text-xs dark:text-white hover:dark:text-brand-300"
-                    href={`tel:${phoneLink}`}
-                  >
-                    <i className="ri-phone-line" aria-hidden="true" /> Call us: {siteConfig.contact.phone}
-                  </a>
                 </div>
               ) : (
-                <button className="btn-brand order-call mt-4" type="button" disabled>
-                  Add items to continue
-                </button>
+                <p className="order-empty-checkout-note dark:text-white/60" role="status">
+                  <i className="ri-information-line" aria-hidden="true" />
+                  Checkout becomes available after you add a dish.
+                </p>
               )}
               <p className="order-hours dark:text-white/50">
                 <i className="ri-time-line" aria-hidden="true" />{" "}

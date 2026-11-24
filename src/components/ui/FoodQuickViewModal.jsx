@@ -78,11 +78,11 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/75 backdrop-blur-xs animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 p-3 backdrop-blur-xs animate-in fade-in sm:p-6"
       role="dialog"
       aria-modal="true"
     >
-      <div className="relative w-full max-w-2xl rounded-4xl bg-white shadow-2xl dark:bg-[#1a1816] text-ink dark:text-white border border-ink/10 dark:border-white/10 overflow-hidden my-8">
+      <div className="relative my-auto flex max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-4xl border border-ink/10 bg-white text-ink shadow-2xl dark:border-white/10 dark:bg-[#1a1816] sm:max-h-[calc(100dvh-3rem)]">
         
         {/* Close Button */}
         <button
@@ -95,7 +95,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
         </button>
 
         {/* Dish Hero Image Banner */}
-        <div className="relative h-64 sm:h-72 w-full bg-ink/10 dark:bg-white/5 overflow-hidden">
+        <div className="relative h-48 w-full shrink-0 overflow-hidden bg-ink/10 dark:bg-white/5 sm:h-56 md:h-64">
           <SafeImage
             src={dish.image}
             alt={dish.menuItemName || dish.name || "Delicious dish"}
@@ -121,7 +121,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto p-4 sm:p-6">
           
           {/* Quick Metrics (Calories, Prep Time, Spiciness, Rating) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
@@ -325,7 +325,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
         </div>
 
         {/* Modal Bottom Action Bar */}
-        <div className="flex items-center justify-between border-t border-ink/10 bg-[#faf8f5] px-6 py-4 dark:border-white/10 dark:bg-[#22201d]">
+        <div className="flex shrink-0 items-center justify-between border-t border-ink/10 bg-[#faf8f5] px-4 py-3 dark:border-white/10 dark:bg-[#22201d] sm:px-6 sm:py-4">
           {/* Quantity Selector */}
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-ink dark:text-white">{t("modal.qty", "Qty:")}</span>

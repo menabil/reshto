@@ -578,7 +578,7 @@ export const CheckoutExperience = () => {
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.cartId, -1)}
-                            className="grid h-4 w-4 place-items-center text-[10px] text-ink hover:bg-white dark:text-white"
+                            className="grid h-4 w-4 place-items-center rounded-sm bg-transparent text-[10px] font-bold text-ink transition-colors hover:bg-brand hover:text-white dark:bg-transparent dark:text-white dark:hover:bg-brand dark:hover:text-[#171512]"
                           >
                             -
                           </button>
@@ -588,7 +588,7 @@ export const CheckoutExperience = () => {
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.cartId, 1)}
-                            className="grid h-4 w-4 place-items-center text-[10px] text-ink hover:bg-white dark:text-white"
+                            className="grid h-4 w-4 place-items-center rounded-sm bg-transparent text-[10px] font-bold text-ink transition-colors hover:bg-brand hover:text-white dark:bg-transparent dark:text-white dark:hover:bg-brand dark:hover:text-[#171512]"
                           >
                             +
                           </button>
@@ -656,7 +656,7 @@ export const CheckoutExperience = () => {
                   </div>
 
                   {/* Price Breakdown */}
-                  <div className="border-t border-ink/10 pt-4 space-y-2 text-xs dark:border-white/10">
+                  <div className="mt-4 border-t border-ink/10 pt-4 space-y-2 text-xs dark:border-white/10">
                     <div className="flex justify-between text-ink-700 dark:text-white/70">
                       <span>{t("cart.subtotal", "Food Subtotal")}</span>
                       <span className="font-bold text-ink dark:text-white">

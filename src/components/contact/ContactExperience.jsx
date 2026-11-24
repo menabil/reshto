@@ -63,7 +63,7 @@ export const ContactExperience = () => {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1.1fr_.9fr]">
             {/* Contact Form */}
-            <div className="rounded-4xl border border-ink/10 bg-white p-8 shadow-xl dark:border-white/10 dark:bg-[#1e1c1a] sm:p-10">
+            <div className="h-fit self-start rounded-4xl border border-ink/10 bg-white p-8 shadow-xl dark:border-white/10 dark:bg-[#1e1c1a] sm:p-10">
               <span className="section-pill dark:bg-brand-900/40 dark:text-brand-300">
                 <i className="ri-chat-smile-2-line" /> Send a Note
               </span>

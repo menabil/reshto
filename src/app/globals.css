@@ -273,10 +273,11 @@ html.dark .order-hero h1 span { color: var(--theme-brand-bright); }
 .quantity-control button { display: grid; width: 25px; height: 25px; place-items: center; border: 0; border-radius: 6px; background: white; color: var(--color-ink); font-size: 14px; }
 .quantity-control button:hover { background: var(--color-brand); color: var(--theme-button-text); }
 .quantity-control span { min-width: 12px; color: var(--color-ink); font-size: 12px; font-weight: 900; text-align: center; }
-.order-summary { position: sticky; top: 106px; padding: 22px; border: 1px solid color-mix(in srgb, var(--theme-text) 12%, transparent); border-radius: 20px; background: rgba(255,253,248,.94); box-shadow: 0 18px 48px rgba(28,25,23,.09); }
-.order-summary-heading { display: flex; align-items: center; justify-content: space-between; padding-bottom: 17px; border-bottom: 1px solid color-mix(in srgb, var(--theme-text) 12%, transparent); }
+.order-summary { position: sticky; top: 100px; display: flex; min-height: 580px; flex-direction: column; padding: 28px 22px; border: 1px solid color-mix(in srgb, var(--theme-text) 12%, transparent); border-radius: 24px; background: var(--theme-surface); box-shadow: 0 18px 48px rgba(28,25,23,.09); }
+.order-summary-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 17px; border-bottom: 1px solid color-mix(in srgb, var(--theme-text) 12%, transparent); }
 .order-summary-heading h2 { margin-top: 4px; font-family: var(--font-display); font-size: 21px; font-weight: 900; }
-.order-count { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; background: var(--color-brand-50); color: var(--color-brand-800); font-size: 12px; font-weight: 900; }
+.order-summary-heading p { margin-top: 4px; color: color-mix(in srgb, var(--theme-muted) 78%, transparent); font-size: 12px; }
+.order-count { display: grid; width: 38px; height: 38px; flex: 0 0 38px; place-items: center; border: 1px solid color-mix(in srgb, var(--theme-brand) 20%, transparent); border-radius: 50%; background: var(--theme-brand-soft); color: var(--theme-brand-strong); font-size: 13px; font-weight: 900; }
 .order-summary-items { display: grid; max-height: 330px; gap: 14px; overflow-y: auto; padding: 16px 0; }
 .order-summary-items li { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .order-summary-items li > span { display: grid; min-width: 0; gap: 3px; }
@@ -285,17 +286,15 @@ html.dark .order-hero h1 span { color: var(--theme-brand-bright); }
 .quantity-control.compact { gap: 5px; padding: 3px; }
 .quantity-control.compact button { width: 22px; height: 22px; }
 .quantity-control.compact span { font-size: 11px; }
-.order-summary-empty { display: grid; justify-items: center; padding: 28px 8px; text-align: center; }
-.order-empty-icon { display: grid; width: 48px; height: 48px; place-items: center; margin-bottom: 12px; border-radius: 15px; background: #f4f0e7; color: var(--color-brand); font-size: 21px; }
+.order-summary-empty { display: grid; flex: 1; align-content: center; justify-items: center; margin: 18px 0 16px; padding: 24px 12px; border: 1px dashed color-mix(in srgb, var(--theme-brand) 26%, transparent); border-radius: 18px; background: color-mix(in srgb, var(--theme-brand-soft) 26%, var(--theme-surface)); text-align: center; }
+.order-empty-icon { display: grid; width: 52px; height: 52px; place-items: center; margin-bottom: 12px; border-radius: 17px; background: var(--theme-brand-soft); color: var(--theme-brand); font-size: 22px; }
 .order-summary-empty p { max-width: 210px; font-size: 12px; font-weight: 800; line-height: 1.5; }
 .order-summary-empty small { margin-top: 5px; color: color-mix(in srgb, var(--theme-muted) 72%, transparent); font-size: 11px; }
-.order-subtotal { display: flex; justify-content: space-between; gap: 10px; padding-top: 15px; border-top: 1px solid color-mix(in srgb, var(--theme-text) 12%, transparent); font-size: 13px; font-weight: 800; }
+.order-subtotal { display: flex; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 15px; border-top: 1px solid color-mix(in srgb, var(--theme-text) 12%, transparent); font-size: 13px; font-weight: 800; }
 .order-subtotal strong { font-family: var(--font-display); font-size: 17px; }
 .order-disclaimer { margin-top: 8px; color: color-mix(in srgb, var(--theme-muted) 72%, transparent); font-size: 10px; line-height: 1.5; }
-.order-call { width: 100%; margin-top: 17px; }
-.order-call:disabled { cursor: not-allowed; opacity: .55; transform: none; }
-.order-phone { display: flex; justify-content: center; gap: 7px; margin-top: 14px; color: var(--color-ink); font-size: 12px; font-weight: 800; }
-.order-phone:hover { color: var(--color-brand); }
+.order-empty-checkout-note { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 14px; padding: 11px 12px; border: 1px solid color-mix(in srgb, var(--theme-brand) 18%, transparent); border-radius: 12px; background: color-mix(in srgb, var(--theme-brand-soft) 28%, var(--theme-surface)); color: color-mix(in srgb, var(--theme-muted) 82%, transparent); font-size: 11px; line-height: 1.45; text-align: center; }
+.order-empty-checkout-note i { flex: 0 0 auto; color: var(--theme-brand); }
 .order-hours { display: flex; justify-content: center; gap: 6px; margin-top: 8px; color: color-mix(in srgb, var(--theme-muted) 70%, transparent); font-size: 10px; text-align: center; }
 .order-hours i { color: var(--color-brand); }
 .order-empty { grid-column: 1 / -1; display: grid; justify-items: center; padding: 50px 20px; border: 1px dashed color-mix(in srgb, var(--theme-text) 20%, transparent); border-radius: 16px; color: color-mix(in srgb, var(--theme-muted) 78%, transparent); text-align: center; }
@@ -417,7 +416,7 @@ html.dark .order-hero h1 span { color: var(--theme-brand-bright); }
   .order-intro { align-items: flex-start; flex-direction: column; }
   .order-menu-grid { grid-template-columns: 1fr; }
   .order-card > img { width: 96px; flex-basis: 96px; }
-  .order-summary { padding: 18px; }
+  .order-summary { padding: 22px 18px; }
   .story-image-wrap { min-height: 255px; }
   .chef-image { height: 235px; }
 }
