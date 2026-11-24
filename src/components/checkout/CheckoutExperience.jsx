@@ -38,11 +38,6 @@ export const CheckoutExperience = () => {
     zip: "1213",
     notes: "Please make the pizza crust slightly crispy and pack extra mint dip.",
     paymentMethod: "Cash on Delivery",
-    cardNumber: "4111 2222 3333 4444",
-    cardExpiry: "12/28",
-    cardCvc: "892",
-    bkashNumber: "+880 1711-234567",
-    bkashTrxId: "TRX-94812",
   });
 
   const [couponCodeInput, setCouponCodeInput] = useState("");
@@ -494,112 +489,29 @@ export const CheckoutExperience = () => {
                       <i className="ri-hand-coin-line text-xl text-brand" />
                     </label>
 
-                    <label className="flex items-center gap-3 rounded-2xl border border-ink/10 p-3.5 cursor-pointer dark:border-white/10 hover:border-brand/40 transition">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="Credit / Debit Card"
-                        checked={formData.paymentMethod === "Credit / Debit Card"}
-                        onChange={handleInputChange}
-                        className="text-brand focus:ring-brand"
-                      />
+                    <div className="flex items-center gap-3 rounded-2xl border border-ink/10 p-3.5 opacity-60 dark:border-white/10">
                       <div className="flex-1">
                         <span className="text-xs font-bold text-ink dark:text-white block">
-                          Credit / Debit Card (Instant Online)
+                          Credit / Debit Card (Unavailable)
                         </span>
                         <small className="text-[11px] text-ink-700/70 dark:text-white/50">
-                          Visa, Mastercard, American Express supported
+                          Online payment processing is not connected yet.
                         </small>
                       </div>
                       <i className="ri-bank-card-line text-xl text-brand" />
-                    </label>
+                    </div>
 
-                    {formData.paymentMethod === "Credit / Debit Card" && (
-                      <div className="rounded-2xl bg-[#faf8f5] p-4 dark:bg-[#22201d] space-y-3 text-xs">
-                        <div>
-                          <label className="font-bold block mb-1">Card Number</label>
-                          <input
-                            type="text"
-                            name="cardNumber"
-                            value={formData.cardNumber}
-                            onChange={handleInputChange}
-                            placeholder="4111 2222 3333 4444"
-                            className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] px-3 py-2 text-xs"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="font-bold block mb-1">Expiry Date</label>
-                            <input
-                              type="text"
-                              name="cardExpiry"
-                              value={formData.cardExpiry}
-                              onChange={handleInputChange}
-                              placeholder="MM/YY"
-                              className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] px-3 py-2 text-xs"
-                            />
-                          </div>
-                          <div>
-                            <label className="font-bold block mb-1">CVC / CVV</label>
-                            <input
-                              type="password"
-                              name="cardCvc"
-                              value={formData.cardCvc}
-                              onChange={handleInputChange}
-                              placeholder="123"
-                              className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] px-3 py-2 text-xs"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <label className="flex items-center gap-3 rounded-2xl border border-ink/10 p-3.5 cursor-pointer dark:border-white/10 hover:border-brand/40 transition">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="bKash / Mobile Banking"
-                        checked={formData.paymentMethod === "bKash / Mobile Banking"}
-                        onChange={handleInputChange}
-                        className="text-brand focus:ring-brand"
-                      />
+                    <div className="flex items-center gap-3 rounded-2xl border border-ink/10 p-3.5 opacity-60 dark:border-white/10">
                       <div className="flex-1">
                         <span className="text-xs font-bold text-ink dark:text-white block">
-                          bKash / Nagad / Rocket (MFS)
+                          bKash / Nagad / Rocket (Unavailable)
                         </span>
                         <small className="text-[11px] text-ink-700/70 dark:text-white/50">
-                          Fast mobile wallet payment
+                          Mobile wallet processing is not connected yet.
                         </small>
                       </div>
                       <i className="ri-smartphone-line text-xl text-brand" />
-                    </label>
-
-                    {formData.paymentMethod === "bKash / Mobile Banking" && (
-                      <div className="rounded-2xl bg-[#faf8f5] p-4 dark:bg-[#22201d] space-y-3 text-xs">
-                        <div>
-                          <label className="font-bold block mb-1">Wallet Number</label>
-                          <input
-                            type="text"
-                            name="bkashNumber"
-                            value={formData.bkashNumber}
-                            onChange={handleInputChange}
-                            placeholder="+880 1711-234567"
-                            className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] px-3 py-2 text-xs"
-                          />
-                        </div>
-                        <div>
-                          <label className="font-bold block mb-1">Transaction ID (TrxID)</label>
-                          <input
-                            type="text"
-                            name="bkashTrxId"
-                            value={formData.bkashTrxId}
-                            onChange={handleInputChange}
-                            placeholder="TRX-94812"
-                            className="w-full rounded-xl border border-ink/15 bg-white dark:bg-[#1a1816] px-3 py-2 text-xs"
-                          />
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </div>
                 </div>
 

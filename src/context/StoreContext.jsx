@@ -346,6 +346,7 @@ export const StoreProvider = ({ children }) => {
     const deliveryNum = orderData.deliveryNumber ?? deliveryFee;
     const taxNum = orderData.taxNumber ?? taxAmount;
     const totalNum = orderData.totalNumber ?? cartTotal;
+    const paymentMethod = orderData.paymentMethod || "Cash on Delivery";
 
     const newOrder = {
       id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -354,10 +355,12 @@ export const StoreProvider = ({ children }) => {
       phone: orderData.phone || "+1 555-0192",
       address: orderData.address || "Dine-in / Pickup",
       orderType: orderData.orderType || orderData.type || "Delivery",
-      paymentMethod: orderData.paymentMethod || "Cash on Delivery",
+      paymentMethod,
       paymentStatus:
         orderData.paymentStatus ||
-        (orderData.paymentMethod === "Cash on Delivery" ? "Pending (COD)" : "Paid"),
+        (paymentMethod === "Cash on Delivery"
+          ? "Pending (COD)"
+          : "Pending (Manual Verification)"),
       notes: orderData.notes || "",
       coupon: orderData.coupon || appliedCoupon?.code || null,
       subtotalNumber: subtotalNum,

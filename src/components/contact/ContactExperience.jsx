@@ -11,6 +11,7 @@ export const ContactExperience = () => {
   const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -23,14 +24,19 @@ export const ContactExperience = () => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) return;
     setSending(true);
+    setSubmitError("");
 
     try {
-      await sendContactMessage(form);
+      const result = await sendContactMessage(form);
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        setSubmitError(result.message);
+      }
     } catch {
-      // handled inside service
+      setSubmitError("The message could not be sent. Please try again.");
     } finally {
       setSending(false);
-      setSubmitted(true);
     }
   };
 
@@ -108,6 +114,14 @@ export const ContactExperience = () => {
                   onSubmit={handleSubmit}
                   className="mt-8 grid gap-4 sm:grid-cols-2"
                 >
+                  {submitError && (
+                    <p
+                      role="alert"
+                      className="sm:col-span-2 rounded-xl bg-rose-500/10 p-3 text-xs text-rose-700 dark:text-rose-300"
+                    >
+                      {submitError}
+                    </p>
+                  )}
                   <div className="sm:col-span-1">
                     <label className="mb-1.5 block text-xs font-bold text-ink dark:text-white">
                       Your Full Name *

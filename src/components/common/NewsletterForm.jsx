@@ -26,14 +26,21 @@ export const NewsletterForm = () => {
           localStorage.setItem("reshto-subscribers", JSON.stringify(subscribers));
         }
       } catch {
-        // storage fallback
+        setLoading(false);
+        setToast({
+          type: "error",
+          title: "Subscription Could Not Be Saved",
+          message: "Browser storage is unavailable. Please try again later.",
+        });
+        return;
       }
 
       setLoading(false);
       setToast({
         type: "success",
-        title: "Subscribed Successfully! 🎉",
-        message: `Welcome aboard! We've sent a 10% discount promo code to ${email.trim()}.`,
+        title: "Demo Subscription Saved",
+        message:
+          "Your subscription is saved on this device only. Email delivery and discount codes are not connected yet.",
       });
       setEmail("");
 

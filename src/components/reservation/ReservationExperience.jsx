@@ -92,6 +92,7 @@ export const ReservationExperience = () => {
   });
 
   const [confirmedReservation, setConfirmedReservation] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState("");
 
   // Sync user info if logged in
   useEffect(() => {
@@ -185,10 +186,13 @@ export const ReservationExperience = () => {
       status: "Confirmed",
     });
 
-    // Zero-backend email notification to restaurant inbox (Task 6.1)
-    sendBookingNotification(newRes);
-
     setConfirmedReservation(newRes);
+    setNotificationMessage("Sending booking notification...");
+    sendBookingNotification(newRes)
+      .then((result) => setNotificationMessage(result.message))
+      .catch(() =>
+        setNotificationMessage("The booking notification could not be sent.")
+      );
   };
 
   // WhatsApp confirmation url
@@ -251,6 +255,14 @@ export const ReservationExperience = () => {
               <p className="mt-2 text-sm text-ink-700 dark:text-white/60">
                 Booking reference <strong className="text-ink dark:text-white font-mono">#{confirmedReservation.id}</strong> has been confirmed for <strong>{confirmedReservation.guestName}</strong>.
               </p>
+              {notificationMessage && (
+                <p
+                  role="status"
+                  className="mt-3 text-xs text-ink-700 dark:text-white/60"
+                >
+                  {notificationMessage}
+                </p>
+              )}
 
               {/* Reservation Details Card */}
               <div className="mt-8 rounded-3xl bg-[#faf8f5] p-6 text-left dark:bg-[#22201d] space-y-4">
@@ -653,7 +665,7 @@ export const ReservationExperience = () => {
                     Primary Guest Contact
                   </h2>
                   <p className="mt-1 text-xs text-ink-700 dark:text-white/60">
-                    We will send instant SMS/WhatsApp booking confirmation to this contact.
+                    After booking, you can share your confirmation through WhatsApp.
                   </p>
                 </div>
 

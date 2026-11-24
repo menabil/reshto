@@ -29,6 +29,24 @@ src/
 └── lib/          # utils (cn helper)
 ```
 
+## Configuration and demo limitations
+
+Contact and reservation email notifications require a Web3Forms access key. Add
+the following to `.env.local` before running the app:
+
+```text
+NEXT_PUBLIC_WEB3FORMS_KEY=your_web3forms_access_key
+```
+
+Without this setting, the forms report that email delivery is unavailable
+instead of claiming that a message was sent.
+
+This project currently stores demo users, orders, reservations, and menu
+changes in the browser's local storage. It does not provide production
+authentication, shared server-side data, or online payment processing. Do not
+use it to handle real customer accounts or payments until those services are
+implemented.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

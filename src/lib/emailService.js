@@ -4,16 +4,22 @@
  * https://web3forms.com
  */
 
-const DEFAULT_WEB3FORMS_KEY =
-  process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "YOUR_ACCESS_KEY_HERE";
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
 export async function sendEmailNotification({
   subject,
   from_name = "Reshto Restaurant Web",
   data = {},
 }) {
+  if (!WEB3FORMS_KEY) {
+    return {
+      success: false,
+      message: "Email notifications are not configured. Please contact us by phone.",
+    };
+  }
+
   const payload = {
-    access_key: DEFAULT_WEB3FORMS_KEY,
+    access_key: WEB3FORMS_KEY,
     subject: subject || "New Notification from Reshto Restaurant",
     from_name,
     ...data,
@@ -34,19 +40,14 @@ export async function sendEmailNotification({
       return { success: true, message: "Email notification sent successfully!" };
     }
 
-    // If key is placeholder during dev/demo, simulate success
     return {
-      success: true,
-      simulated: true,
-      message: "Notification received and queued for dispatch.",
+      success: false,
+      message: result.message || "The email could not be sent. Please try again.",
     };
-  } catch (error) {
-    // Graceful offline/network fallback
-    console.warn("Email service network dispatch notice:", error?.message);
+  } catch {
     return {
-      success: true,
-      simulated: true,
-      message: "Notification recorded successfully.",
+      success: false,
+      message: "The email service could not be reached. Please try again.",
     };
   }
 }
