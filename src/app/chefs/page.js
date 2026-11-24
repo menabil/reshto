@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { GalleryExperience } from "@/components/gallery/GalleryExperience";
 import { foodImages } from "@/constants/images";
 import { chefs } from "@/data/data";
 
@@ -135,7 +136,7 @@ export default function ChefsPage() {
                           <i className="ri-twitter-x-line" />
                         </a>
                       </div>
-                      <Link href="/menu" className="text-xs font-bold text-brand hover:underline dark:text-brand-300">
+                      <Link href="/about#menu" className="text-xs font-bold text-brand hover:underline dark:text-brand-300">
                         View Creations &rarr;
                       </Link>
                     </div>
@@ -184,6 +185,8 @@ export default function ChefsPage() {
           </div>
         </Container>
       </section>
+
+      <GalleryExperience />
     </>
   );
 }

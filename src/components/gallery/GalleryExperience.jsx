@@ -93,149 +93,128 @@ export const GalleryExperience = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  const filtered = activeTab === "all"
-    ? GALLERY_ITEMS
-    : GALLERY_ITEMS.filter((item) => item.category === activeTab);
+  const filtered =
+    activeTab === "all" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((item) => item.category === activeTab);
 
   return (
-    <>
-      <section className="subpage-hero">
-        <Container>
-          <span className="hero-eyebrow">
+    <section id="gallery" className="section bg-[#f7f3eb] transition-colors duration-300 dark:bg-[#0f0e0d]">
+      <Container>
+        {/* Section Heading */}
+        <div className="mb-10 text-center">
+          <span className="section-pill dark:bg-brand-900/40 dark:text-brand-300">
             <i className="ri-image-line" /> Visual Journey
           </span>
-          <h1>
-            A glimpse into the<br />
-            <span>Reshto experience.</span>
-          </h1>
-          <p>
+          <h2 className="mt-4 font-display text-3xl font-extrabold text-ink dark:text-white md:text-4xl">
+            A glimpse into the Reshto experience
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-ink-700/65 dark:text-white/60 md:text-base">
             Immerse yourself in our warm ambiance, exquisite culinary creations, and the vibrant passion
             of our kitchen.
           </p>
-        </Container>
-      </section>
+        </div>
 
-      <section className="section bg-[#f7f3eb] transition-colors duration-300 dark:bg-[#0f0e0d]">
-        <Container>
-          {/* Category Filter Tabs */}
-          <div className="mb-10 flex flex-wrap justify-center gap-2">
-            {CATEGORIES.map((tab) => (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setActiveTab(tab.key)}
-                className={`rounded-full px-5 py-2.5 text-xs font-bold transition ${
-                  activeTab === tab.key
-                    ? "bg-brand text-white shadow-md dark:bg-brand dark:text-[#171512]"
-                    : "border border-ink/10 bg-white text-ink-700/80 hover:bg-brand/10 hover:text-brand dark:border-white/10 dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Photo Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => setSelectedPhoto(item)}
-                className="group relative cursor-pointer overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-[#1e1c1a]"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
-                  <SafeImage
-                    src={item.image}
-                    alt={item.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  <span className="absolute bottom-4 left-4 right-4 text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-between">
-                    <span>Click to view photo</span>
-                    <i className="ri-zoom-in-line text-lg" />
-                  </span>
-                </div>
-                <div className="p-5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-brand dark:text-brand-300">
-                    {item.categoryLabel}
-                  </span>
-                  <h3 className="mt-1 font-display text-lg font-bold text-ink dark:text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-ink-700/70 dark:text-white/60">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Lightbox Modal */}
-          {selectedPhoto ? (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
-              onClick={() => setSelectedPhoto(null)}
+        {/* Category Filter Tabs */}
+        <div className="mb-10 flex flex-wrap justify-center gap-2">
+          {CATEGORIES.map((tab) => (
+            <button
+              key={tab.key}
+              type="button"
+              onClick={() => setActiveTab(tab.key)}
+              className={`rounded-full px-5 py-2.5 text-xs font-bold transition ${
+                activeTab === tab.key
+                  ? "bg-brand text-white shadow-md dark:bg-brand dark:text-[#171512]"
+                  : "border border-ink/10 bg-white text-ink-700/80 hover:bg-brand/10 hover:text-brand dark:border-white/10 dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
+              }`}
             >
-              <div
-                className="relative max-w-3xl overflow-hidden rounded-4xl bg-white shadow-2xl dark:bg-[#1e1c1a]"
-                onClick={(e) => e.stopPropagation()}
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Photo Grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => setSelectedPhoto(item)}
+              className="group relative cursor-pointer overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-[#1e1c1a]"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
+                <SafeImage
+                  src={item.image}
+                  alt={item.title}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <span className="absolute bottom-4 left-4 right-4 text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-between">
+                  <span>Click to view photo</span>
+                  <i className="ri-zoom-in-line text-lg" />
+                </span>
+              </div>
+              <div className="p-5">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand dark:text-brand-300">
+                  {item.categoryLabel}
+                </span>
+                <h3 className="mt-1 font-display text-lg font-bold text-ink dark:text-white">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-ink-700/70 dark:text-white/60">
+                  {item.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Lightbox Modal */}
+        {selectedPhoto ? (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
+            onClick={() => setSelectedPhoto(null)}
+          >
+            <div
+              className="relative max-w-3xl overflow-hidden rounded-4xl bg-white shadow-2xl dark:bg-[#1e1c1a]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedPhoto(null)}
+                className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-black/60 text-white transition hover:bg-black"
               >
-                <button
-                  type="button"
-                  onClick={() => setSelectedPhoto(null)}
-                  className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-black/60 text-white transition hover:bg-black"
-                >
-                  <i className="ri-close-line text-xl" />
-                </button>
-                <div className="relative max-h-[60vh] overflow-hidden">
-                  <SafeImage
-                    src={selectedPhoto.image}
-                    alt={selectedPhoto.title}
-                    className="w-full object-cover"
-                  />
-                </div>
-                <div className="p-6 sm:p-8">
-                  <span className="text-xs font-bold uppercase tracking-wider text-brand dark:text-brand-300">
-                    {selectedPhoto.categoryLabel}
-                  </span>
-                  <h3 className="mt-1 font-display text-2xl font-bold text-ink dark:text-white">
-                    {selectedPhoto.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-700/70 dark:text-white/70">
-                    {selectedPhoto.desc}
-                  </p>
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <Link href="/menu" className="btn-brand py-2.5! text-xs!">
-                      Explore Menu <i className="ri-arrow-right-line" />
-                    </Link>
-                    <Link href="/reservation" className="btn-dark py-2.5! text-xs!">
-                      Book a Table
-                    </Link>
-                  </div>
+                <i className="ri-close-line text-xl" />
+              </button>
+              <div className="relative max-h-[60vh] overflow-hidden">
+                <SafeImage
+                  src={selectedPhoto.image}
+                  alt={selectedPhoto.title}
+                  className="w-full object-cover"
+                />
+              </div>
+              <div className="p-6 sm:p-8">
+                <span className="text-xs font-bold uppercase tracking-wider text-brand dark:text-brand-300">
+                  {selectedPhoto.categoryLabel}
+                </span>
+                <h3 className="mt-1 font-display text-2xl font-bold text-ink dark:text-white">
+                  {selectedPhoto.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-700/70 dark:text-white/70">
+                  {selectedPhoto.desc}
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link href="/about#menu" className="btn-brand py-2.5! text-xs!">
+                    Explore Menu <i className="ri-arrow-right-line" />
+                  </Link>
+                  <Link href="/reservation" className="btn-dark py-2.5! text-xs!">
+                    Book a Table
+                  </Link>
                 </div>
               </div>
             </div>
-          ) : null}
-
-          {/* Bottom CTA */}
-          <div className="mt-16 text-center">
-            <h3 className="font-display text-2xl font-bold text-ink dark:text-white">
-              Ready to experience Reshto in person?
-            </h3>
-            <p className="mt-2 text-xs text-ink-700/70 dark:text-white/60">
-              We look forward to welcoming you and crafting a dinner to remember.
-            </p>
-            <div className="mt-6 flex justify-center gap-3">
-              <Link href="/reservation" className="btn-brand">
-                Reserve Your Table <i className="ri-calendar-line" />
-              </Link>
-              <Link href="/order" className="btn-dark">
-                Order Delivery <i className="ri-truck-line" />
-              </Link>
-            </div>
           </div>
-        </Container>
-      </section>
-    </>
+        ) : null}
+      </Container>
+    </section>
   );
 };
+
+export default GalleryExperience;

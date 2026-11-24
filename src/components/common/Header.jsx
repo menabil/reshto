@@ -14,11 +14,9 @@ import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
 const NAV_KEYS = {
   "/": "nav.home",
   "/about": "nav.about",
-  "/menu": "nav.menu",
   "/order": "nav.order",
   "/reservation": "nav.reservation",
   "/chefs": "nav.chefs",
-  "/gallery": "nav.gallery",
   "/contact": "nav.contact",
 };
 
@@ -143,7 +141,7 @@ export const Header = () => {
 
           {/* Actions */}
           <div className="header-actions">
-            {/* Language & Currency Switcher */}
+            {/* Currency Switcher */}
             <LanguageSwitcher />
 
             {/* Dark Mode Toggle */}

@@ -44,7 +44,7 @@ export const Hero = () => {
             {t("hero.subtitle", "Seasonal ingredients, a thoughtful pour, and the kind of welcome that makes you want to stay for one more course.")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/menu" className="btn-brand hero-button">
+            <Link href="/about#menu" className="btn-brand hero-button">
               {t("hero.exploreMenu", "Explore Menu")} <i className="ri-arrow-right-line" aria-hidden="true" />
             </Link>
             <Link href="/reservation" className="btn-dark hero-button">
