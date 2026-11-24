@@ -7,12 +7,12 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { menu, menuTabs } from "@/data/data";
 import { useStore } from "@/context/StoreContext";
-import { useCurrency } from "@/context/CurrencyContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
 
 export const ExploreMenu = () => {
   const { isFavorite, toggleFavorite, updateQuantity, openCart } = useStore();
-  const { formatPrice } = useCurrency();
+  const { formatPrice } = useLanguage();
   const [activeTab, setActiveTab] = useState("breakfast");
   const [query, setQuery] = useState("");
   const [quickViewDish, setQuickViewDish] = useState(null);

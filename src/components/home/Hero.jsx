@@ -4,8 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { foodImages } from "@/constants/images";
+import { useLanguage } from "@/context/LanguageContext";
 
 export const Hero = () => {
+  const { t } = useLanguage();
+
   const handleScrollToNext = (event) => {
     event.preventDefault();
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
@@ -41,7 +44,7 @@ export const Hero = () => {
             Seasonal ingredients, a thoughtful pour, and the kind of welcome that makes you want to stay for one more course.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/menu" className="btn-brand hero-button">
+            <Link href="/order" className="btn-brand hero-button">
               {t("hero.exploreMenu", "Explore Menu")} <i className="ri-arrow-right-line" aria-hidden="true" />
             </Link>
             <Link href="/reservation" className="btn-dark hero-button">

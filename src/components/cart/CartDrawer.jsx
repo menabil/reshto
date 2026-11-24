@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/context/StoreContext";
-import { useCurrency } from "@/context/CurrencyContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 
@@ -25,7 +25,7 @@ export const CartDrawer = () => {
     clearCart,
     orders,
   } = useStore();
-  const { formatPrice } = useCurrency();
+  const { formatPrice } = useLanguage();
 
   const [couponInput, setCouponInput] = useState("");
   const [couponMessage, setCouponMessage] = useState(null);

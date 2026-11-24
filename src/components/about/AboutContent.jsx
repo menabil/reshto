@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { PopularCategories } from "@/components/home/PopularCategories";
@@ -6,8 +8,11 @@ import { WhyChoose } from "@/components/home/WhyChoose";
 import { Chefs } from "@/components/home/Chefs";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { foodImages } from "@/constants/images";
+import { useLanguage } from "@/context/LanguageContext";
 
 export const AboutContent = () => {
+  const { t } = useLanguage();
+
   return (
     <>
       <section className="subpage-hero">
@@ -51,7 +56,7 @@ export const AboutContent = () => {
               )}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/menu" className="btn-brand">
+              <Link href="/order" className="btn-brand">
                 {t("about.exploreMenu", "Explore the Menu")}{" "}
                 <i className="ri-arrow-right-line" />
               </Link>

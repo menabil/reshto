@@ -47,6 +47,9 @@ authentication, shared server-side data, or online payment processing. Do not
 use it to handle real customer accounts or payments until those services are
 implemented.
 
+Menu and order prices are displayed in USD. Language and currency selectors
+have been removed from the header.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

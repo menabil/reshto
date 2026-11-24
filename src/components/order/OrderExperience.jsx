@@ -7,7 +7,7 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { siteConfig } from "@/constants/site";
 import { menuTabs } from "@/data/data";
 import { useStore } from "@/context/StoreContext";
-import { useCurrency } from "@/context/CurrencyContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
 
@@ -22,7 +22,7 @@ export const OrderExperience = ({ initialSearch }) => {
     isFavorite,
     toggleFavorite,
   } = useStore();
-  const { formatPrice } = useCurrency();
+  const { formatPrice } = useLanguage();
 
   const [activeCategory, setActiveCategory] = useState("all");
   const [query, setQuery] = useState(initialSearch);

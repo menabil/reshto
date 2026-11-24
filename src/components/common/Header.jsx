@@ -2,48 +2,22 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/constants/site";
 import { ThemeToggle } from "@/components/common/ThemeProvider";
 import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
-import { useLanguage } from "@/context/LanguageContext";
-import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
-
-const NAV_KEYS = {
-  "/": "nav.home",
-  "/about": "nav.about",
-  "/menu": "nav.menu",
-  "/order": "nav.order",
-  "/reservation": "nav.reservation",
-  "/chefs": "nav.chefs",
-  "/gallery": "nav.gallery",
-  "/contact": "nav.contact",
-};
-
-const POPULAR_SEARCHES = [
-  "Margherita Pizza",
-  "Prime Steak",
-  "Salmon",
-  "French Toast",
-  "Coffee",
-  "Tacos",
-];
 
 export const Header = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount, openCart } = useStore();
 
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
-  const searchInputRef = useRef(null);
   const userMenuRef = useRef(null);
 
   // Sticky header background on scroll
@@ -53,18 +27,6 @@ export const Header = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  // Focus search input when search modal opens & handle ESC
-  useEffect(() => {
-    if (searchOpen) {
-      setTimeout(() => searchInputRef.current?.focus(), 80);
-      const handleKeyDown = (e) => {
-        if (e.key === "Escape") setSearchOpen(false);
-      };
-      window.addEventListener("keydown", handleKeyDown);
-      return () => window.removeEventListener("keydown", handleKeyDown);
-    }
-  }, [searchOpen]);
 
   // Close user dropdown on outside click
   useEffect(() => {
@@ -76,20 +38,6 @@ export const Header = () => {
     document.addEventListener("mousedown", handleOutside);
     return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-    setSearchOpen(false);
-    router.push(`/order?search=${encodeURIComponent(searchQuery.trim())}`);
-  };
-
-  const handleQuickSearch = (term) => {
-    setSearchOpen(false);
-    router.push(`/order?search=${encodeURIComponent(term)}`);
-  };
-
-  const isHome = pathname === "/";
 
   return (
     <>
@@ -141,22 +89,8 @@ export const Header = () => {
 
           {/* Actions */}
           <div className="header-actions">
-            {/* Language & Currency Switcher */}
-            <LanguageSwitcher />
-
             {/* Dark Mode Toggle */}
             <ThemeToggle />
-
-            {/* Search Button (Triggers blurred modal) */}
-            <button
-              type="button"
-              className="header-icon"
-              aria-label="Open search menu"
-              onClick={() => setSearchOpen(true)}
-              title="Search menu"
-            >
-              <i className="ri-search-line" />
-            </button>
 
             {/* User Login & Profile Icon */}
             <div className="relative desktop-action" ref={userMenuRef}>
@@ -282,10 +216,6 @@ export const Header = () => {
         {open ? (
           <div className="mobile-nav dark:bg-[#0f0e0d] dark:border-white/10">
             <Container>
-              <div className="mb-3">
-                <CurrencySwitcher mobile />
-              </div>
-
               {siteConfig.navLinks.map((link) => {
                 const isActive =
                   link.href === "/"
@@ -372,7 +302,7 @@ export const Header = () => {
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-2 mt-3">
+              <div className="mt-3 grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -386,87 +316,15 @@ export const Header = () => {
                 <Link
                   href="/order"
                   onClick={() => setOpen(false)}
-                  className="mobile-order m-0! flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs!"
+                  className="btn-brand flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs!"
                 >
-                  Order Menu <i className="ri-arrow-right-line" />
+                  Order Now <i className="ri-arrow-right-line" />
                 </Link>
               </div>
             </Container>
           </div>
         ) : null}
       </header>
-
-      {/* SLEEK BLURRED SEARCH MODAL */}
-      {searchOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-24 md:pt-32 bg-black/65 backdrop-blur-md transition-all duration-300"
-          onClick={() => setSearchOpen(false)}
-          role="dialog"
-          aria-modal="true"
-        >
-          <div
-            className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-ink/10 bg-[var(--theme-surface)] p-6 text-ink shadow-2xl backdrop-blur-2xl dark:border-white/10 animate-in fade-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between pb-3">
-              <span className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-brand dark:text-brand-300">
-                <i className="ri-search-2-line" /> Explore Reshto Menu
-              </span>
-              <button
-                type="button"
-                onClick={() => setSearchOpen(false)}
-                className="grid h-8 w-8 place-items-center rounded-full bg-soft-primary text-ink hover:bg-brand/10 transition"
-                aria-label="Close search"
-              >
-                <i className="ri-close-line text-lg" />
-              </button>
-            </div>
-
-            {/* Search Input Box */}
-            <form onSubmit={handleSearchSubmit} className="relative mt-2">
-              <i className="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-xl text-brand dark:text-brand-300" />
-              <input
-                ref={searchInputRef}
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search pizza, ribeye steak, salmon, salad, desserts..."
-                className="w-full rounded-2xl border border-ink/15 bg-soft-primary py-4 pl-12 pr-28 text-base text-ink placeholder:text-ink-700/60 outline-none transition focus:border-brand focus:bg-[var(--theme-surface)] dark:border-white/10"
-              />
-              <button
-                type="submit"
-                className="btn-brand absolute right-2 top-1/2 -translate-y-1/2 py-2! px-4! text-xs!"
-              >
-                Search
-              </button>
-            </form>
-
-            {/* Quick Popular Searches */}
-            <div className="mt-5 border-t border-ink/10 pt-4 dark:border-white/10">
-              <span className="mb-2 block text-xs font-semibold text-ink-700">
-                Popular Searches:
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {POPULAR_SEARCHES.map((term) => (
-                  <button
-                    key={term}
-                    type="button"
-                    onClick={() => handleQuickSearch(term)}
-                    className="flex items-center gap-1.5 rounded-full border border-ink/10 bg-soft-primary px-3 py-1 text-xs font-medium text-ink hover:border-brand hover:bg-brand/10 transition-all dark:border-white/10"
-                  >
-                    <i className="ri-arrow-right-up-line text-brand dark:text-brand-300" /> {term}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <p className="mt-4 text-center text-[11px] text-ink-700/70">
-              Press <kbd className="rounded bg-soft-primary px-1.5 py-0.5">ESC</kbd> to close
-            </p>
-          </div>
-        </div>
-      ) : null}
     </>
   );
 };
