@@ -77,7 +77,7 @@ export const Testimonials = () => {
                 </p>
                 <div className="mt-6 flex items-center gap-3 border-t border-ink/5 dark:border-white/5 pt-5">
                   <span
-                    className={`grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br text-sm font-bold text-white shadow-xs ${
+                    className={`grid h-12 w-12 shrink-0 place-items-center rounded-full bg-linear-to-br text-sm font-bold text-white shadow-xs ${
                       avatarTones[index % avatarTones.length]
                     }`}
                   >

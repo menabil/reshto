@@ -101,7 +101,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
             alt={dish.menuItemName || dish.name || "Delicious dish"}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
           
           <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between text-white">
             <div>
@@ -337,7 +337,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
               >
                 <i className="ri-subtract-line text-xs" />
               </button>
-              <span className="min-w-[1.5rem] text-center text-xs font-bold">
+              <span className="min-w-6 text-center text-xs font-bold">
                 {quantity}
               </span>
               <button

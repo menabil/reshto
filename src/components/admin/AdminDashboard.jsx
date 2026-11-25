@@ -477,7 +477,7 @@ export const AdminDashboard = () => {
             <div className="flex flex-col justify-between gap-4 rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] md:flex-row md:items-center">
               <div className="flex flex-1 flex-wrap items-center gap-3">
                 {/* Search */}
-                <div className="relative min-w-[220px] flex-1">
+                <div className="relative min-w-55 flex-1">
                   <i className="ri-search-line absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-700/50 dark:text-white/40" />
                   <input
                     type="search"
@@ -517,7 +517,7 @@ export const AdminDashboard = () => {
             <div className="overflow-hidden rounded-3xl border border-ink/10 bg-[#fffdf8] shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-ink/10 bg-ink/[0.02] text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:border-white/10 dark:bg-white/[0.02] dark:text-white/60">
+                  <thead className="border-b border-ink/10 bg-ink/2 text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:border-white/10 dark:bg-white/2 dark:text-white/60">
                     <tr>
                       <th className="px-5 py-4">Dish</th>
                       <th className="px-5 py-4">Category</th>
@@ -528,7 +528,7 @@ export const AdminDashboard = () => {
                   </thead>
                   <tbody className="divide-y divide-ink/5 dark:divide-white/5">
                     {filteredMenu.map((item) => (
-                      <tr key={item.id} className="hover:bg-ink/[0.01] dark:hover:bg-white/[0.01]">
+                      <tr key={item.id} className="hover:bg-ink/1 dark:hover:bg-white/1">
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
                             <SafeImage
@@ -652,7 +652,7 @@ export const AdminDashboard = () => {
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-ink/10 bg-ink/[0.02] text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:border-white/10 dark:bg-white/[0.02] dark:text-white/60">
+                  <thead className="border-b border-ink/10 bg-ink/2 text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:border-white/10 dark:bg-white/2 dark:text-white/60">
                     <tr>
                       <th className="px-5 py-4">Order ID</th>
                       <th className="px-5 py-4">Customer</th>
@@ -672,7 +672,7 @@ export const AdminDashboard = () => {
                       </tr>
                     ) : (
                       filteredOrders.map((ord) => (
-                      <tr key={ord.id} className="hover:bg-ink/[0.01] dark:hover:bg-white/[0.01]">
+                      <tr key={ord.id} className="hover:bg-ink/1 dark:hover:bg-white/1">
                         <td className="px-5 py-4 font-mono font-bold text-xs text-brand dark:text-brand-300">
                           {ord.id}
                         </td>
@@ -800,7 +800,7 @@ export const AdminDashboard = () => {
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-ink/10 bg-ink/[0.02] text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:border-white/10 dark:bg-white/[0.02] dark:text-white/60">
+                  <thead className="border-b border-ink/10 bg-ink/2 text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:border-white/10 dark:bg-white/2 dark:text-white/60">
                     <tr>
                       <th className="px-5 py-4">Booking ID &amp; Guest</th>
                       <th className="px-5 py-4">Seating Zone &amp; Table</th>
@@ -819,7 +819,7 @@ export const AdminDashboard = () => {
                       </tr>
                     ) : (
                       filteredReservations.map((res) => (
-                      <tr key={res.id} className="hover:bg-ink/[0.01] dark:hover:bg-white/[0.01]">
+                      <tr key={res.id} className="hover:bg-ink/1 dark:hover:bg-white/1">
                         <td className="px-5 py-4">
                           <span className="font-mono text-xs font-extrabold text-brand dark:text-brand-300 block">
                             {res.id}

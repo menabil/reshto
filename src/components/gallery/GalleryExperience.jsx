@@ -139,7 +139,7 @@ export const GalleryExperience = () => {
               onClick={() => setSelectedPhoto(item)}
               className="group relative cursor-pointer overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-[#1e1c1a]"
             >
-              <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
+              <div className="relative aspect-4/3 overflow-hidden bg-black/5">
                 <SafeImage
                   src={item.image}
                   alt={item.title}

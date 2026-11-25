@@ -31,6 +31,7 @@ export const CartDrawer = () => {
   const [couponInput, setCouponInput] = useState("");
   const [couponMessage, setCouponMessage] = useState(null);
   const activeOrder = orders?.find((order) => order.isCustomerOrder);
+  const canTrackActiveOrder = isAuthenticated && Boolean(activeOrder);
 
   // Close drawer on ESC key
   useEffect(() => {
@@ -69,7 +70,11 @@ export const CartDrawer = () => {
   if (!isCartOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden" aria-modal="true" role="dialog">
+    <div
+      className="fixed inset-0 z-50 overflow-hidden"
+      aria-modal="true"
+      role="dialog"
+    >
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 animate-in fade-in"
@@ -80,7 +85,6 @@ export const CartDrawer = () => {
       {/* Drawer Container */}
       <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
         <div className="relative w-screen max-w-md bg-[#faf8f5] shadow-2xl transition-all duration-300 dark:bg-[#1a1816] flex flex-col border-l border-ink/10 dark:border-white/10">
-          
           {/* Drawer Header */}
           <div className="flex items-center justify-between border-b border-ink/10 px-5 py-4 dark:border-white/10">
             <div className="flex items-center gap-2">
@@ -121,42 +125,52 @@ export const CartDrawer = () => {
 
           {/* Drawer Body - Items List */}
           <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
-            {/* Active Order Tracker Pill */}
-            <div className="rounded-2xl border border-brand/20 bg-brand/5 p-3 dark:border-brand-400/20 dark:bg-brand/10 flex items-center justify-between gap-2 shadow-xs">
-              <div className="flex items-center gap-2.5">
-                <span className="grid h-8 w-8 place-items-center rounded-xl bg-brand text-white text-sm shadow-xs">
+            {/* Active Order Tracker */}
+            <div className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-x-3 gap-y-3 rounded-2xl border border-brand/20 bg-brand/5 p-4 shadow-xs dark:border-brand-400/20 dark:bg-brand/10 sm:flex sm:justify-between">
+              <div className="col-span-2 grid min-w-0 grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-3 sm:col-span-1 sm:flex sm:items-center">
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand text-base text-white shadow-xs">
                   <i className="ri-e-bike-2-fill" />
                 </span>
-                <div>
-                  <span className="text-[10px] font-bold text-brand uppercase tracking-wider block">
-                    {activeOrder
-                      ? `Active Order #${activeOrder.id}`
-                      : "No order to track yet"}
+                <div className="min-w-0">
+                  <span className="block text-[11px] font-extrabold uppercase tracking-wider text-brand dark:text-brand-300">
+                    {activeOrder ? "Active Order" : "No order to track yet"}
                   </span>
                   {activeOrder ? (
-                    <strong className="text-xs text-ink dark:text-white">
-                      Status: {activeOrder.status}
-                    </strong>
+                    <>
+                      <strong className="mt-0.5 block break-words text-sm font-bold text-ink dark:text-white">
+                        #{activeOrder.id}
+                      </strong>
+                      <p className="mt-1 flex flex-wrap gap-x-1 text-xs text-ink-700 dark:text-white/70">
+                        <span>Status:</span>
+                        <span className="font-semibold text-ink dark:text-white">
+                          {activeOrder.status}
+                        </span>
+                      </p>
+                    </>
                   ) : null}
                 </div>
               </div>
 
-              {activeOrder ? (
+              {canTrackActiveOrder ? (
                 <Link
                   href={`/order-tracking?orderId=${activeOrder.id}`}
                   onClick={closeCart}
-                  className="rounded-xl bg-brand px-3 py-1.5 text-[11px] font-bold text-white hover:bg-brand-600 transition shadow-xs whitespace-nowrap"
+                  className="col-span-2 flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-brand-600 sm:col-span-1 sm:min-h-9 sm:whitespace-nowrap"
                 >
-                  Track Live &rarr;
+                  Track Live <i className="ri-arrow-right-line" aria-hidden="true" />
                 </Link>
               ) : (
                 <button
                   type="button"
                   disabled
-                  className="cursor-not-allowed whitespace-nowrap rounded-xl bg-ink/10 px-3 py-1.5 text-[11px] font-bold text-ink/40 dark:bg-white/10 dark:text-white/40"
-                  aria-label="Track order unavailable until you place an order"
+                  className="col-span-2 min-h-10 cursor-not-allowed rounded-xl bg-ink/10 px-4 py-2 text-xs font-bold text-ink/40 dark:bg-white/10 dark:text-white/40 sm:col-span-1 sm:min-h-9 sm:whitespace-nowrap"
+                  aria-label={
+                    isAuthenticated
+                      ? "Track order unavailable until you place an order"
+                      : "Sign in to track your order"
+                  }
                 >
-                  Track Live &rarr;
+                  Track Live
                 </button>
               )}
             </div>
@@ -167,7 +181,7 @@ export const CartDrawer = () => {
                   key={item.cartId}
                   className="flex items-center gap-3 rounded-2xl border border-ink/8 bg-white p-3 shadow-xs transition hover:border-brand/40 dark:border-white/10 dark:bg-[#22201d]"
                 >
-                  <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl bg-ink/5 dark:bg-white/5">
+                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-ink/5 dark:bg-white/5">
                     <SafeImage
                       src={item.image}
                       alt={item.menuItemName}
@@ -194,7 +208,7 @@ export const CartDrawer = () => {
                         >
                           <i className="ri-subtract-line" />
                         </button>
-                        <span className="min-w-[1.25rem] text-center text-xs font-bold text-ink dark:text-white">
+                        <span className="min-w-5 text-center text-xs font-bold text-ink dark:text-white">
                           {item.quantity}
                         </span>
                         <button
@@ -231,8 +245,9 @@ export const CartDrawer = () => {
                 <h3 className="mt-4 font-display text-lg font-bold text-ink dark:text-white">
                   Your cart is empty
                 </h3>
-                <p className="mt-1 max-w-[240px] text-xs text-ink-700 dark:text-white/60">
-                  Looks like you haven&apos;t added any delicious dishes to your tray yet.
+                <p className="mt-1 max-w-60 text-xs text-ink-700 dark:text-white/60">
+                  Looks like you haven&apos;t added any delicious dishes to your
+                  tray yet.
                 </p>
                 <Link
                   href="/order"
@@ -261,7 +276,9 @@ export const CartDrawer = () => {
                     <div className="mt-2.5 flex items-center justify-between rounded-xl bg-emerald-500/10 px-3 py-2 border border-emerald-500/20 text-xs font-bold text-emerald-700 dark:text-emerald-300">
                       <div className="flex items-center gap-1.5">
                         <i className="ri-checkbox-circle-fill text-sm" />
-                        <span>{appliedCoupon.code} applied ({appliedCoupon.desc})</span>
+                        <span>
+                          {appliedCoupon.code} applied ({appliedCoupon.desc})
+                        </span>
                       </div>
                       <button
                         type="button"
@@ -272,7 +289,10 @@ export const CartDrawer = () => {
                       </button>
                     </div>
                   ) : (
-                    <form onSubmit={handleApplyCoupon} className="mt-2 flex gap-2">
+                    <form
+                      onSubmit={handleApplyCoupon}
+                      className="mt-2 flex gap-2"
+                    >
                       <input
                         type="text"
                         value={couponInput}
@@ -292,7 +312,9 @@ export const CartDrawer = () => {
                   {couponMessage && (
                     <p
                       className={`mt-2 text-[11px] font-semibold ${
-                        couponMessage.success ? "text-emerald-600 dark:text-emerald-400" : "text-rose-500"
+                        couponMessage.success
+                          ? "text-emerald-600 dark:text-emerald-400"
+                          : "text-rose-500"
                       }`}
                     >
                       {couponMessage.message}
@@ -344,12 +366,16 @@ export const CartDrawer = () => {
               {/* Action Buttons */}
               <div className="mt-4 flex flex-col gap-2">
                 <Link
-                  href={isAuthenticated ? "/checkout" : "/login?next=%2Fcheckout"}
+                  href={
+                    isAuthenticated ? "/checkout" : "/login?next=%2Fcheckout"
+                  }
                   onClick={closeCart}
                   className="btn-brand flex w-full items-center justify-center gap-2 py-3 text-xs! font-bold shadow-md"
                 >
                   <i className="ri-secure-payment-line text-sm" />
-                  {isAuthenticated ? "Proceed to Payment" : "Sign In to Continue"}
+                  {isAuthenticated
+                    ? "Proceed to Payment"
+                    : "Sign In to Continue"}
                 </Link>
               </div>
 

@@ -210,7 +210,7 @@ export const UserDashboard = () => {
 
       <Container>
         {/* User Profile Header Card */}
-        <div className="relative mb-8 overflow-hidden rounded-4xl border border-ink/10 bg-gradient-to-br from-[#171512] via-[#24211d] to-[#171512] p-6 text-white shadow-xl dark:border-white/10 md:p-8">
+        <div className="relative mb-8 overflow-hidden rounded-4xl border border-ink/10 bg-linear-to-br from-[#171512] via-[#24211d] to-[#171512] p-6 text-white shadow-xl dark:border-white/10 md:p-8">
           <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand/30 blur-3xl" />
 
           <div className="relative z-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">

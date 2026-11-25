@@ -94,13 +94,13 @@ export const AuthExperience = ({ initialMode = "login" }) => {
   };
 
   return (
-    <main className="relative isolate flex min-h-svh items-center justify-center overflow-hidden bg-[var(--theme-page)] px-4 pt-28 pb-8 transition-colors duration-300 dark:bg-[#0f0e0d] md:pb-10">
+    <main className="relative isolate flex min-h-svh items-center justify-center overflow-hidden bg-(--theme-page) px-4 pt-28 pb-8 transition-colors duration-300 dark:bg-[#0f0e0d] md:pb-10">
       <div className="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full bg-brand/10 blur-3xl dark:bg-brand/5" />
-      <div className="pointer-events-none absolute -bottom-40 -right-32 h-[30rem] w-[30rem] rounded-full bg-brand/5 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 -right-32 h-120 w-120 rounded-full bg-brand/5 blur-3xl" />
 
       <Container className="relative z-10 max-w-6xl">
-        <div className="grid overflow-hidden rounded-[28px] border border-[var(--theme-border)] bg-[var(--theme-surface)] shadow-[0_18px_52px_-30px_rgba(26,26,26,.24)] dark:border-white/10 dark:bg-[#1e1c1a] lg:grid-cols-[.86fr_1.14fr]">
-          <aside className="relative flex min-h-[240px] flex-col justify-between overflow-hidden bg-linear-to-br from-[#171512] via-[#24211d] to-[#39332b] p-7 text-white sm:p-9 lg:min-h-[720px] lg:p-11">
+        <div className="grid overflow-hidden rounded-[28px] border border-(--theme-border) bg-(--theme-surface) shadow-[0_18px_52px_-30px_rgba(26,26,26,.24)] dark:border-white/10 dark:bg-[#1e1c1a] lg:grid-cols-[.86fr_1.14fr]">
+          <aside className="relative flex min-h-60 flex-col justify-between overflow-hidden bg-linear-to-br from-[#171512] via-[#24211d] to-[#39332b] p-7 text-white sm:p-9 lg:min-h-180 lg:p-11">
             <div className="pointer-events-none absolute -right-24 -top-20 h-80 w-80 rounded-full border border-white/10" />
             <div className="pointer-events-none absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-brand/15 blur-3xl" />
 

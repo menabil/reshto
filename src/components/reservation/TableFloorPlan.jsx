@@ -250,7 +250,7 @@ export const TableFloorPlan = ({
                   >
                     <i className="ri-user-line" /> {table.capacity} Seats
                   </span>
-                  <span className="text-[10px] text-ink-700/50 dark:text-white/40 truncate max-w-[85px]">
+                  <span className="text-[10px] text-ink-700/50 dark:text-white/40 truncate max-w-21.25">
                     {table.view.split(" ")[0]}
                   </span>
                 </div>

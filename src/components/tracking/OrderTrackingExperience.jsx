@@ -234,7 +234,7 @@ export const OrderTrackingExperience = () => {
           <div className="overflow-hidden rounded-4xl border border-ink/10 bg-white shadow-xl dark:border-white/10 dark:bg-[#1a1816]">
             
             {/* Order status summary */}
-            <div className="bg-gradient-to-r from-[#1c1a18] via-[#24211d] to-[#3a2916] p-6 md:p-8 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="bg-linear-to-r from-[#1c1a18] via-[#24211d] to-[#3a2916] p-6 md:p-8 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-brand/20 px-3 py-0.5 text-[11px] font-extrabold uppercase tracking-wider text-brand-300 ring-1 ring-brand-300/30">
@@ -299,7 +299,7 @@ export const OrderTrackingExperience = () => {
               {/* Progress track line */}
               <div className="relative mt-6 h-2 w-full overflow-hidden rounded-full bg-ink/10 dark:bg-white/10">
                 <div
-                  className="h-full bg-gradient-to-r from-emerald-500 via-brand to-amber-500 transition-all duration-700 ease-out"
+                  className="h-full bg-linear-to-r from-emerald-500 via-brand to-amber-500 transition-all duration-700 ease-out"
                   style={{
                     width: `${((activeStepIndex) / (TRACKING_STAGES.length - 1)) * 100}%`,
                   }}
@@ -332,7 +332,7 @@ export const OrderTrackingExperience = () => {
                   <div key={i} className="flex items-center justify-between py-3">
                     <div className="flex items-center gap-3">
                       {dish.image && (
-                        <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-xl bg-ink/5 dark:bg-white/5">
+                        <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-ink/5 dark:bg-white/5">
                           <SafeImage
                             src={dish.image}
                             alt={dish.name}

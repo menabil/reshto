@@ -32,7 +32,7 @@ export const Placeholder = ({
         className
       )}
     >
-      <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_20%_20%,#fff_0,transparent_45%),radial-gradient(circle_at_80%_70%,#fff_0,transparent_40%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_20%_20%,#fff_0,transparent_45%),radial-gradient(circle_at_80%_70%,#fff_0,transparent_40%)]" />
       <div className="relative flex flex-col items-center gap-2 text-white">
         <i className={cn(icon, iconClassName, "drop-shadow")} />
         {label ? (

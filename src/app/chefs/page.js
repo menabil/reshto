@@ -93,7 +93,7 @@ export default function ChefsPage() {
                 className="overflow-hidden rounded-4xl border border-ink/10 bg-white shadow-md transition hover:shadow-xl dark:border-white/10 dark:bg-[#1e1c1a]"
               >
                 <div className="grid sm:grid-cols-[.95fr_1.05fr]">
-                  <div className="relative min-h-[280px] sm:min-h-full">
+                  <div className="relative min-h-70 sm:min-h-full">
                     <SafeImage
                       src={foodImages.chefs[idx]}
                       alt={chef.name}

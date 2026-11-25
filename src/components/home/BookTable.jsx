@@ -68,8 +68,8 @@ export const BookTable = () => {
   return (
     <section id="book" className="reservation-section section pt-24 pb-20 md:pt-32 md:pb-28 transition-colors duration-300 dark:bg-[#0f0e0d]">
       <Container>
-        <div className="reservation-panel relative overflow-hidden rounded-4xl bg-gradient-to-br from-[#1e1c1a] via-[#171614] to-[#402d17] px-6 py-14 md:px-12 border border-white/10 shadow-2xl">
-          <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:radial-gradient(circle_at_12%_20%,#fff_0,transparent_35%),radial-gradient(circle_at_88%_80%,#fff_0,transparent_30%)]" />
+        <div className="reservation-panel relative overflow-hidden rounded-4xl bg-linear-to-br from-[#1e1c1a] via-[#171614] to-[#402d17] px-6 py-14 md:px-12 border border-white/10 shadow-2xl">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.14] bg-[radial-gradient(circle_at_12%_20%,#fff_0,transparent_35%),radial-gradient(circle_at_88%_80%,#fff_0,transparent_30%)]" />
 
           <div className="relative z-10">
             <div className="mb-8 flex justify-center">

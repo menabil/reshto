@@ -14,7 +14,7 @@ export const WhyChoose = () => {
         <div className="grid gap-6 md:grid-cols-3">
           {whyChoose.map((item, index) => (
             <Reveal key={item.id} delay={index * 80}>
-              <article className="h-full rounded-3xl bg-white/[0.04] p-8 text-center ring-1 ring-white/10 transition duration-300 hover:-translate-y-1.5 hover:bg-white/[0.07] dark:bg-white/[0.03] dark:ring-white/10">
+              <article className="h-full rounded-3xl bg-white/4 p-8 text-center ring-1 ring-white/10 transition duration-300 hover:-translate-y-1.5 hover:bg-white/[0.07] dark:bg-white/3 dark:ring-white/10">
                 <span
                   className="mx-auto grid h-16 w-16 place-items-center rounded-3xl border border-brand-100 bg-brand-50 text-3xl text-brand-700"
                 >
