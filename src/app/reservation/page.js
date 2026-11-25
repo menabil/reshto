@@ -1,12 +1,13 @@
 import { Container } from "@/components/ui/Container";
 import { ReservationExperience } from "@/components/reservation/ReservationExperience";
 import { siteConfig } from "@/constants/site";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Book a Table & Seating Zones",
-  description:
-    "Reserve your dining table at Reshto. Select outdoor patio, window corner, or VIP lounge with customized anniversary and birthday decoration notes.",
-};
+export const metadata = createPageMetadata(
+  "Book a Table & Seating Zones",
+  "Reserve your dining table at Reshto. Select outdoor patio, window corner, or VIP lounge with customized anniversary and birthday decoration notes.",
+  "/reservation",
+);
 
 const guidelines = [
   {

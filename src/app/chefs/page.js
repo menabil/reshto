@@ -4,11 +4,13 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { GalleryExperience } from "@/components/gallery/GalleryExperience";
 import { foodImages } from "@/constants/images";
 import { chefs } from "@/data/data";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Meet Our Chefs",
-  description: "Meet the world-class culinary artists, pastry masters, and executive chefs at Reshto.",
-};
+export const metadata = createPageMetadata(
+  "Meet Our Chefs",
+  "Meet the world-class culinary artists, pastry masters, and executive chefs at Reshto.",
+  "/chefs",
+);
 
 const chefDetails = [
   {

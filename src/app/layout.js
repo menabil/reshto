@@ -42,10 +42,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#faf8f5" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0e0d" },
-  ],
+  themeColor: "#faf8f5",
 };
 
 export default function RootLayout({ children }) {
@@ -60,15 +57,17 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                var storedTheme = null;
                 try {
-                  var stored = localStorage.getItem('reshto-theme');
-                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  if (stored === 'dark' || (!stored && prefersDark)) {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.remove('dark');
-                  }
-                } catch(e) {}
+                  storedTheme = localStorage.getItem('reshto-theme');
+                } catch (e) {}
+                var prefersDark = window.matchMedia &&
+                  window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var isDark = storedTheme === 'dark' ||
+                  (storedTheme !== 'light' && prefersDark);
+                document.documentElement.classList.toggle('dark', isDark);
+                var themeColor = document.querySelector('meta[name="theme-color"]');
+                if (themeColor) themeColor.setAttribute('content', isDark ? '#0f0e0d' : '#faf8f5');
               })();
             `,
           }}

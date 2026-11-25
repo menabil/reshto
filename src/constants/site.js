@@ -4,18 +4,18 @@
 export const siteConfig = {
   name: "Reshto",
   description:
-    "Reshto is a modern React restaurant template for online food ordering and delivery. Perfect for restaurants, cafes, food startups, and takeaway services.",
-  url: "https://reshto.example.com",
+    "Discover Reshto's fresh menu, reserve a table, and order your favorite meals for pickup or delivery.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://reshto.vercel.app",
   ogImage: "/og.jpg",
   copyrightYear: 2026,
   keywords: [
     "Reshto",
-    "restaurant template",
-    "React restaurant website",
+    "restaurant",
+    "Reshto restaurant",
     "online food ordering",
+    "restaurant menu",
+    "table reservations",
     "food delivery",
-    "restaurant landing page",
-    "cafe website",
     "fresh meals",
   ],
   navLinks: [

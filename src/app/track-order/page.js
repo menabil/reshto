@@ -5,6 +5,10 @@ export const metadata = {
   title: "Track Your Order | Reshto Restaurant",
   description:
     "Track your food delivery in real-time with live updates and courier GPS status.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function TrackOrderPage() {

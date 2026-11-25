@@ -214,54 +214,59 @@ export const Header = () => {
 
         {/* Mobile Navigation Drawer */}
         {open ? (
-          <div className="mobile-nav dark:bg-[#0f0e0d] dark:border-white/10">
-            <Container>
-              {siteConfig.navLinks.map((link) => {
-                const isActive =
-                  link.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(link.href);
+          <div className="mobile-nav">
+            <Container className="mobile-nav-content">
+              <nav className="mobile-nav-links" aria-label="Mobile navigation">
+                {siteConfig.navLinks.map((link) => {
+                  const isActive =
+                    link.href === "/"
+                      ? pathname === "/"
+                      : pathname.startsWith(link.href);
 
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center justify-between py-3 text-sm font-semibold transition-colors ${
-                      isActive
-                        ? "text-brand-300 font-bold"
-                        : "text-white/80 hover:text-white"
-                    }`}
-                  >
-                    <span>{link.label}</span>
-                    <i className="ri-arrow-right-s-line" />
-                  </Link>
-                );
-              })}
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      aria-current={isActive ? "page" : undefined}
+                      className={`mobile-nav-link${isActive ? " is-active" : ""}`}
+                    >
+                      <span>{link.label}</span>
+                      <i className="ri-arrow-right-s-line" aria-hidden="true" />
+                    </Link>
+                  );
+                })}
+              </nav>
 
-              <div className="my-2 border-t border-white/10 pt-2 flex flex-col gap-1">
+              <div className="mobile-nav-account">
                 {isAuthenticated ? (
                   <>
-                    <div className="px-1 py-1 text-xs text-white/60">
-                      Signed in as: <strong className="text-white">{user.name}</strong>
+                    <div className="mobile-nav-user">
+                      <span className="mobile-nav-user-icon">
+                        <i className="ri-user-smile-line" aria-hidden="true" />
+                      </span>
+                      <span className="min-w-0">
+                        <small>Signed in as</small>
+                        <strong>{user.name}</strong>
+                      </span>
                     </div>
                     <Link
                       href="/dashboard"
                       onClick={() => setOpen(false)}
-                      className="flex items-center justify-between py-2 text-sm font-medium text-amber-200"
+                      className="mobile-nav-account-link"
                     >
                       <span className="flex items-center gap-2">
-                        <i className="ri-user-smile-line" /> User Dashboard
+                        <i className="ri-dashboard-line" /> User Dashboard
                       </span>
                       <i className="ri-arrow-right-s-line" />
                     </Link>
                     <Link
                       href="/order-tracking"
                       onClick={() => setOpen(false)}
-                      className="flex items-center justify-between py-2 text-sm font-medium text-emerald-300"
+                      className="mobile-nav-account-link"
                     >
                       <span className="flex items-center gap-2">
-                        <i className="ri-e-bike-2-line" /> Track Live Order
+                        <i className="ri-e-bike-2-line" /> Track Order
                       </span>
                       <i className="ri-arrow-right-s-line" />
                     </Link>
@@ -269,7 +274,7 @@ export const Header = () => {
                       <Link
                         href="/admin"
                         onClick={() => setOpen(false)}
-                        className="flex items-center justify-between py-2 text-sm font-medium text-amber-200"
+                        className="mobile-nav-account-link"
                       >
                         <span className="flex items-center gap-2">
                           <i className="ri-dashboard-line" /> Admin Portal
@@ -283,7 +288,7 @@ export const Header = () => {
                         logout();
                         setOpen(false);
                       }}
-                      className="flex items-center gap-2 py-2 text-sm font-medium text-rose-400"
+                      className="mobile-nav-signout"
                     >
                       <i className="ri-logout-box-r-line" /> Sign Out
                     </button>
@@ -292,7 +297,7 @@ export const Header = () => {
                   <Link
                     href="/login"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-between py-2.5 text-sm font-semibold text-amber-300"
+                    className="mobile-nav-signin"
                   >
                     <span className="flex items-center gap-2">
                       <i className="ri-user-add-line" /> Sign In / Register
@@ -302,21 +307,21 @@ export const Header = () => {
                 )}
               </div>
 
-              <div className="mt-3 grid grid-cols-2 gap-2">
+              <div className="mobile-nav-actions">
                 <button
                   type="button"
                   onClick={() => {
                     setOpen(false);
                     openCart();
                   }}
-                  className="flex items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/10 py-3 text-xs font-bold text-white transition hover:bg-white/20"
+                  className="mobile-nav-cart"
                 >
                   <i className="ri-shopping-bag-3-line" /> Cart ({cartCount})
                 </button>
                 <Link
                   href="/order"
                   onClick={() => setOpen(false)}
-                  className="btn-brand flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs!"
+                  className="mobile-order-link"
                 >
                   Order Now <i className="ri-arrow-right-line" />
                 </Link>

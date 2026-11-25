@@ -1,10 +1,12 @@
 import { Suspense } from "react";
 import { OrderExperience } from "@/components/order/OrderExperience";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Order Now",
-  description: "Browse the Reshto menu and build your order.",
-};
+export const metadata = createPageMetadata(
+  "Order Now",
+  "Browse the Reshto menu and build your order.",
+  "/order",
+);
 
 async function OrderRouteContent({ searchParams }) {
   const params = await searchParams;
