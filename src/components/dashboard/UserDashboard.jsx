@@ -3,23 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { SafeImage } from "@/components/ui/SafeImage";
 import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { ReceiptModal } from "@/components/checkout/ReceiptModal";
 
-const USER_MOCK = {
-  name: "Tahmid Hassan",
-  email: "tahmid.hassan@example.com",
-  phone: "+880 1711-234567",
-  joined: "March 2025",
-  avatar:
-    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-};
-
 export const UserDashboard = () => {
-  const { user: authUser, isAuthenticated, mounted } = useAuth();
+  const { user: authUser, isAuthenticated, mounted, updateProfile } = useAuth();
   const { t, formatPrice } = useLanguage();
   const {
     orders,
@@ -29,9 +19,11 @@ export const UserDashboard = () => {
     addReview,
   } = useStore();
   const [activeTab, setActiveTab] = useState("orders"); // orders, bookings, reviews, profile
-  const [user, setUser] = useState(() => (authUser ? { ...USER_MOCK, ...authUser } : USER_MOCK));
+  const [profileDraft, setProfileDraft] = useState(null);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [profileError, setProfileError] = useState("");
   const [selectedOrderReceipt, setSelectedOrderReceipt] = useState(null);
+  const user = profileDraft || authUser;
 
   // Review modal state (Task 5.4)
   const [reviewModalData, setReviewModalData] = useState(null);
@@ -41,12 +33,11 @@ export const UserDashboard = () => {
 
   const userOrders = authUser
     ? orders.filter(
-        (o) =>
-          !o.email ||
-          o.email.toLowerCase() === authUser.email.toLowerCase() ||
-          o.customer === authUser.name
+        (order) =>
+          order.userId === authUser.id ||
+          order.email?.toLowerCase() === authUser.email.toLowerCase()
       )
-    : orders;
+    : [];
 
   const userReservations = authUser
     ? reservations.filter(
@@ -57,11 +48,39 @@ export const UserDashboard = () => {
       )
     : reservations;
 
+  const userReviews = authUser
+    ? reviews.filter(
+        (review) =>
+          review.userId === authUser.id ||
+          review.email?.toLowerCase() === authUser.email.toLowerCase()
+      )
+    : [];
+
   const handleProfileSave = (e) => {
     e.preventDefault();
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 3000);
+    setProfileError("");
+    const result = updateProfile({
+      name: user.name,
+      email: user.email,
+      phone: user.phone || "",
+      address: user.address || "",
+    });
+    if (result.success) {
+      setProfileDraft(result.user);
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 3000);
+    } else {
+      setProfileError(result.error);
+    }
   };
+
+  if (!mounted) {
+    return (
+      <div className="grid min-h-screen place-items-center pt-24 text-sm text-ink-700 dark:bg-[#0f0e0d] dark:text-white/60">
+        Loading your account...
+      </div>
+    );
+  }
 
   if (mounted && !isAuthenticated) {
     return (
@@ -93,6 +112,8 @@ export const UserDashboard = () => {
       </div>
     );
   }
+
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-[#f7f3eb] pb-20 pt-28 transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-[#f5f5f4]">
@@ -137,6 +158,8 @@ export const UserDashboard = () => {
                 addReview({
                   dishId: reviewModalData.dishId || 1,
                   dishName: reviewModalData.dishName,
+                  userId: authUser.id,
+                  email: user.email,
                   customerName: user.name || "Foodie Patron",
                   rating: reviewRating,
                   comment: reviewComment.trim(),
@@ -216,11 +239,12 @@ export const UserDashboard = () => {
           <div className="relative z-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <div className="relative">
-                <SafeImage
-                  src={user.avatar}
-                  alt={user.name}
-                  className="h-20 w-20 rounded-2xl border-2 border-brand-300 object-cover shadow-lg"
-                />
+                <span
+                  className="grid h-20 w-20 place-items-center rounded-2xl border-2 border-brand-300 bg-brand/15 font-display text-3xl font-bold text-brand-300 shadow-lg"
+                  aria-label={`${user.name} profile`}
+                >
+                  {user.name.charAt(0).toUpperCase()}
+                </span>
                 <span className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full bg-emerald-500 text-xs text-white">
                   <i className="ri-check-line" />
                 </span>
@@ -233,10 +257,15 @@ export const UserDashboard = () => {
                   </h1>
                 </div>
                 <p className="mt-1 text-sm text-white/70">
-                  {user.email} &middot; {user.phone}
+                  {user.email}
+                  {user.phone ? ` · ${user.phone}` : ""}
                 </p>
                 <p className="mt-0.5 text-xs text-white/50">
-                  Valued Reshto patron since {user.joined}
+                  Member since{" "}
+                  {new Date(user.createdAt).toLocaleDateString(undefined, {
+                    month: "long",
+                    year: "numeric",
+                  })}
                 </p>
               </div>
             </div>
@@ -282,7 +311,7 @@ export const UserDashboard = () => {
                 : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
-            <i className="ri-star-smile-line" /> My Reviews &amp; Ratings ({reviews.length})
+            <i className="ri-star-smile-line" /> My Reviews &amp; Ratings ({userReviews.length})
           </button>
 
           <button
@@ -506,10 +535,10 @@ export const UserDashboard = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-ink/10 pb-4 dark:border-white/10">
               <div>
                 <h3 className="font-display text-xl font-bold text-ink dark:text-white">
-                  Customer Dish Reviews &amp; Ratings
+                  My Dish Reviews &amp; Ratings
                 </h3>
                 <p className="text-xs text-ink-700/60 dark:text-white/60">
-                  Read community reviews and share your culinary feedback on dishes you tried.
+                  Reviews you have written about dishes you tried.
                 </p>
               </div>
 
@@ -527,38 +556,50 @@ export const UserDashboard = () => {
               </button>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {reviews.map((rev) => (
-                <div
-                  key={rev.id}
-                  className="flex flex-col justify-between rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] hover:border-brand/30 transition-all"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="rounded-md bg-brand/10 px-2 py-0.5 text-[11px] font-bold text-brand dark:bg-brand/20 dark:text-brand-300">
-                        {rev.dishName}
-                      </span>
-                      <div className="flex items-center gap-0.5 text-amber-500">
-                        {Array.from({ length: rev.rating }).map((_, i) => (
-                          <i key={i} className="ri-star-fill text-xs" />
-                        ))}
+            {userReviews.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-ink/20 p-10 text-center dark:border-white/20">
+                <i className="ri-star-smile-line text-4xl text-ink-700/40 dark:text-white/40" />
+                <h4 className="mt-3 font-display text-lg font-bold text-ink dark:text-white">
+                  No reviews yet
+                </h4>
+                <p className="mt-1 text-xs text-ink-700/60 dark:text-white/60">
+                  Reviews you write will appear here.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {userReviews.map((rev) => (
+                  <div
+                    key={rev.id}
+                    className="flex flex-col justify-between rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a] hover:border-brand/30 transition-all"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="rounded-md bg-brand/10 px-2 py-0.5 text-[11px] font-bold text-brand dark:bg-brand/20 dark:text-brand-300">
+                          {rev.dishName}
+                        </span>
+                        <div className="flex items-center gap-0.5 text-amber-500">
+                          {Array.from({ length: rev.rating }).map((_, i) => (
+                            <i key={i} className="ri-star-fill text-xs" />
+                          ))}
+                        </div>
                       </div>
+
+                      <p className="mt-3 text-xs leading-relaxed text-ink dark:text-white/80 italic">
+                        &ldquo;{rev.comment}&rdquo;
+                      </p>
                     </div>
 
-                    <p className="mt-3 text-xs leading-relaxed text-ink dark:text-white/80 italic">
-                      &ldquo;{rev.comment}&rdquo;
-                    </p>
+                    <div className="mt-4 flex items-center justify-between border-t border-ink/5 pt-3 text-[11px] text-ink-700/60 dark:border-white/5 dark:text-white/50">
+                      <span className="font-bold text-ink dark:text-white">
+                        By: {rev.customerName}
+                      </span>
+                      <span>{rev.date || "Verified Diner"}</span>
+                    </div>
                   </div>
-
-                  <div className="mt-4 flex items-center justify-between border-t border-ink/5 pt-3 text-[11px] text-ink-700/60 dark:border-white/5 dark:text-white/50">
-                    <span className="font-bold text-ink dark:text-white">
-                      By: {rev.customerName}
-                    </span>
-                    <span>{rev.date || "Verified Diner"}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : null}
 
@@ -577,6 +618,11 @@ export const UserDashboard = () => {
                 <i className="ri-checkbox-circle-fill text-base" /> Profile saved successfully!
               </div>
             ) : null}
+            {profileError ? (
+              <p role="alert" className="mt-4 rounded-xl bg-rose-500/10 p-3 text-xs font-semibold text-rose-600 dark:text-rose-300">
+                {profileError}
+              </p>
+            ) : null}
 
             <form onSubmit={handleProfileSave} className="mt-6 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
@@ -587,7 +633,8 @@ export const UserDashboard = () => {
                   <input
                     type="text"
                     value={user.name}
-                    onChange={(e) => setUser({ ...user, name: e.target.value })}
+                    required
+                    onChange={(e) => setProfileDraft({ ...user, name: e.target.value })}
                     className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
@@ -598,7 +645,8 @@ export const UserDashboard = () => {
                   <input
                     type="email"
                     value={user.email}
-                    onChange={(e) => setUser({ ...user, email: e.target.value })}
+                    required
+                    onChange={(e) => setProfileDraft({ ...user, email: e.target.value })}
                     className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
@@ -610,8 +658,8 @@ export const UserDashboard = () => {
                 </label>
                 <input
                   type="tel"
-                  value={user.phone}
-                  onChange={(e) => setUser({ ...user, phone: e.target.value })}
+                  value={user.phone || ""}
+                  onChange={(e) => setProfileDraft({ ...user, phone: e.target.value })}
                   className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                 />
               </div>
@@ -622,7 +670,8 @@ export const UserDashboard = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue="House 24, Road 7, Block D, Banani, Dhaka"
+                  value={user.address || ""}
+                  onChange={(e) => setProfileDraft({ ...user, address: e.target.value })}
                   className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                 />
               </div>

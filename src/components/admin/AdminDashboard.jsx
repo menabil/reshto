@@ -21,6 +21,22 @@ export const AdminDashboard = () => {
     deleteMenuItem,
     toggleMenuItemStock,
   } = useStore();
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const todayOrders = orders.filter(
+    (order) =>
+      Number.isFinite(Number(order.createdAt)) &&
+      Number(order.createdAt) >= startOfToday.getTime(),
+  );
+  const todayRevenue = todayOrders.reduce((total, order) => {
+    const amount = Number(
+      order.totalNumber ?? String(order.total || "").replace(/[^0-9.-]/g, ""),
+    );
+    return total + (Number.isFinite(amount) ? amount : 0);
+  }, 0);
+  const activeOrdersCount = orders.filter(
+    (order) => !["Delivered", "Cancelled"].includes(order.status),
+  ).length;
 
   const [activeTab, setActiveTab] = useState("overview"); // overview, menu, orders, reservations
   const [selectedOrderReceipt, setSelectedOrderReceipt] = useState(null);
@@ -142,7 +158,8 @@ export const AdminDashboard = () => {
               Admin Access Required
             </h2>
             <p className="mt-2 text-xs leading-relaxed text-ink-700/70 dark:text-white/60">
-              This dashboard is reserved for restaurant managers and kitchen chefs. Please sign in with administrator credentials.
+              This dashboard is reserved for restaurant managers and kitchen
+              chefs. Please sign in with administrator credentials.
             </p>
             <div className="mt-6 flex flex-col gap-2.5">
               <Link href="/login" className="btn-brand py-3! text-xs!">
@@ -184,15 +201,12 @@ export const AdminDashboard = () => {
               Restaurant Admin Portal
             </h1>
             <p className="mt-1 text-sm text-ink-700/60 dark:text-white/60">
-              Control menu items, live customer orders, table reservations, and daily metrics.
+              Control menu items, live customer orders, table reservations, and
+              daily metrics.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              Kitchen Live
-            </span>
             <Link href="/order" className="btn-brand text-xs py-2.5! px-4!">
               View Storefront <i className="ri-external-link-line" />
             </Link>
@@ -204,17 +218,21 @@ export const AdminDashboard = () => {
           <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-5 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-ink-700/60 dark:text-white/60">
-                Today&apos;s Revenue
+                Today&apos;s Order Value
               </span>
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
                 <i className="ri-money-dollar-circle-line text-xl" />
               </span>
             </div>
             <p className="mt-3 font-display text-2xl font-extrabold text-ink dark:text-white">
-              $14,850.00
+              {todayRevenue.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
             </p>
             <span className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              <i className="ri-arrow-up-line" /> +14.2% vs yesterday
+              {todayOrders.length}{" "}
+              {todayOrders.length === 1 ? "order" : "orders"} today
             </span>
           </div>
 
@@ -228,10 +246,11 @@ export const AdminDashboard = () => {
               </span>
             </div>
             <p className="mt-3 font-display text-2xl font-extrabold text-ink dark:text-white">
-              {orders.length} Orders
+              {activeOrdersCount} Orders
             </p>
             <span className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-amber-500">
-              {orders.filter((o) => o.status === "Pending").length} pending review
+              {orders.filter((order) => order.status === "Pending").length}{" "}
+              pending
             </span>
           </div>
 
@@ -248,7 +267,8 @@ export const AdminDashboard = () => {
               {reservations.length} Tables
             </p>
             <span className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-purple-500">
-              {reservations.filter((r) => r.status === "Confirmed").length} confirmed
+              {reservations.filter((r) => r.status === "Confirmed").length}{" "}
+              confirmed
             </span>
           </div>
 
@@ -292,7 +312,8 @@ export const AdminDashboard = () => {
                 : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
-            <i className="ri-restaurant-line" /> Menu Management ({menuItems.length})
+            <i className="ri-restaurant-line" /> Menu Management (
+            {menuItems.length})
           </button>
           <button
             type="button"
@@ -303,7 +324,7 @@ export const AdminDashboard = () => {
                 : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
-            <i className="ri-list-check-2" /> Live Orders ({orders.length})
+            <i className="ri-list-check-2" /> Orders ({orders.length})
           </button>
           <button
             type="button"
@@ -314,7 +335,8 @@ export const AdminDashboard = () => {
                 : "bg-white/60 text-ink-700 hover:bg-white dark:bg-[#1e1c1a] dark:text-white/70 dark:hover:bg-white/10"
             }`}
           >
-            <i className="ri-calendar-check-line" /> Bookings &amp; Tables ({reservations.length})
+            <i className="ri-calendar-check-line" /> Bookings &amp; Tables (
+            {reservations.length})
           </button>
         </div>
 
@@ -326,7 +348,7 @@ export const AdminDashboard = () => {
               <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-display text-lg font-bold text-ink dark:text-white">
-                    Live Kitchen Queue
+                    Order Queue
                   </h3>
                   <button
                     onClick={() => setActiveTab("orders")}
@@ -336,76 +358,93 @@ export const AdminDashboard = () => {
                   </button>
                 </div>
                 <div className="divide-y divide-ink/5 dark:divide-white/5">
-                  {orders.slice(0, 4).map((ord) => (
-                    <div
-                      key={ord.id}
-                      className="flex flex-col justify-between gap-3 py-3.5 sm:flex-row sm:items-center"
-                    >
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-ink dark:text-white">
-                            {ord.customer}
+                  {orders.length === 0 ? (
+                    <p className="py-8 text-center text-sm text-ink-700/60 dark:text-white/50">
+                      No orders yet. Customer orders will appear here.
+                    </p>
+                  ) : (
+                    orders.slice(0, 4).map((ord) => (
+                      <div
+                        key={ord.id}
+                        className="flex flex-col justify-between gap-3 py-3.5 sm:flex-row sm:items-center"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-ink dark:text-white">
+                              {ord.customer}
+                            </span>
+                            <span className="text-xs text-ink-700/50 dark:text-white/40">
+                              {ord.id}
+                            </span>
+                            <span className="rounded-md bg-ink/5 px-2 py-0.5 text-[10px] font-bold uppercase text-ink-700 dark:bg-white/10 dark:text-white/70">
+                              {ord.type}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-xs text-ink-700/70 dark:text-white/60">
+                            {ord.itemsSummary ||
+                              (Array.isArray(ord.items)
+                                ? ord.items
+                                    .map((i) => `${i.name} (x${i.qty})`)
+                                    .join(", ")
+                                : ord.items)}
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-between gap-3 sm:justify-end">
+                          <span className="font-display font-bold text-brand dark:text-brand-300">
+                            {ord.total}
                           </span>
-                          <span className="text-xs text-ink-700/50 dark:text-white/40">
-                            {ord.id}
-                          </span>
-                          <span className="rounded-md bg-ink/5 px-2 py-0.5 text-[10px] font-bold uppercase text-ink-700 dark:bg-white/10 dark:text-white/70">
-                            {ord.type}
+                          <span
+                            className={`rounded-full px-2.5 py-1 text-xs font-bold ${
+                              ord.status === "Delivered"
+                                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400"
+                                : ord.status === "Preparing"
+                                  ? "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400"
+                                  : ord.status === "Pending"
+                                    ? "bg-sky-100 text-sky-700 dark:bg-sky-950/60 dark:text-sky-400"
+                                    : "bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-400"
+                            }`}
+                          >
+                            {ord.status}
                           </span>
                         </div>
-                        <p className="mt-1 text-xs text-ink-700/70 dark:text-white/60">
-                          {ord.itemsSummary || (Array.isArray(ord.items) ? ord.items.map((i) => `${i.name} (x${i.qty})`).join(", ") : ord.items)}
-                        </p>
                       </div>
-                      <div className="flex items-center justify-between gap-3 sm:justify-end">
-                        <span className="font-display font-bold text-brand dark:text-brand-300">
-                          {ord.total}
-                        </span>
-                        <span
-                          className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-                            ord.status === "Delivered"
-                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400"
-                              : ord.status === "Preparing"
-                              ? "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400"
-                              : ord.status === "Pending"
-                              ? "bg-sky-100 text-sky-700 dark:bg-sky-950/60 dark:text-sky-400"
-                              : "bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-400"
-                          }`}
-                        >
-                          {ord.status}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
 
               {/* Popular Dishes Highlight */}
               <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
                 <h3 className="mb-4 font-display text-lg font-bold text-ink dark:text-white">
-                  Trending Menu Items
+                  Current Menu Items
                 </h3>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  {menuItems.slice(0, 4).map((dish) => (
-                    <div
-                      key={dish.id}
-                      className="flex items-center gap-3 rounded-2xl border border-ink/5 p-3 dark:border-white/5"
-                    >
-                      <SafeImage
-                        src={dish.image}
-                        alt={dish.menuItemName}
-                        className="h-14 w-14 rounded-xl object-cover"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <h4 className="truncate font-bold text-sm text-ink dark:text-white">
-                          {dish.menuItemName}
-                        </h4>
-                        <span className="text-xs font-bold text-brand dark:text-brand-300">
-                          {dish.menuItemPrice}
-                        </span>
+                  {menuItems.length === 0 ? (
+                    <p className="text-sm text-ink-700/60 dark:text-white/50">
+                      No menu items have been added yet.
+                    </p>
+                  ) : (
+                    menuItems.slice(0, 4).map((dish) => (
+                      <div
+                        key={dish.id}
+                        className="flex items-center gap-3 rounded-2xl border border-ink/5 p-3 dark:border-white/5"
+                      >
+                        <SafeImage
+                          src={dish.image}
+                          alt={dish.menuItemName}
+                          className="h-14 w-14 rounded-xl object-cover"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <h4 className="truncate font-bold text-sm text-ink dark:text-white">
+                            {dish.menuItemName}
+                          </h4>
+                          <span className="text-xs font-bold text-brand dark:text-brand-300">
+                            {dish.menuItemPrice}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>
@@ -415,7 +454,7 @@ export const AdminDashboard = () => {
               <div className="rounded-3xl border border-ink/10 bg-[#fffdf8] p-6 shadow-sm dark:border-white/10 dark:bg-[#1e1c1a]">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-display text-lg font-bold text-ink dark:text-white">
-                    Tonight&apos;s Tables
+                    Recent Reservations
                   </h3>
                   <button
                     onClick={() => setActiveTab("reservations")}
@@ -425,38 +464,44 @@ export const AdminDashboard = () => {
                   </button>
                 </div>
                 <div className="space-y-3">
-                  {reservations.slice(0, 3).map((res) => (
-                    <div
-                      key={res.id}
-                      className="rounded-2xl border border-ink/5 p-3 dark:border-white/5"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-sm text-ink dark:text-white">
-                          {res.guestName}
-                        </span>
-                        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                          {res.status}
+                  {reservations.length === 0 ? (
+                    <p className="py-4 text-sm text-ink-700/60 dark:text-white/50">
+                      No table reservations yet.
+                    </p>
+                  ) : (
+                    reservations.slice(0, 3).map((res) => (
+                      <div
+                        key={res.id}
+                        className="rounded-2xl border border-ink/5 p-3 dark:border-white/5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-sm text-ink dark:text-white">
+                            {res.guestName}
+                          </span>
+                          <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                            {res.status}
+                          </span>
+                        </div>
+                        <div className="mt-1 flex items-center justify-between text-xs text-ink-700/60 dark:text-white/60">
+                          <span>{res.date}</span>
+                          <span>{res.guests} Guests</span>
+                        </div>
+                        <span className="mt-1 block text-[11px] font-semibold text-brand dark:text-brand-300">
+                          {res.table}
                         </span>
                       </div>
-                      <div className="mt-1 flex items-center justify-between text-xs text-ink-700/60 dark:text-white/60">
-                        <span>{res.date}</span>
-                        <span>{res.guests} Guests</span>
-                      </div>
-                      <span className="mt-1 block text-[11px] font-semibold text-brand dark:text-brand-300">
-                        {res.table}
-                      </span>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
 
-              {/* Kitchen Action Bar */}
+              {/* Quick Actions */}
               <div className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-6 dark:border-amber-500/20 dark:bg-amber-500/5">
                 <h4 className="font-display font-bold text-amber-800 dark:text-amber-300">
-                  <i className="ri-fire-line mr-1" /> Peak Hour Alert
+                  <i className="ri-settings-3-line mr-1" /> Quick Actions
                 </h4>
                 <p className="mt-2 text-xs leading-relaxed text-amber-900/70 dark:text-amber-200/70">
-                  Dinner rush predicted between 7:30 PM &mdash; 9:30 PM. All culinary stations are fully staffed.
+                  Add a menu item here. Your changes are saved in this browser.
                 </p>
                 <button
                   type="button"
@@ -501,7 +546,6 @@ export const AdminDashboard = () => {
                     </option>
                   ))}
                 </select>
-
               </div>
 
               <button
@@ -527,58 +571,74 @@ export const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-ink/5 dark:divide-white/5">
-                    {filteredMenu.map((item) => (
-                      <tr key={item.id} className="hover:bg-ink/1 dark:hover:bg-white/1">
-                        <td className="px-5 py-4">
-                          <div className="flex items-center gap-3">
-                            <SafeImage
-                              src={item.image}
-                              alt={item.menuItemName}
-                              className="h-12 w-12 rounded-xl object-cover"
-                            />
-                            <div>
-                              <p className="font-bold text-ink dark:text-white">
-                                {item.menuItemName}
-                              </p>
-                              <p className="max-w-xs truncate text-xs text-ink-700/60 dark:text-white/50">
-                                {item.menuItemDesc}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-5 py-4">
-                          <span className="rounded-lg bg-ink/5 px-2.5 py-1 text-xs font-semibold capitalize text-ink-700 dark:bg-white/10 dark:text-white/80">
-                            {item.categoryLabel || item.category}
-                          </span>
-                        </td>
-                        <td className="px-5 py-4 font-display font-bold text-brand dark:text-brand-300">
-                          {item.menuItemPrice}
-                        </td>
-                        <td className="px-5 py-4">
-                          <button
-                            type="button"
-                            onClick={() => toggleStock(item.id)}
-                            className={`rounded-full px-3 py-1 text-xs font-bold transition-all ${
-                              item.inStock
-                                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400"
-                                : "bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-                            }`}
-                          >
-                            {item.inStock ? "In Stock" : "Sold Out"}
-                          </button>
-                        </td>
-                        <td className="px-5 py-4 text-right">
-                          <button
-                            type="button"
-                            onClick={() => deleteDish(item.id)}
-                            className="text-rose-500 hover:text-rose-700 transition"
-                            title="Delete dish"
-                          >
-                            <i className="ri-delete-bin-line text-lg" />
-                          </button>
+                    {filteredMenu.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan={5}
+                          className="px-5 py-12 text-center text-xs text-ink-700/60 dark:text-white/50"
+                        >
+                          {menuItems.length === 0
+                            ? "No menu items have been added yet."
+                            : "No menu items match your search or category."}
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      filteredMenu.map((item) => (
+                        <tr
+                          key={item.id}
+                          className="hover:bg-ink/1 dark:hover:bg-white/1"
+                        >
+                          <td className="px-5 py-4">
+                            <div className="flex items-center gap-3">
+                              <SafeImage
+                                src={item.image}
+                                alt={item.menuItemName}
+                                className="h-12 w-12 rounded-xl object-cover"
+                              />
+                              <div>
+                                <p className="font-bold text-ink dark:text-white">
+                                  {item.menuItemName}
+                                </p>
+                                <p className="max-w-xs truncate text-xs text-ink-700/60 dark:text-white/50">
+                                  {item.menuItemDesc}
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-5 py-4">
+                            <span className="rounded-lg bg-ink/5 px-2.5 py-1 text-xs font-semibold capitalize text-ink-700 dark:bg-white/10 dark:text-white/80">
+                              {item.categoryLabel || item.category}
+                            </span>
+                          </td>
+                          <td className="px-5 py-4 font-display font-bold text-brand dark:text-brand-300">
+                            {item.menuItemPrice}
+                          </td>
+                          <td className="px-5 py-4">
+                            <button
+                              type="button"
+                              onClick={() => toggleStock(item.id)}
+                              className={`rounded-full px-3 py-1 text-xs font-bold transition-all ${
+                                item.inStock
+                                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400"
+                                  : "bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                              }`}
+                            >
+                              {item.inStock ? "In Stock" : "Sold Out"}
+                            </button>
+                          </td>
+                          <td className="px-5 py-4 text-right">
+                            <button
+                              type="button"
+                              onClick={() => deleteDish(item.id)}
+                              className="text-rose-500 hover:text-rose-700 transition"
+                              title="Delete dish"
+                            >
+                              <i className="ri-delete-bin-line text-lg" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -596,7 +656,7 @@ export const AdminDashboard = () => {
                     Incoming &amp; Recent Orders ({filteredOrders.length})
                   </h3>
                   <p className="text-xs text-ink-700/60 dark:text-white/60">
-                    Live updates with search by customer, phone, ID or date.
+                    Manage orders with search by customer, phone, ID or date.
                   </p>
                 </div>
 
@@ -634,7 +694,9 @@ export const AdminDashboard = () => {
                     <option value="Cancelled">Cancelled</option>
                   </select>
 
-                  {(orderSearch || orderStatusFilter !== "all" || orderDateFilter) && (
+                  {(orderSearch ||
+                    orderStatusFilter !== "all" ||
+                    orderDateFilter) && (
                     <button
                       type="button"
                       onClick={() => {
@@ -665,56 +727,76 @@ export const AdminDashboard = () => {
                   <tbody className="divide-y divide-ink/5 dark:divide-white/5">
                     {filteredOrders.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="px-5 py-12 text-center text-xs text-ink-700/60 dark:text-white/50">
+                        <td
+                          colSpan={6}
+                          className="px-5 py-12 text-center text-xs text-ink-700/60 dark:text-white/50"
+                        >
                           <i className="ri-search-line text-2xl block mb-2" />
-                          No orders matched your search or filters.
+                          {orders.length === 0
+                            ? "No customer orders have been placed yet."
+                            : "No orders matched your search or filters."}
                         </td>
                       </tr>
                     ) : (
                       filteredOrders.map((ord) => (
-                      <tr key={ord.id} className="hover:bg-ink/1 dark:hover:bg-white/1">
-                        <td className="px-5 py-4 font-mono font-bold text-xs text-brand dark:text-brand-300">
-                          {ord.id}
-                        </td>
-                        <td className="px-5 py-4">
-                          <p className="font-bold text-ink dark:text-white">{ord.customer}</p>
-                          <p className="text-xs text-ink-700/60 dark:text-white/50">{ord.email}</p>
-                        </td>
-                        <td className="px-5 py-4 text-xs text-ink-700/80 dark:text-white/70 max-w-sm">
-                          {ord.itemsSummary || (Array.isArray(ord.items) ? ord.items.map((i) => `${i.name} (x${i.qty})`).join(", ") : ord.items)}
-                        </td>
-                        <td className="px-5 py-4 font-display font-extrabold text-ink dark:text-white">
-                          {ord.total}
-                        </td>
-                        <td className="px-5 py-4">
-                          <span className="rounded-md bg-ink/5 px-2.5 py-1 text-xs font-semibold text-ink-700 dark:bg-white/10 dark:text-white/70">
-                            {ord.type} &middot; {ord.time}
-                          </span>
-                        </td>
-                        <td className="px-5 py-4">
-                          <div className="flex items-center gap-2">
-                            <select
-                              value={ord.status}
-                              onChange={(e) => updateOrderStatus(ord.id, e.target.value)}
-                              className="rounded-lg border border-ink/15 bg-white px-2.5 py-1 text-xs font-bold text-ink outline-none dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
-                            >
-                              <option value="Pending">Pending</option>
-                              <option value="Preparing">Preparing</option>
-                              <option value="Delivered">Delivered</option>
-                              <option value="Cancelled">Cancelled</option>
-                            </select>
-                            <button
-                              type="button"
-                              onClick={() => setSelectedOrderReceipt(ord)}
-                              className="grid h-7 w-7 place-items-center rounded-lg border border-ink/15 bg-white text-xs font-bold text-ink hover:bg-ink/5 dark:border-white/15 dark:bg-[#2c2925] dark:text-white transition"
-                              title="Print Invoice / View Receipt"
-                            >
-                              <i className="ri-printer-line" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    )))}
+                        <tr
+                          key={ord.id}
+                          className="hover:bg-ink/1 dark:hover:bg-white/1"
+                        >
+                          <td className="px-5 py-4 font-mono font-bold text-xs text-brand dark:text-brand-300">
+                            {ord.id}
+                          </td>
+                          <td className="px-5 py-4">
+                            <p className="font-bold text-ink dark:text-white">
+                              {ord.customer}
+                            </p>
+                            <p className="text-xs text-ink-700/60 dark:text-white/50">
+                              {ord.email}
+                            </p>
+                          </td>
+                          <td className="px-5 py-4 text-xs text-ink-700/80 dark:text-white/70 max-w-sm">
+                            {ord.itemsSummary ||
+                              (Array.isArray(ord.items)
+                                ? ord.items
+                                    .map((i) => `${i.name} (x${i.qty})`)
+                                    .join(", ")
+                                : ord.items)}
+                          </td>
+                          <td className="px-5 py-4 font-display font-extrabold text-ink dark:text-white">
+                            {ord.total}
+                          </td>
+                          <td className="px-5 py-4">
+                            <span className="rounded-md bg-ink/5 px-2.5 py-1 text-xs font-semibold text-ink-700 dark:bg-white/10 dark:text-white/70">
+                              {ord.type} &middot; {ord.time}
+                            </span>
+                          </td>
+                          <td className="px-5 py-4">
+                            <div className="flex items-center gap-2">
+                              <select
+                                value={ord.status}
+                                onChange={(e) =>
+                                  updateOrderStatus(ord.id, e.target.value)
+                                }
+                                className="rounded-lg border border-ink/15 bg-white px-2.5 py-1 text-xs font-bold text-ink outline-none dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
+                              >
+                                <option value="Pending">Pending</option>
+                                <option value="Preparing">Preparing</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option>
+                              </select>
+                              <button
+                                type="button"
+                                onClick={() => setSelectedOrderReceipt(ord)}
+                                className="grid h-7 w-7 place-items-center rounded-lg border border-ink/15 bg-white text-xs font-bold text-ink hover:bg-ink/5 dark:border-white/15 dark:bg-[#2c2925] dark:text-white transition"
+                                title="Print Invoice / View Receipt"
+                              >
+                                <i className="ri-printer-line" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -732,7 +814,8 @@ export const AdminDashboard = () => {
                     Table Reservations ({filteredReservations.length})
                   </h3>
                   <p className="text-xs text-ink-700/60 dark:text-white/60">
-                    Manage guest bookings with filter by guest name, phone, zone, or status.
+                    Manage guest bookings with filter by guest name, phone,
+                    zone, or status.
                   </p>
                 </div>
 
@@ -765,7 +848,9 @@ export const AdminDashboard = () => {
                   >
                     <option value="all">All Seating Zones</option>
                     <option value="Outdoor Garden Patio">Outdoor Patio</option>
-                    <option value="Romantic Window Corner">Window Corner</option>
+                    <option value="Romantic Window Corner">
+                      Window Corner
+                    </option>
                     <option value="Indoor Grand Dining">Indoor Hall</option>
                     <option value="Private VIP Lounge">VIP Lounge</option>
                   </select>
@@ -781,7 +866,9 @@ export const AdminDashboard = () => {
                     <option value="Cancelled">Cancelled</option>
                   </select>
 
-                  {(resSearch || resStatusFilter !== "all" || resZoneFilter !== "all") && (
+                  {(resSearch ||
+                    resStatusFilter !== "all" ||
+                    resZoneFilter !== "all") && (
                     <button
                       type="button"
                       onClick={() => {
@@ -812,81 +899,109 @@ export const AdminDashboard = () => {
                   <tbody className="divide-y divide-ink/5 dark:divide-white/5">
                     {filteredReservations.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="px-5 py-12 text-center text-xs text-ink-700/60 dark:text-white/50">
+                        <td
+                          colSpan={5}
+                          className="px-5 py-12 text-center text-xs text-ink-700/60 dark:text-white/50"
+                        >
                           <i className="ri-search-line text-2xl block mb-2" />
-                          No table bookings matched your search or filters.
+                          {reservations.length === 0
+                            ? "No table reservations have been made yet."
+                            : "No table bookings matched your search or filters."}
                         </td>
                       </tr>
                     ) : (
                       filteredReservations.map((res) => (
-                      <tr key={res.id} className="hover:bg-ink/1 dark:hover:bg-white/1">
-                        <td className="px-5 py-4">
-                          <span className="font-mono text-xs font-extrabold text-brand dark:text-brand-300 block">
-                            {res.id}
-                          </span>
-                          <p className="font-bold text-ink dark:text-white">{res.guestName}</p>
-                          <p className="text-xs text-ink-700/60 dark:text-white/50">{res.phone}</p>
-                          {res.email && <p className="text-[11px] text-ink-700/50 dark:text-white/40">{res.email}</p>}
-                        </td>
-
-                        <td className="px-5 py-4">
-                          <span className="rounded-lg bg-ink/5 px-2 py-0.5 text-xs font-semibold text-ink-700 dark:bg-white/10 dark:text-white/80 block w-fit">
-                            {res.seatingZone || "Main Hall"}
-                          </span>
-                          <p className="mt-1 text-xs font-bold text-brand dark:text-brand-300">
-                            {res.table}
-                          </p>
-                        </td>
-
-                        <td className="px-5 py-4 max-w-xs text-xs">
-                          <span className="font-bold text-ink dark:text-white block">
-                            {res.occasion || "Casual Dining"}
-                          </span>
-                          {res.addOns?.length > 0 && (
-                            <p className="text-[11px] text-ink-700/70 dark:text-white/60 mt-0.5">
-                              ✨ {res.addOns.join(", ")}
+                        <tr
+                          key={res.id}
+                          className="hover:bg-ink/1 dark:hover:bg-white/1"
+                        >
+                          <td className="px-5 py-4">
+                            <span className="font-mono text-xs font-extrabold text-brand dark:text-brand-300 block">
+                              {res.id}
+                            </span>
+                            <p className="font-bold text-ink dark:text-white">
+                              {res.guestName}
                             </p>
-                          )}
-                          {res.decorationNotes && (
-                            <p className="italic text-amber-700 dark:text-amber-300 text-[11px] mt-0.5">
-                              &ldquo;{res.decorationNotes}&rdquo;
+                            <p className="text-xs text-ink-700/60 dark:text-white/50">
+                              {res.phone}
                             </p>
-                          )}
-                        </td>
+                            {res.email && (
+                              <p className="text-[11px] text-ink-700/50 dark:text-white/40">
+                                {res.email}
+                              </p>
+                            )}
+                          </td>
 
-                        <td className="px-5 py-4">
-                          <p className="font-semibold text-xs text-ink dark:text-white">
-                            {res.guests} Guests
-                          </p>
-                          <p className="text-xs text-ink-700/80 dark:text-white/70">
-                            {res.date}
-                          </p>
-                          <p className="text-[11px] text-ink-700/60 dark:text-white/50">
-                            {res.time}
-                          </p>
-                        </td>
+                          <td className="px-5 py-4">
+                            <span className="rounded-lg bg-ink/5 px-2 py-0.5 text-xs font-semibold text-ink-700 dark:bg-white/10 dark:text-white/80 block w-fit">
+                              {res.seatingZone || "Main Hall"}
+                            </span>
+                            <p className="mt-1 text-xs font-bold text-brand dark:text-brand-300">
+                              {res.table}
+                            </p>
+                          </td>
 
-                        <td className="px-5 py-4">
-                          <div className="flex items-center gap-2">
-                            <select
-                              value={res.status}
-                              onChange={(e) => updateReservationStatus(res.id, e.target.value)}
-                              className={`rounded-lg border px-2.5 py-1 text-xs font-bold outline-none transition ${
-                                res.status === "Confirmed"
-                                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-                                  : res.status === "Cancelled"
-                                  ? "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-400"
-                                  : "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300"
-                              }`}
-                            >
-                              <option value="Confirmed" className="text-ink">Confirmed</option>
-                              <option value="Pending" className="text-ink">Pending</option>
-                              <option value="Cancelled" className="text-ink">Cancelled</option>
-                            </select>
-                          </div>
-                        </td>
-                      </tr>
-                    )))}
+                          <td className="px-5 py-4 max-w-xs text-xs">
+                            <span className="font-bold text-ink dark:text-white block">
+                              {res.occasion || "Casual Dining"}
+                            </span>
+                            {res.addOns?.length > 0 && (
+                              <p className="text-[11px] text-ink-700/70 dark:text-white/60 mt-0.5">
+                                ✨ {res.addOns.join(", ")}
+                              </p>
+                            )}
+                            {res.decorationNotes && (
+                              <p className="italic text-amber-700 dark:text-amber-300 text-[11px] mt-0.5">
+                                &ldquo;{res.decorationNotes}&rdquo;
+                              </p>
+                            )}
+                          </td>
+
+                          <td className="px-5 py-4">
+                            <p className="font-semibold text-xs text-ink dark:text-white">
+                              {res.guests} Guests
+                            </p>
+                            <p className="text-xs text-ink-700/80 dark:text-white/70">
+                              {res.date}
+                            </p>
+                            <p className="text-[11px] text-ink-700/60 dark:text-white/50">
+                              {res.time}
+                            </p>
+                          </td>
+
+                          <td className="px-5 py-4">
+                            <div className="flex items-center gap-2">
+                              <select
+                                value={res.status}
+                                onChange={(e) =>
+                                  updateReservationStatus(
+                                    res.id,
+                                    e.target.value,
+                                  )
+                                }
+                                className={`rounded-lg border px-2.5 py-1 text-xs font-bold outline-none transition ${
+                                  res.status === "Confirmed"
+                                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                                    : res.status === "Cancelled"
+                                      ? "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-400"
+                                      : "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                                }`}
+                              >
+                                <option value="Confirmed" className="text-ink">
+                                  Confirmed
+                                </option>
+                                <option value="Pending" className="text-ink">
+                                  Pending
+                                </option>
+                                <option value="Cancelled" className="text-ink">
+                                  Cancelled
+                                </option>
+                              </select>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -921,7 +1036,9 @@ export const AdminDashboard = () => {
                     required
                     placeholder="e.g. Truffle Mushroom Risotto"
                     value={newDish.name}
-                    onChange={(e) => setNewDish({ ...newDish, name: e.target.value })}
+                    onChange={(e) =>
+                      setNewDish({ ...newDish, name: e.target.value })
+                    }
                     className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
@@ -936,7 +1053,9 @@ export const AdminDashboard = () => {
                       required
                       placeholder="$22.50"
                       value={newDish.price}
-                      onChange={(e) => setNewDish({ ...newDish, price: e.target.value })}
+                      onChange={(e) =>
+                        setNewDish({ ...newDish, price: e.target.value })
+                      }
                       className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                     />
                   </div>
@@ -946,7 +1065,9 @@ export const AdminDashboard = () => {
                     </label>
                     <select
                       value={newDish.category}
-                      onChange={(e) => setNewDish({ ...newDish, category: e.target.value })}
+                      onChange={(e) =>
+                        setNewDish({ ...newDish, category: e.target.value })
+                      }
                       className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                     >
                       {menuTabs.map((t) => (
@@ -966,7 +1087,9 @@ export const AdminDashboard = () => {
                     rows={2}
                     placeholder="Short description of ingredients and flavors..."
                     value={newDish.desc}
-                    onChange={(e) => setNewDish({ ...newDish, desc: e.target.value })}
+                    onChange={(e) =>
+                      setNewDish({ ...newDish, desc: e.target.value })
+                    }
                     className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
@@ -979,7 +1102,9 @@ export const AdminDashboard = () => {
                     type="url"
                     placeholder="https://images.unsplash.com/..."
                     value={newDish.image}
-                    onChange={(e) => setNewDish({ ...newDish, image: e.target.value })}
+                    onChange={(e) =>
+                      setNewDish({ ...newDish, image: e.target.value })
+                    }
                     className="w-full rounded-xl border border-ink/15 bg-white p-2.5 text-sm text-ink outline-none focus:border-brand dark:border-white/10 dark:bg-[#0f0e0d] dark:text-white"
                   />
                 </div>
@@ -992,7 +1117,10 @@ export const AdminDashboard = () => {
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn-brand py-2! px-5! text-sm!">
+                  <button
+                    type="submit"
+                    className="btn-brand py-2! px-5! text-sm!"
+                  >
                     Add to Menu
                   </button>
                 </div>

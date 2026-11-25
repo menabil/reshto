@@ -1,8 +1,8 @@
-import { AuthExperience } from "@/components/auth/AuthExperience";
+import { RegistrationExperience } from "@/components/auth/RegistrationExperience";
 
 export const metadata = {
   title: "Register",
-  description: "Create a Reshto account.",
+  description: "Create a Reshto account to manage your orders and reservations.",
   robots: {
     index: false,
     follow: false,
@@ -10,5 +10,5 @@ export const metadata = {
 };
 
 export default function RegisterPage() {
-  return <AuthExperience initialMode="register" />;
+  return <RegistrationExperience />;
 }

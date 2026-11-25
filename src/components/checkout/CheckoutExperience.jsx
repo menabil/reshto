@@ -88,6 +88,7 @@ export const CheckoutExperience = () => {
 
     setTimeout(() => {
       const newOrder = placeOrder({
+        userId: user.id,
         customer: user.name,
         email: user.email,
         phone: customerPhone,

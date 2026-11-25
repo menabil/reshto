@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { useStore } from "@/context/StoreContext";
+import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { getDishMetadata } from "@/lib/dishMetadata";
 
@@ -13,6 +14,7 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
     addReview,
     openCart,
   } = useStore();
+  const { user } = useAuth();
   const { t, formatPrice } = useLanguage();
 
   const [quantity, setQuantity] = useState(1);
@@ -63,6 +65,8 @@ export const FoodQuickViewModal = ({ dish, onClose }) => {
     addReview({
       dishId: dish.id,
       dishName: dish.menuItemName || dish.name || dish.recipesName,
+      userId: user?.id,
+      email: user?.email,
       customerName: reviewAuthor.trim() || "Foodie Guest",
       rating: reviewRating,
       comment: reviewComment.trim(),

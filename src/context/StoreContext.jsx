@@ -16,161 +16,29 @@ const INITIAL_MENU_ITEMS = menuTabs.flatMap((tab) =>
   }))
 );
 
-// Initial Mock Orders (connected across user and admin)
-const INITIAL_ORDERS = [
-  {
-    id: "ORD-9421",
-    customer: "Tahmid Hassan",
-    email: "tahmid@example.com",
-    phone: "+880 1711-234567",
-    address: "House 24, Road 7, Banani, Dhaka",
-    items: [
-      { name: "Classic Margherita Pizza", qty: 2, price: "$15.00" },
-      { name: "Fresh Mint Lemonade", qty: 2, price: "$4.00" },
-    ],
-    itemsSummary: "Classic Margherita Pizza x2, Fresh Mint Lemonade x2",
-    subtotal: "$38.00",
-    total: "$38.00",
-    status: "Preparing",
-    type: "Delivery",
-    date: "Today, 7:15 PM",
-    createdAt: Date.now() - 600000,
-  },
-  {
-    id: "ORD-9420",
-    customer: "Sadia Islam",
-    email: "sadia@example.com",
-    phone: "+880 1799-887766",
-    address: "Dine-in Table 2",
-    items: [
-      { name: "Prime Ribeye Steak", qty: 1, price: "$28.00" },
-      { name: "Dark Chocolate Cake", qty: 1, price: "$8.00" },
-    ],
-    itemsSummary: "Prime Ribeye Steak x1, Dark Chocolate Cake x1",
-    subtotal: "$36.00",
-    total: "$36.00",
-    status: "Pending",
-    type: "Dine-in",
-    date: "Today, 6:45 PM",
-    createdAt: Date.now() - 1500000,
-  },
-  {
-    id: "ORD-9419",
-    customer: "Michael Tan",
-    email: "michael@example.com",
-    phone: "+1 415-555-8912",
-    address: "Mason City, IA 50401",
-    items: [
-      { name: "Grilled Chicken Sandwich", qty: 2, price: "$16.00" },
-      { name: "Special Coffee", qty: 2, price: "$3.00" },
-    ],
-    itemsSummary: "Grilled Chicken Sandwich x2, Special Coffee x2",
-    subtotal: "$38.00",
-    total: "$38.00",
-    status: "Delivered",
-    type: "Delivery",
-    date: "Today, 5:30 PM",
-    createdAt: Date.now() - 3600000,
-  },
-  {
-    id: "ORD-9418",
-    customer: "Tahmid Hassan",
-    email: "tahmid@example.com",
-    phone: "+880 1711-234567",
-    address: "House 24, Road 7, Banani, Dhaka",
-    items: [
-      { name: "Pan-Seared Salmon", qty: 1, price: "$26.00" },
-      { name: "Greek Salad", qty: 1, price: "$14.00" },
-    ],
-    itemsSummary: "Pan-Seared Salmon x1, Greek Salad x1",
-    subtotal: "$40.00",
-    total: "$40.00",
-    status: "Delivered",
-    type: "Delivery",
-    date: "Yesterday, 8:00 PM",
-    createdAt: Date.now() - 86400000,
-  },
-];
-
-// Initial Mock Reservations
-const INITIAL_RESERVATIONS = [
-  {
-    id: "RES-101",
-    guestName: "Tahmid Hassan",
-    email: "tahmid@example.com",
-    phone: "+880 1711-234567",
-    guests: 4,
-    date: "Today, 7:30 PM",
-    table: "Table 6 (Patio Garden)",
-    occasion: "Family Dinner",
-    status: "Confirmed",
-    createdAt: Date.now() - 7200000,
-  },
-  {
-    id: "RES-102",
-    guestName: "Emma Watson",
-    email: "emma@example.com",
-    phone: "+1 415-888-2931",
-    guests: 2,
-    date: "Today, 8:15 PM",
-    table: "Table 2 (Window)",
-    occasion: "Date Night",
-    status: "Confirmed",
-    createdAt: Date.now() - 14400000,
-  },
-  {
-    id: "RES-103",
-    guestName: "Arifur Rahman",
-    email: "arif@example.com",
-    phone: "+880 1819-992211",
-    guests: 6,
-    date: "Tomorrow, 1:00 PM",
-    table: "Table 11 (Private Hall)",
-    occasion: "Business Lunch",
-    status: "Pending",
-    createdAt: Date.now() - 28800000,
-  },
-];
-
-const INITIAL_REVIEWS = [
-  {
-    id: "REV-101",
-    dishId: 1,
-    dishName: "Classic Margherita Pizza",
-    customerName: "Tahmid Hassan",
-    rating: 5,
-    comment: "The crust is authentically crispy with that distinct wood-fired aroma. Fresh basil and mozzarella were top tier!",
-    date: "Yesterday",
-    createdAt: 1740000000000,
-  },
-  {
-    id: "REV-102",
-    dishId: 4,
-    dishName: "Prime Cut Steak",
-    customerName: "Sadia Islam",
-    rating: 5,
-    comment: "Cooked to medium-rare perfection. Juicy, flavorful garlic rosemary butter sauce.",
-    date: "2 days ago",
-    createdAt: 1739900000000,
-  },
-  {
-    id: "REV-103",
-    dishId: 2,
-    dishName: "Spaghetti Carbonara",
-    customerName: "Michael Tan",
-    rating: 4,
-    comment: "Creamy, rich and great texture of the pasta. Loved the fresh cured pancetta flavor.",
-    date: "3 days ago",
-    createdAt: 1739800000000,
-  },
-];
+const DEMO_ORDERS = new Map([
+  ["ORD-9421", { email: "tahmid@example.com", customer: "Tahmid Hassan" }],
+  ["ORD-9420", { email: "sadia@example.com", customer: "Sadia Islam" }],
+  ["ORD-9419", { email: "michael@example.com", customer: "Michael Tan" }],
+  ["ORD-9418", { email: "tahmid@example.com", customer: "Tahmid Hassan" }],
+]);
+const DEMO_REVIEWS = new Map([
+  ["REV-101", "Tahmid Hassan"],
+  ["REV-102", "Sadia Islam"],
+  ["REV-103", "Michael Tan"],
+]);
+const DEMO_RESERVATIONS = new Map([
+  ["RES-101", { email: "tahmid@example.com", guestName: "Tahmid Hassan" }],
+  ["RES-102", { email: "emma@example.com", guestName: "Emma Watson" }],
+  ["RES-103", { email: "arif@example.com", guestName: "Arifur Rahman" }],
+]);
 
 export const StoreProvider = ({ children }) => {
   const [menuItems, setMenuItems] = useState(INITIAL_MENU_ITEMS);
   const [quantities, setQuantities] = useState({});
-  const [orders, setOrders] = useState(INITIAL_ORDERS);
-  const [reservations, setReservations] = useState(INITIAL_RESERVATIONS);
-  const [reviews, setReviews] = useState(INITIAL_REVIEWS);
+  const [orders, setOrders] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
@@ -186,13 +54,70 @@ export const StoreProvider = ({ children }) => {
       if (savedCart) setQuantities(JSON.parse(savedCart));
 
       const savedOrders = localStorage.getItem("reshto-orders");
-      if (savedOrders) setOrders(JSON.parse(savedOrders));
+      if (savedOrders) {
+        const parsedOrders = JSON.parse(savedOrders);
+        const customerOrders = Array.isArray(parsedOrders)
+          ? parsedOrders.filter((order) => {
+              const demoOrder = DEMO_ORDERS.get(order?.id);
+              return (
+                !demoOrder ||
+                demoOrder.email !== String(order?.email || "").toLowerCase() ||
+                demoOrder.customer !== order?.customer
+              );
+            })
+          : [];
+        setOrders(customerOrders);
+        if (
+          !Array.isArray(parsedOrders) ||
+          customerOrders.length !== parsedOrders.length
+        ) {
+          localStorage.setItem("reshto-orders", JSON.stringify(customerOrders));
+        }
+      }
 
       const savedReservations = localStorage.getItem("reshto-reservations");
-      if (savedReservations) setReservations(JSON.parse(savedReservations));
+      if (savedReservations) {
+        const parsedReservations = JSON.parse(savedReservations);
+        const customerReservations = Array.isArray(parsedReservations)
+          ? parsedReservations.filter((reservation) => {
+              const demoReservation = DEMO_RESERVATIONS.get(reservation?.id);
+              return (
+                !demoReservation ||
+                demoReservation.email !==
+                  String(reservation?.email || "").toLowerCase() ||
+                demoReservation.guestName !== reservation?.guestName
+              );
+            })
+          : [];
+        setReservations(customerReservations);
+        if (
+          !Array.isArray(parsedReservations) ||
+          customerReservations.length !== parsedReservations.length
+        ) {
+          localStorage.setItem(
+            "reshto-reservations",
+            JSON.stringify(customerReservations),
+          );
+        }
+      }
 
       const savedReviews = localStorage.getItem("reshto-reviews");
-      if (savedReviews) setReviews(JSON.parse(savedReviews));
+      if (savedReviews) {
+        const parsedReviews = JSON.parse(savedReviews);
+        const customerReviews = Array.isArray(parsedReviews)
+          ? parsedReviews.filter((review) => {
+              const demoCustomerName = DEMO_REVIEWS.get(review?.id);
+              return !demoCustomerName || demoCustomerName !== review?.customerName;
+            })
+          : [];
+        setReviews(customerReviews);
+        if (
+          !Array.isArray(parsedReviews) ||
+          customerReviews.length !== parsedReviews.length
+        ) {
+          localStorage.setItem("reshto-reviews", JSON.stringify(customerReviews));
+        }
+      }
     } catch {
       // ignore parsing errors
     }
@@ -345,6 +270,7 @@ export const StoreProvider = ({ children }) => {
     const newOrder = {
       id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
       isCustomerOrder: true,
+      userId: orderData.userId || null,
       customer: orderData.customer || "Guest Customer",
       email: orderData.email || "guest@example.com",
       phone: orderData.phone || "+1 555-0192",
@@ -485,6 +411,8 @@ export const StoreProvider = ({ children }) => {
       id: `REV-${Math.floor(100 + Math.random() * 900)}`,
       dishId: reviewData.dishId,
       dishName: reviewData.dishName || "Selected Dish",
+      userId: reviewData.userId || null,
+      email: reviewData.email?.trim().toLowerCase() || "",
       customerName: reviewData.customerName || "Foodie Guest",
       rating: Number(reviewData.rating) || 5,
       comment: reviewData.comment || "Delicious meal, loved the presentation and fresh ingredients!",

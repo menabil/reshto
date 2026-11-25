@@ -1,8 +1,8 @@
-import { AuthExperience } from "@/components/auth/AuthExperience";
+import { LoginExperience } from "@/components/auth/LoginExperience";
 
 export const metadata = {
   title: "Sign In",
-  description: "Sign in to your Reshto account.",
+  description: "Sign in to your Reshto account with your email and password.",
   robots: {
     index: false,
     follow: false,
@@ -10,5 +10,5 @@ export const metadata = {
 };
 
 export default function LoginPage() {
-  return <AuthExperience />;
+  return <LoginExperience />;
 }

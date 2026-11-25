@@ -1,60 +1,24 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import {
+  clearFrontendSession,
+  loginFrontendAccount,
+  registerFrontendAccount,
+  restoreFrontendSession,
+  updateFrontendProfile,
+} from "@/lib/frontendAuth";
 
 const AuthContext = createContext({
   user: null,
   isAuthenticated: false,
   isAdmin: false,
-  login: () => {},
-  register: () => {},
+  login: async () => ({ success: false, error: "Authentication unavailable." }),
+  register: async () => ({ success: false, error: "Registration unavailable." }),
+  updateProfile: () => ({ success: false, error: "Profile updates unavailable." }),
   logout: () => {},
+  mounted: false,
 });
-
-const DEMO_SESSION_VERSION = "frontend-demo-v1";
-const DEMO_ACCOUNTS = [
-  {
-    loginId: "12345",
-    password: "12345",
-    user: {
-      id: "ADM-001",
-      name: "Reshto Admin",
-      email: "admin@reshto.local",
-      phone: "+880 1700-000001",
-      role: "admin",
-      avatar:
-        "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80",
-    },
-  },
-  {
-    loginId: "1234",
-    password: "1234",
-    user: {
-      id: "USR-101",
-      name: "Reshto Customer",
-      email: "customer@reshto.local",
-      phone: "+880 1700-000002",
-      role: "user",
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-      membership: "Gold VIP Foodie",
-      points: 480,
-    },
-  },
-];
-
-const isDemoAuthEnabled = process.env.NODE_ENV === "development";
-
-const persistDemoSession = (sessionUser) => {
-  try {
-    localStorage.setItem(
-      "reshto-user",
-      JSON.stringify({ ...sessionUser, authMode: DEMO_SESSION_VERSION }),
-    );
-  } catch {
-    // Keep the in-memory session available if browser storage is disabled.
-  }
-};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -63,74 +27,65 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
     try {
-      const stored = localStorage.getItem("reshto-user");
-      if (stored) {
-        const savedSession = JSON.parse(stored);
-        if (
-          isDemoAuthEnabled &&
-          savedSession.authMode === DEMO_SESSION_VERSION
-        ) {
-          const { authMode, ...savedUser } = savedSession;
-          const accountDefaults = DEMO_ACCOUNTS.find(
-            (account) => account.user.id === savedUser.id,
-          )?.user;
-          setUser({
-            ...accountDefaults,
-            ...savedUser,
-            phone: savedUser.phone || accountDefaults?.phone,
-          });
-        } else {
-          localStorage.removeItem("reshto-user");
-        }
-      }
+      setUser(restoreFrontendSession());
     } catch {
-      // Ignore malformed stored sessions; no authenticated state is restored.
+      try {
+        clearFrontendSession();
+      } catch {
+        // Storage can be unavailable in private or restricted browser contexts.
+      }
+    } finally {
+      setMounted(true);
     }
-    setMounted(true);
-    /* eslint-enable react-hooks/set-state-in-effect */
-  }, []);
 
-  const login = ({ id, password }) => {
-    if (!isDemoAuthEnabled) return null;
-
-    const account = DEMO_ACCOUNTS.find(
-      (candidate) => candidate.loginId === id && candidate.password === password,
-    );
-    if (!account) return null;
-
-    const sessionUser = { ...account.user };
-
-    setUser(sessionUser);
-    persistDemoSession(sessionUser);
-    return sessionUser;
-  };
-
-  const register = ({ name, email, phone }) => {
-    if (!isDemoAuthEnabled) return null;
-
-    const newUser = {
-      id: `USR-${Math.floor(100 + Math.random() * 900)}`,
-      name: name || "New Foodie",
-      email: email || "customer@example.com",
-      phone: phone || "+880 1700-000000",
-      role: "user",
-      avatar:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80",
-      membership: "Silver Member",
-      points: 50,
+    const handleStorage = (event) => {
+      if (event.key !== "reshto-user") return;
+      try {
+        setUser(restoreFrontendSession());
+      } catch {
+        setUser(null);
+      }
     };
 
-    setUser(newUser);
-    persistDemoSession(newUser);
-    return newUser;
+    window.addEventListener("storage", handleStorage);
+    /* eslint-enable react-hooks/set-state-in-effect */
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
+  const login = async (credentials) => {
+    const result = await loginFrontendAccount(credentials);
+    if (result.success) {
+      setUser(result.user);
+    }
+    return result;
+  };
+
+  const register = async (accountDetails) => {
+    const result = await registerFrontendAccount(accountDetails);
+    if (result.success) {
+      setUser(result.user);
+    }
+    return result;
+  };
+
+  const updateProfile = (profile) => {
+    if (!user) {
+      return { success: false, error: "Sign in to update your profile." };
+    }
+
+    const result = updateFrontendProfile({ ...profile, userId: user.id });
+    if (result.success) {
+      setUser(result.user);
+    }
+    return result;
   };
 
   const logout = () => {
     setUser(null);
     try {
-      localStorage.removeItem("reshto-user");
+      clearFrontendSession();
     } catch {
-      // ignore
+      // The in-memory session is still cleared if browser storage is unavailable.
     }
   };
 
@@ -138,10 +93,11 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: !!user,
+        isAuthenticated: Boolean(user),
         isAdmin: user?.role === "admin",
         login,
         register,
+        updateProfile,
         logout,
         mounted,
       }}
