@@ -24,21 +24,11 @@ const playfair = Playfair_Display({
 
 /** @type {import('next').Metadata} */
 export const metadata = {
-  metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  openGraph: {
-    title: siteConfig.name,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    locale: "en_US",
-    type: "website",
-  },
 };
 
 export const viewport = {

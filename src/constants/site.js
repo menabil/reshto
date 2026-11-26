@@ -1,23 +1,11 @@
 /**
- * Global site configuration and metadata constants
+ * Global site configuration
  */
 export const siteConfig = {
   name: "Reshto",
   description:
     "Discover Reshto's fresh menu, reserve a table, and order your favorite meals for pickup or delivery.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://reshto.vercel.app",
-  ogImage: "/og.jpg",
   copyrightYear: 2026,
-  keywords: [
-    "Reshto",
-    "restaurant",
-    "Reshto restaurant",
-    "online food ordering",
-    "restaurant menu",
-    "table reservations",
-    "food delivery",
-    "fresh meals",
-  ],
   navLinks: [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },

@@ -2,13 +2,9 @@ import { Suspense } from "react";
 import OrderTrackingExperience from "@/components/tracking/OrderTrackingExperience";
 
 export const metadata = {
-  title: "Live Order Tracking | Reshto Restaurant",
+  title: "Live Order Tracking",
   description:
     "Track your fresh meal in real-time from our kitchen to your doorstep with live GPS route and courier updates.",
-  robots: {
-    index: false,
-    follow: false,
-  },
 };
 
 export default function OrderTrackingPage() {

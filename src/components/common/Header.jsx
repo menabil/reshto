@@ -9,6 +9,10 @@ import { ThemeToggle } from "@/components/common/ThemeProvider";
 import { useAuth } from "@/context/AuthContext";
 import { useStore } from "@/context/StoreContext";
 
+const scrollToPageTop = () => {
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+};
+
 export const Header = () => {
   const pathname = usePathname();
   const isAuthPage = pathname === "/login" || pathname === "/register";
@@ -52,6 +56,8 @@ export const Header = () => {
         <Container className="header-inner">
           <Link
             href="/"
+            scroll={false}
+            onClick={scrollToPageTop}
             className="site-logo"
             aria-label="Reshto home"
           >
@@ -76,6 +82,8 @@ export const Header = () => {
                 <Link
                   key={link.label}
                   href={link.href}
+                  scroll={false}
+                  onClick={scrollToPageTop}
                   className={`transition-colors duration-200 ${
                     isActive
                       ? "active font-bold text-brand-300 dark:text-brand-300"
@@ -90,9 +98,6 @@ export const Header = () => {
 
           {/* Actions */}
           <div className="header-actions">
-            {/* Dark Mode Toggle */}
-            <ThemeToggle />
-
             {/* User Login & Profile Icon */}
             <div className="relative desktop-action" ref={userMenuRef}>
               {isAuthenticated ? (
@@ -126,14 +131,22 @@ export const Header = () => {
                       <div className="py-1">
                         <Link
                           href="/dashboard"
-                          onClick={() => setUserMenuOpen(false)}
+                          scroll={false}
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            scrollToPageTop();
+                          }}
                           className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-ink hover:bg-soft-primary"
                         >
                           <i className="ri-user-smile-line text-sm" /> User Dashboard
                         </Link>
                         <Link
                           href="/order-tracking"
-                          onClick={() => setUserMenuOpen(false)}
+                          scroll={false}
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            scrollToPageTop();
+                          }}
                           className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-ink hover:bg-soft-primary"
                         >
                           <i className="ri-e-bike-2-line text-sm text-brand" /> Track Order
@@ -141,7 +154,11 @@ export const Header = () => {
                         {user.role === "admin" ? (
                           <Link
                             href="/admin"
-                            onClick={() => setUserMenuOpen(false)}
+                            scroll={false}
+                            onClick={() => {
+                              setUserMenuOpen(false);
+                              scrollToPageTop();
+                            }}
                             className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-brand hover:bg-soft-primary"
                           >
                             <i className="ri-dashboard-line text-sm" /> Admin Portal
@@ -167,6 +184,8 @@ export const Header = () => {
               ) : (
                 <Link
                   href="/login"
+                  scroll={false}
+                  onClick={scrollToPageTop}
                   className="header-icon"
                   aria-label="Sign in or register"
                   title="Sign In / Register"
@@ -192,9 +211,13 @@ export const Header = () => {
               ) : null}
             </button>
 
+            <ThemeToggle />
+
             {/* Order Now button */}
             <Link
               href="/order"
+              scroll={false}
+              onClick={scrollToPageTop}
               className="btn-brand header-order flex items-center gap-1.5"
             >
               Order Now <i className="ri-arrow-right-line" />
@@ -228,7 +251,11 @@ export const Header = () => {
                     <Link
                       key={link.label}
                       href={link.href}
-                      onClick={() => setOpen(false)}
+                      scroll={false}
+                      onClick={() => {
+                        setOpen(false);
+                        scrollToPageTop();
+                      }}
                       aria-current={isActive ? "page" : undefined}
                       className={`mobile-nav-link${isActive ? " is-active" : ""}`}
                     >
@@ -253,7 +280,11 @@ export const Header = () => {
                     </div>
                     <Link
                       href="/dashboard"
-                      onClick={() => setOpen(false)}
+                      scroll={false}
+                      onClick={() => {
+                        setOpen(false);
+                        scrollToPageTop();
+                      }}
                       className="mobile-nav-account-link"
                     >
                       <span className="flex items-center gap-2">
@@ -263,7 +294,11 @@ export const Header = () => {
                     </Link>
                     <Link
                       href="/order-tracking"
-                      onClick={() => setOpen(false)}
+                      scroll={false}
+                      onClick={() => {
+                        setOpen(false);
+                        scrollToPageTop();
+                      }}
                       className="mobile-nav-account-link"
                     >
                       <span className="flex items-center gap-2">
@@ -274,7 +309,11 @@ export const Header = () => {
                     {user.role === "admin" ? (
                       <Link
                         href="/admin"
-                        onClick={() => setOpen(false)}
+                        scroll={false}
+                        onClick={() => {
+                          setOpen(false);
+                          scrollToPageTop();
+                        }}
                         className="mobile-nav-account-link"
                       >
                         <span className="flex items-center gap-2">
@@ -297,7 +336,11 @@ export const Header = () => {
                 ) : (
                   <Link
                     href="/login"
-                    onClick={() => setOpen(false)}
+                    scroll={false}
+                    onClick={() => {
+                      setOpen(false);
+                      scrollToPageTop();
+                    }}
                     className="mobile-nav-signin"
                   >
                     <span className="flex items-center gap-2">
@@ -321,7 +364,11 @@ export const Header = () => {
                 </button>
                 <Link
                   href="/order"
-                  onClick={() => setOpen(false)}
+                  scroll={false}
+                  onClick={() => {
+                    setOpen(false);
+                    scrollToPageTop();
+                  }}
                   className="mobile-order-link"
                 >
                   Order Now <i className="ri-arrow-right-line" />

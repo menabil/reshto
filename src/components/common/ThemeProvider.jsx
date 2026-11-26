@@ -137,30 +137,36 @@ export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeToggle = ({ className = "" }) => {
   const { theme, toggleTheme, mounted } = useTheme();
+  const isDark = mounted && theme === "dark";
+  const nextTheme = isDark ? "light" : "dark";
 
   return (
     <button
       type="button"
       onClick={toggleTheme}
-      className={`relative grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition-all hover:bg-white/20 hover:text-amber-300 dark:border-white/15 dark:bg-white/5 dark:text-amber-300 ${className}`}
-      aria-label={
-        mounted && theme === "dark"
-          ? "Switch to light mode"
-          : "Switch to dark mode"
-      }
-      title={
-        mounted && theme === "dark"
-          ? "Switch to light mode"
-          : "Switch to dark mode"
-      }
+      className={`theme-toggle ${className}`}
+      aria-label={`Switch to ${nextTheme} mode`}
+      title={`Switch to ${nextTheme} mode`}
     >
-      <i
-        className={`text-lg transition-transform duration-300 ${
-          mounted && theme === "dark"
-            ? "ri-sun-fill rotate-0"
-            : "ri-moon-line -rotate-12"
-        }`}
-      />
+      <svg
+        aria-hidden="true"
+        className="theme-toggle-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {isDark ? (
+          <>
+            <circle cx="12" cy="12" r="3.75" />
+            <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+          </>
+        ) : (
+          <path d="M20.2 15.1A8.6 8.6 0 0 1 8.9 3.8 8.6 8.6 0 1 0 20.2 15.1Z" />
+        )}
+      </svg>
     </button>
   );
 };
