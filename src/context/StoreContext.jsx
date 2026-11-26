@@ -5,7 +5,20 @@ import { menu, menuTabs } from "@/data/data";
 
 const StoreContext = createContext(null);
 
-// Flatten all dishes from data.js as initial menu
+const DEFAULT_MENU_SELECTION = {
+  breakfast: [1, 2],
+  lunch: [1, 2],
+  dinner: [1, 2],
+  dessert: [1, 2],
+  drink: [1, 2],
+};
+
+const ALL_CATALOG_CART_IDS = new Set(
+  menuTabs.flatMap((tab) =>
+    (menu[tab.key] || []).map((item) => `${tab.key}-${item.id}`),
+  ),
+);
+
 const INITIAL_MENU_ITEMS = menuTabs.flatMap((tab) =>
   (menu[tab.key] || []).map((item) => ({
     ...item,
@@ -13,7 +26,7 @@ const INITIAL_MENU_ITEMS = menuTabs.flatMap((tab) =>
     categoryLabel: tab.label,
     cartId: `${tab.key}-${item.id}`,
     inStock: true,
-  }))
+  })).filter((item) => DEFAULT_MENU_SELECTION[tab.key]?.includes(item.id)),
 );
 
 const DEMO_ORDERS = new Map([
@@ -48,7 +61,25 @@ export const StoreProvider = ({ children }) => {
     /* eslint-disable react-hooks/set-state-in-effect */
     try {
       const savedMenu = localStorage.getItem("reshto-menu");
-      if (savedMenu) setMenuItems(JSON.parse(savedMenu));
+      if (savedMenu) {
+        const parsedMenu = JSON.parse(savedMenu);
+        const activeMenuItems = Array.isArray(parsedMenu)
+          ? parsedMenu.filter(
+              (item) =>
+                !ALL_CATALOG_CART_IDS.has(item?.cartId) ||
+                INITIAL_MENU_ITEMS.some(
+                  (defaultItem) => defaultItem.cartId === item.cartId,
+                ),
+            )
+          : INITIAL_MENU_ITEMS;
+        setMenuItems(activeMenuItems);
+        if (
+          !Array.isArray(parsedMenu) ||
+          activeMenuItems.length !== parsedMenu.length
+        ) {
+          localStorage.setItem("reshto-menu", JSON.stringify(activeMenuItems));
+        }
+      }
 
       const savedCart = localStorage.getItem("reshto-cart");
       if (savedCart) setQuantities(JSON.parse(savedCart));

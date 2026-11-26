@@ -5,12 +5,13 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SafeImage } from "@/components/ui/SafeImage";
-import { categories } from "@/data/data";
+import { useStore } from "@/context/StoreContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
 
 export const PopularCategories = () => {
-  const { t, formatPrice } = useLanguage();
+  const { menuItems } = useStore();
+  const { formatPrice } = useLanguage();
   const [quickViewDish, setQuickViewDish] = useState(null);
 
   return (
@@ -40,25 +41,17 @@ export const PopularCategories = () => {
         </Reveal>
 
         <div className="signature-grid">
-          {categories.slice(0, 4).map((item, index) => {
-            const enrichedItem = {
-              ...item,
-              menuItemName: item.recipesName,
-              menuItemDesc: item.recipesSubTitle,
-              menuItemPrice: item.recipesPrice,
-              category: "Signature",
-            };
-
+          {menuItems.slice(0, 4).map((item, index) => {
             return (
-              <Reveal key={item.id} delay={index * 65}>
+              <Reveal key={item.cartId} delay={index * 65}>
                 <article
-                  onClick={() => setQuickViewDish(enrichedItem)}
+                  onClick={() => setQuickViewDish(item)}
                   className="signature-card group cursor-pointer relative"
                 >
                   <div className="signature-image">
                     <SafeImage
                       src={item.image}
-                      alt={item.recipesName}
+                      alt={item.menuItemName}
                       className="transition-transform duration-700 group-hover:scale-105"
                     />
                     <span className="signature-number">
@@ -67,10 +60,10 @@ export const PopularCategories = () => {
                   </div>
                   <div className="signature-card-copy">
                     <div>
-                      <h3>{item.recipesName}</h3>
-                      <p>{item.recipesSubTitle}</p>
+                      <h3>{item.menuItemName}</h3>
+                      <p>{item.menuItemDesc}</p>
                     </div>
-                    <span className="signature-price">{formatPrice(item.recipesPrice)}</span>
+                    <span className="signature-price">{formatPrice(item.menuItemPrice)}</span>
                   </div>
                 </article>
               </Reveal>

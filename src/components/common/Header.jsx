@@ -11,6 +11,7 @@ import { useStore } from "@/context/StoreContext";
 
 export const Header = () => {
   const pathname = usePathname();
+  const isAuthPage = pathname === "/login" || pathname === "/register";
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount, openCart } = useStore();
 
@@ -42,7 +43,7 @@ export const Header = () => {
   return (
     <>
       <header
-        className={`site-header transition-all duration-300 ${
+        className={`site-header${isAuthPage ? " site-header-auth" : ""} transition-all duration-300 ${
           scrolled
             ? "is-scrolled shadow-lg backdrop-blur-md dark:bg-[#0f0e0d]/95"
             : "bg-transparent"

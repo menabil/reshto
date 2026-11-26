@@ -5,21 +5,20 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SafeImage } from "@/components/ui/SafeImage";
-import { menu, menuTabs } from "@/data/data";
+import { menuTabs } from "@/data/data";
 import { useStore } from "@/context/StoreContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { FoodQuickViewModal } from "@/components/ui/FoodQuickViewModal";
 
 export const ExploreMenu = () => {
-  const { updateQuantity, openCart } = useStore();
+  const { menuItems, updateQuantity, openCart } = useStore();
   const { formatPrice } = useLanguage();
   const [activeTab, setActiveTab] = useState("breakfast");
   const [query, setQuery] = useState("");
   const [quickViewDish, setQuickViewDish] = useState(null);
 
-  const rawItems = menu[activeTab] || [];
-
-  const items = rawItems.filter((item) =>
+  const items = menuItems.filter((item) =>
+    item.category === activeTab &&
     `${item.menuItemName} ${item.menuItemDesc}`
       .toLowerCase()
       .includes(query.trim().toLowerCase())
@@ -90,12 +89,10 @@ export const ExploreMenu = () => {
         {/* Menu Cards Grid */}
         <div className="grid gap-4 md:grid-cols-2">
           {items.map((item) => {
-            const enrichedItem = { ...item, category: activeTab };
-
             return (
               <article
-                key={`${activeTab}-${item.id}`}
-                onClick={() => setQuickViewDish(enrichedItem)}
+                key={item.cartId}
+                onClick={() => setQuickViewDish(item)}
                 className="menu-item relative dark:bg-[#1e1c1a] dark:border-white/10 group cursor-pointer hover:border-brand/40 transition-all"
               >
                 <SafeImage
@@ -125,7 +122,7 @@ export const ExploreMenu = () => {
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        updateQuantity(`${activeTab}-${item.id}`, 1);
+                        updateQuantity(item.cartId, 1);
                         openCart();
                       }}
                       className="menu-order hover:underline text-xs font-bold text-brand"
