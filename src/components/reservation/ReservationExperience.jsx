@@ -199,7 +199,7 @@ export const ReservationExperience = () => {
   const getWhatsAppBookingUrl = (res) => {
     const cleanPhone = (siteConfig.contact.phone || "+1 415-555-1234").replace(/[^\d]/g, "");
     const msg = [
-      `🏛️ *TABLE RESERVATION - RESHTO RESTAURANT*`,
+      `🏛️ *TABLE RESERVATION - BITEON RESTAURANT*`,
       `🔖 *Booking ID:* ${res.id}`,
       `👤 *Guest Name:* ${res.guestName}`,
       `📞 *Phone:* ${res.phone}`,
@@ -721,7 +721,7 @@ export const ReservationExperience = () => {
                     type="submit"
                     className="btn-brand w-full py-4 text-sm! font-bold shadow-xl flex items-center justify-center gap-2"
                   >
-                    <i className="ri-calendar-check-line text-lg" /> Confirm &amp; Reserve Table at Reshto
+                    <i className="ri-calendar-check-line text-lg" /> Confirm &amp; Reserve Table at Biteon
                   </button>
                   <p className="mt-2 text-center text-[11px] text-ink-700/60 dark:text-white/50">
                     No upfront booking fee required. You can modify or cancel anytime from your dashboard.

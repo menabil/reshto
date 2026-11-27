@@ -132,7 +132,11 @@ export const AdminMenuManagement = ({
                               type="button"
                               onClick={() => deleteDish(item.cartId)}
                               className="text-rose-500 hover:text-rose-700 transition"
-                              title="Delete dish"
+                              title={
+                                item.isDefault
+                                  ? "Delete until refresh; this default dish returns after refreshing"
+                                  : "Delete dish"
+                              }
                             >
                               <i className="ri-delete-bin-line text-lg" />
                             </button>

@@ -1,8 +1,8 @@
 import { ExploreMenu } from "@/components/home/ExploreMenu";
 
 export const metadata = {
-  title: "Our Menu",
-  description: "Explore Reshto's dishes, ingredients, and signature favorites.",
+  title: { absolute: "Our Menu | Biteon" },
+  description: "Explore Biteon's dishes, ingredients, and signature favorites.",
 };
 
 export default function MenuPage() {

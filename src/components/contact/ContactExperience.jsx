@@ -329,7 +329,7 @@ export const ContactExperience = () => {
                     <i className="ri-map-pin-2-fill" />
                   </span>
                   <strong className="mt-2 block font-display text-sm font-bold text-ink dark:text-white">
-                    Reshto Flagship Restaurant
+                    Biteon Flagship Restaurant
                   </strong>
                   <p className="mt-0.5 text-[11px] text-ink-700/70 dark:text-white/60">
                     Mason City, IA &bull; Valet parking available

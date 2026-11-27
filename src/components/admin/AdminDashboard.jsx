@@ -128,7 +128,14 @@ export const AdminDashboard = () => {
 
   // Delete dish
   const deleteDish = (itemId) => {
-    if (confirm("Are you sure you want to remove this dish from the menu?")) {
+    const item = menuItems.find(
+      (menuItem) => menuItem.cartId === itemId || menuItem.id === itemId,
+    );
+    const message = item?.isDefault
+      ? "This default dish will return after refreshing the page. Continue?"
+      : "Are you sure you want to remove this dish from the menu?";
+
+    if (confirm(message)) {
       deleteMenuItem(itemId);
     }
   };

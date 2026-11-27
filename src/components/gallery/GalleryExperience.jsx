@@ -97,7 +97,7 @@ export const GalleryExperience = () => {
     activeTab === "all" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((item) => item.category === activeTab);
 
   return (
-    <section id="gallery" className="section bg-[#f7f3eb] transition-colors duration-300 dark:bg-[#0f0e0d]">
+    <section id="gallery" className="gallery-page section bg-[#f7f3eb] transition-colors duration-300 dark:bg-[#0f0e0d]">
       <Container>
         {/* Section Heading */}
         <div className="mb-10 text-center">
@@ -105,7 +105,7 @@ export const GalleryExperience = () => {
             <i className="ri-image-line" /> Visual Journey
           </span>
           <h2 className="mt-4 font-display text-3xl font-extrabold text-ink dark:text-white md:text-4xl">
-            A glimpse into the Reshto experience
+            A glimpse into the Biteon experience
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-ink-700/65 dark:text-white/60 md:text-base">
             Immerse yourself in our warm ambiance, exquisite culinary creations, and the vibrant passion

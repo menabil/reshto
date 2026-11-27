@@ -48,7 +48,7 @@ export const LoginExperience = () => {
     <AuthLayout
       mode="login"
       title="Welcome back"
-      description="Enter your email and password to sign in to Reshto."
+      description="Enter your email and password to sign in to Biteon."
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {error ? (

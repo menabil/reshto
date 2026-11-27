@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Container } from "@/components/ui/Container";
+import { BrandMark } from "@/components/common/BrandMark";
 import { siteConfig } from "@/constants/site";
 import { ThemeToggle } from "@/components/common/ThemeProvider";
 import { useAuth } from "@/context/AuthContext";
@@ -16,6 +17,9 @@ const scrollToPageTop = () => {
 export const Header = () => {
   const pathname = usePathname();
   const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isMenuPage = pathname === "/menu";
+  const isAdminPage = pathname === "/admin";
+  const isDashboardPage = pathname === "/dashboard";
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount, openCart } = useStore();
 
@@ -47,7 +51,7 @@ export const Header = () => {
   return (
     <>
       <header
-        className={`site-header${isAuthPage ? " site-header-auth" : ""} transition-all duration-300 ${
+        className={`site-header${isAuthPage ? " site-header-auth" : ""}${isMenuPage ? " site-header-menu" : ""}${isAdminPage ? " site-header-admin" : ""}${isDashboardPage ? " site-header-dashboard" : ""} transition-all duration-300 ${
           scrolled
             ? "is-scrolled shadow-lg backdrop-blur-md dark:bg-[#0f0e0d]/95"
             : "bg-transparent"
@@ -59,11 +63,9 @@ export const Header = () => {
             scroll={false}
             onClick={scrollToPageTop}
             className="site-logo"
-            aria-label="Reshto home"
+            aria-label={`${siteConfig.name} home`}
           >
-            <span className="logo-mark">
-              <i className="ri-restaurant-2-fill" />
-            </span>
+            <BrandMark />
             <span>
               {siteConfig.name}
               <small>FRESH &amp; DELICIOUS</small>

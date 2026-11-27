@@ -5,23 +5,23 @@ import { whyChoose } from "@/data/data";
 
 export const WhyChoose = () => {
   return (
-    <section className="section bg-ink text-white transition-colors duration-300 dark:bg-[#0f0e0d]">
+    <section className="section bg-[#f7f3eb] text-ink transition-colors duration-300 dark:bg-[#0f0e0d] dark:text-white">
       <Container>
         <Reveal className="mb-14">
-          <SectionTitle eyebrow="Our Promise" title="Why Choose Reshto?" light />
+          <SectionTitle eyebrow="Our Promise" title="Why Choose Biteon?" />
         </Reveal>
 
         <div className="grid gap-6 md:grid-cols-3">
           {whyChoose.map((item, index) => (
             <Reveal key={item.id} delay={index * 80}>
-              <article className="h-full rounded-3xl bg-white/4 p-8 text-center ring-1 ring-white/10 transition duration-300 hover:-translate-y-1.5 hover:bg-white/[0.07] dark:bg-white/3 dark:ring-white/10">
+              <article className="h-full rounded-3xl bg-white/80 p-8 text-center text-ink ring-1 ring-ink/10 transition duration-300 hover:-translate-y-1.5 hover:bg-white dark:bg-white/3 dark:text-white dark:ring-white/10 dark:hover:bg-white/[0.07]">
                 <span
                   className="mx-auto grid h-16 w-16 place-items-center rounded-3xl border border-brand-100 bg-brand-50 text-3xl text-brand-700"
                 >
                   <i className={item.icon} />
                 </span>
                 <h5 className="mt-5 font-display text-xl font-bold">{item.title}</h5>
-                <p className="mt-2 text-sm leading-relaxed text-white/60">{item.text}</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink-700/70 dark:text-white/60">{item.text}</p>
               </article>
             </Reveal>
           ))}

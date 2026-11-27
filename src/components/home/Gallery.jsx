@@ -7,7 +7,7 @@ import { foodImages } from "@/constants/images";
 const moments = [
   {
     image: foodImages.restaurant,
-    alt: "The warm, intimate dining room at Reshto",
+    alt: "The warm, intimate dining room at Biteon",
     label: "Room for one more",
     className: "gallery-tile-featured",
   },
@@ -25,7 +25,7 @@ const moments = [
   },
   {
     image: foodImages.pasta,
-    alt: "Fresh pasta prepared in the Reshto kitchen",
+    alt: "Fresh pasta prepared in the Biteon kitchen",
     label: "From our kitchen",
     className: "",
   },
@@ -47,7 +47,7 @@ export const Gallery = () => (
         <div>
           <span className="story-kicker">
             <span aria-hidden="true" />
-            A seat at Reshto
+            A seat at Biteon
           </span>
           <h2>Come for dinner.<br />Stay for the feeling.</h2>
         </div>

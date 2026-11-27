@@ -3,9 +3,9 @@ import { ReservationExperience } from "@/components/reservation/ReservationExper
 import { siteConfig } from "@/constants/site";
 
 export const metadata = {
-  title: "Book a Table & Seating Zones",
+  title: { absolute: "Book a Table & Seating Zones | Biteon" },
   description:
-    "Reserve your dining table at Reshto. Select outdoor patio, window corner, or VIP lounge with customized anniversary and birthday decoration notes.",
+    "Reserve your dining table at Biteon. Select outdoor patio, window corner, or VIP lounge with customized anniversary and birthday decoration notes.",
 };
 
 const guidelines = [

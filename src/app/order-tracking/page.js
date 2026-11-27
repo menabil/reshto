@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import OrderTrackingExperience from "@/components/tracking/OrderTrackingExperience";
 
 export const metadata = {
-  title: "Live Order Tracking",
+  title: { absolute: "Live Order Tracking | Biteon" },
   description:
     "Track your fresh meal in real-time from our kitchen to your doorstep with live GPS route and courier updates.",
 };

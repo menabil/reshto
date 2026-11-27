@@ -8,7 +8,7 @@ const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
 export async function sendEmailNotification({
   subject,
-  from_name = "Reshto Restaurant Web",
+  from_name = "Biteon Restaurant Web",
   data = {},
 }) {
   if (!WEB3FORMS_KEY) {
@@ -20,7 +20,7 @@ export async function sendEmailNotification({
 
   const payload = {
     access_key: WEB3FORMS_KEY,
-    subject: subject || "New Notification from Reshto Restaurant",
+    subject: subject || "New Notification from Biteon Restaurant",
     from_name,
     ...data,
   };
@@ -55,7 +55,7 @@ export async function sendEmailNotification({
 export async function sendContactMessage({ name, email, phone, subject, message }) {
   return sendEmailNotification({
     subject: `📩 [Contact Inquiry] ${subject || "General Inquiry"} - from ${name}`,
-    from_name: "Reshto Guest Inquiry",
+    from_name: "Biteon Guest Inquiry",
     data: {
       name,
       email,
@@ -81,7 +81,7 @@ export async function sendBookingNotification({
 }) {
   return sendEmailNotification({
     subject: `🏛️ [New Table Booking #${id}] ${guestName} (${guests} Guests - ${seatingZone})`,
-    from_name: "Reshto Table Reservation Bot",
+    from_name: "Biteon Table Reservation Bot",
     data: {
       booking_id: id,
       guest_name: guestName,

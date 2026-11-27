@@ -1,8 +1,8 @@
 import { GalleryExperience } from "@/components/gallery/GalleryExperience";
 
 export const metadata = {
-  title: "Photo Gallery",
-  description: "Browse photos of Reshto's dining room, signature dishes, and kitchen.",
+  title: { absolute: "Photo Gallery | Biteon" },
+  description: "Browse photos of Biteon's dining room, signature dishes, and kitchen.",
 };
 
 export default function GalleryPage() {

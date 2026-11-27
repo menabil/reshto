@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { BrandMark } from "@/components/common/BrandMark";
 import { siteConfig } from "@/constants/site";
 
 export const AuthLayout = ({ mode, title, description, children }) => {
@@ -21,9 +22,7 @@ export const AuthLayout = ({ mode, title, description, children }) => {
                 href="/"
                 className="inline-flex items-center gap-3 font-display text-2xl font-extrabold text-white"
               >
-                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-brand text-white shadow-lg shadow-black/15 dark:text-[#171512]">
-                  <i className="ri-restaurant-2-fill text-xl" />
-                </span>
+                <BrandMark className="auth-brand-mark" />
                 {siteConfig.name}
               </Link>
               <p className="mt-2 pl-14 text-[10px] font-extrabold uppercase tracking-[.2em] text-white/70">
@@ -34,7 +33,7 @@ export const AuthLayout = ({ mode, title, description, children }) => {
             <div className="relative z-10 mt-10 max-w-md lg:mt-16">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[.16em] text-white/75">
                 <i className="ri-sparkling-2-line text-white/80" />
-                Your Reshto account
+                Your Biteon account
               </span>
               <h1 className="mt-5 font-display text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-[2.8rem]">
                 Good food is even better{" "}
@@ -82,7 +81,7 @@ export const AuthLayout = ({ mode, title, description, children }) => {
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-ink transition hover:text-brand dark:text-white/80 dark:hover:text-brand-300"
               >
                 <i className="ri-arrow-left-line" />
-                <span className="hidden sm:inline">Back to Reshto</span>
+                <span className="hidden sm:inline">Back to Biteon</span>
                 <span className="sm:hidden">Home</span>
               </Link>
             </div>
@@ -100,7 +99,7 @@ export const AuthLayout = ({ mode, title, description, children }) => {
             <div className="mt-7">{children}</div>
 
             <p className="mt-7 border-t border-ink/10 pt-5 text-center text-xs text-ink-700/55 dark:border-white/10 dark:text-white/45">
-              {isLogin ? "New to Reshto?" : "Already have an account?"}{" "}
+              {isLogin ? "New to Biteon?" : "Already have an account?"}{" "}
               <Link
                 href={isLogin ? "/register" : "/login"}
                 className="font-bold text-brand hover:underline dark:text-brand-300"

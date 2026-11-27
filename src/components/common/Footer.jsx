@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { BrandMark } from "@/components/common/BrandMark";
 import { NewsletterForm } from "@/components/common/NewsletterForm";
 import { siteConfig } from "@/constants/site";
 import { useLanguage } from "@/context/LanguageContext";
@@ -26,13 +27,11 @@ export const Footer = () => {
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <Link href="/" className="flex items-center gap-2 font-display text-2xl font-extrabold text-white">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand text-white dark:text-[#171512]">
-                <i className="ri-restaurant-2-fill text-xl" />
-              </span>
+              <BrandMark className="footer-brand-mark" />
               {siteConfig.name}
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
-              {t("hero.subtitle", "At Reshto, we believe that food is more than just a meal — it's an experience. Seasonal ingredients, thoughtful cooking, and memorable hospitality.")}
+              {t("hero.subtitle", "At Biteon, we believe that food is more than just a meal — it's an experience. Seasonal ingredients, thoughtful cooking, and memorable hospitality.")}
             </p>
             <h5 className="mt-6 font-display text-base font-bold">{t("footer.followUs", "Follow Us")}</h5>
             <div className="mt-3 flex items-center gap-3">
@@ -140,7 +139,7 @@ export const Footer = () => {
           <p>
             Copyright &copy; {siteConfig.copyrightYear}{" "}
             <Link href="/" className="font-medium text-brand">
-              Reshto Restaurant
+              Biteon Restaurant
             </Link>
             . {t("footer.rights", "All rights reserved.")} &bull; {t("footer.madeWith", "Crafted with passion for exquisite gastronomy.")}
           </p>

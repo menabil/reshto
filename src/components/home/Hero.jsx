@@ -22,7 +22,7 @@ export const Hero = () => {
       <div className="hero-background" aria-hidden="true">
         <Image
           src={foodImages.restaurant}
-          alt="Reshto Restaurant Ambience"
+          alt="Biteon Restaurant Ambience"
           fill
           priority
           sizes="100vw"

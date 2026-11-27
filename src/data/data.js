@@ -1,4 +1,4 @@
-// Reshto template data with verified images
+// Biteon template data with verified images
 
 export const categories = [
   {

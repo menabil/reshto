@@ -19,15 +19,72 @@ const ALL_CATALOG_CART_IDS = new Set(
   ),
 );
 
-const INITIAL_MENU_ITEMS = menuTabs.flatMap((tab) =>
+const DEFAULT_MENU_ITEMS = menuTabs.flatMap((tab) =>
   (menu[tab.key] || []).map((item) => ({
     ...item,
     category: tab.key,
     categoryLabel: tab.label,
     cartId: `${tab.key}-${item.id}`,
     inStock: true,
+    isDefault: true,
   })).filter((item) => DEFAULT_MENU_SELECTION[tab.key]?.includes(item.id)),
 );
+
+const DEFAULT_MENU_CART_IDS = new Set(
+  DEFAULT_MENU_ITEMS.map((item) => item.cartId),
+);
+
+const restoreMenuItems = (savedMenu) => {
+  const isLegacyMenu = Array.isArray(savedMenu);
+  const storedItems = isLegacyMenu
+    ? savedMenu
+    : Array.isArray(savedMenu?.customItems)
+      ? savedMenu.customItems
+      : [];
+  const savedDefaultItems = new Map(
+    isLegacyMenu
+      ? savedMenu
+          .filter((item) => DEFAULT_MENU_CART_IDS.has(item?.cartId))
+          .map((item) => [item.cartId, item])
+      : [],
+  );
+  const defaultStock = !isLegacyMenu &&
+    savedMenu?.defaultStock &&
+    typeof savedMenu.defaultStock === "object"
+    ? savedMenu.defaultStock
+    : {};
+  const customItems = storedItems.filter(
+    (item) =>
+      item &&
+      typeof item.cartId === "string" &&
+      !ALL_CATALOG_CART_IDS.has(item.cartId),
+  );
+  const defaultItems = DEFAULT_MENU_ITEMS.map((item) => ({
+    ...item,
+    inStock: isLegacyMenu
+      ? savedDefaultItems.get(item.cartId)?.inStock !== false
+      : defaultStock[item.cartId] !== false,
+  }));
+
+  return [...customItems, ...defaultItems];
+};
+
+const serializeMenuItems = (items) => ({
+  version: 2,
+  customItems: items.filter(
+    (item) =>
+      !DEFAULT_MENU_CART_IDS.has(item.cartId) &&
+      !ALL_CATALOG_CART_IDS.has(item.cartId),
+  ),
+  defaultStock: Object.fromEntries(
+    items
+      .filter(
+        (item) =>
+          DEFAULT_MENU_CART_IDS.has(item.cartId) && item.inStock === false,
+      )
+      .map((item) => [item.cartId, false]),
+  ),
+});
 
 const DEMO_ORDERS = new Map([
   ["ORD-9421", { email: "tahmid@example.com", customer: "Tahmid Hassan" }],
@@ -47,7 +104,7 @@ const DEMO_RESERVATIONS = new Map([
 ]);
 
 export const StoreProvider = ({ children }) => {
-  const [menuItems, setMenuItems] = useState(INITIAL_MENU_ITEMS);
+  const [menuItems, setMenuItems] = useState(DEFAULT_MENU_ITEMS);
   const [quantities, setQuantities] = useState({});
   const [orders, setOrders] = useState([]);
   const [reservations, setReservations] = useState([]);
@@ -63,22 +120,7 @@ export const StoreProvider = ({ children }) => {
       const savedMenu = localStorage.getItem("reshto-menu");
       if (savedMenu) {
         const parsedMenu = JSON.parse(savedMenu);
-        const activeMenuItems = Array.isArray(parsedMenu)
-          ? parsedMenu.filter(
-              (item) =>
-                !ALL_CATALOG_CART_IDS.has(item?.cartId) ||
-                INITIAL_MENU_ITEMS.some(
-                  (defaultItem) => defaultItem.cartId === item.cartId,
-                ),
-            )
-          : INITIAL_MENU_ITEMS;
-        setMenuItems(activeMenuItems);
-        if (
-          !Array.isArray(parsedMenu) ||
-          activeMenuItems.length !== parsedMenu.length
-        ) {
-          localStorage.setItem("reshto-menu", JSON.stringify(activeMenuItems));
-        }
+        setMenuItems(restoreMenuItems(parsedMenu));
       }
 
       const savedCart = localStorage.getItem("reshto-cart");
@@ -268,12 +310,12 @@ export const StoreProvider = ({ children }) => {
       setAppliedCoupon({ code, freeShipping: true, desc: "Free Home Delivery ($5 Saved)" });
       return { success: true, message: "🎉 Code 'FREESHIP' applied! Delivery is 100% free." };
     }
-    if (code === "RESHTO10") {
+    if (code === "BITEON10") {
       if (cartSubtotal < 40) {
-        return { success: false, message: "Code 'RESHTO10' requires minimum order of $40.00." };
+        return { success: false, message: "Code 'BITEON10' requires minimum order of $40.00." };
       }
       setAppliedCoupon({ code, flatDiscount: 10, desc: "$10.00 Flat Discount" });
-      return { success: true, message: "🎉 Code 'RESHTO10' applied! $10.00 saved on your order." };
+      return { success: true, message: "🎉 Code 'BITEON10' applied! $10.00 saved on your order." };
     }
     if (code === "WELCOME15") {
       setAppliedCoupon({ code, discountPercent: 15, desc: "15% Welcome Discount" });
@@ -281,7 +323,7 @@ export const StoreProvider = ({ children }) => {
     }
     return {
       success: false,
-      message: "Invalid coupon. Try available codes: SAVE20, FREESHIP, or RESHTO10.",
+      message: "Invalid coupon. Try available codes: SAVE20, FREESHIP, or BITEON10.",
     };
   };
 
@@ -414,18 +456,19 @@ export const StoreProvider = ({ children }) => {
         item.image ||
         "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80",
       inStock: true,
+      isDefault: false,
     };
 
     const nextMenu = [newItem, ...menuItems];
     setMenuItems(nextMenu);
-    saveToStorage("reshto-menu", nextMenu);
+    saveToStorage("reshto-menu", serializeMenuItems(nextMenu));
     return newItem;
   };
 
   const deleteMenuItem = (itemId) => {
     const nextMenu = menuItems.filter((i) => i.id !== itemId && i.cartId !== itemId);
     setMenuItems(nextMenu);
-    saveToStorage("reshto-menu", nextMenu);
+    saveToStorage("reshto-menu", serializeMenuItems(nextMenu));
   };
 
   const toggleMenuItemStock = (itemId) => {
@@ -433,7 +476,7 @@ export const StoreProvider = ({ children }) => {
       i.id === itemId || i.cartId === itemId ? { ...i, inStock: !i.inStock } : i
     );
     setMenuItems(nextMenu);
-    saveToStorage("reshto-menu", nextMenu);
+    saveToStorage("reshto-menu", serializeMenuItems(nextMenu));
   };
 
   // --- REVIEWS OPERATIONS ---

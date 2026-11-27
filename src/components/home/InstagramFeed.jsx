@@ -17,9 +17,9 @@ export const InstagramFeed = () => (
   <section className="section bg-[#f7f3eb] transition-colors duration-300 dark:bg-[#0f0e0d]">
     <Container>
       <Reveal className="mb-10 flex flex-col items-center text-center">
-        <SectionTitle eyebrow="@reshto" title="Instagram Post" />
+        <SectionTitle eyebrow="@biteon" title="Instagram Post" />
         <a
-          href="https://www.instagram.com/reshto"
+          href="https://www.instagram.com/biteon"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-3 text-sm font-semibold text-brand dark:text-brand-300 hover:underline inline-flex items-center gap-1"
@@ -31,13 +31,13 @@ export const InstagramFeed = () => (
         {posts.map((image, index) => (
           <Reveal key={`${image}-${index}`} delay={index * 35}>
             <a
-              href="https://www.instagram.com/reshto"
+              href="https://www.instagram.com/biteon"
               target="_blank"
               rel="noopener noreferrer"
               className="instagram-tile"
-              aria-label={`View Reshto food post ${index + 1}`}
+              aria-label={`View Biteon food post ${index + 1}`}
             >
-              <SafeImage src={image} alt="A freshly prepared Reshto dish" />
+              <SafeImage src={image} alt="A freshly prepared Biteon dish" />
               <span>
                 <i className="ri-instagram-line" />
               </span>

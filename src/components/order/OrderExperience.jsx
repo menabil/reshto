@@ -51,7 +51,7 @@ export const OrderExperience = ({ initialSearch }) => {
             <i className="ri-restaurant-2-fill" /> Fresh from our kitchen
           </span>
           <h1>
-            Make it a <span>Reshto</span> moment.
+            Make it a <span>Biteon</span> moment.
           </h1>
           <p>Choose your dishes, build your order, and call us or check out online.</p>
         </Container>

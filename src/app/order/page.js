@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import { OrderExperience } from "@/components/order/OrderExperience";
 
 export const metadata = {
-  title: "Order Now",
-  description: "Browse the Reshto menu and build your order.",
+  title: { absolute: "Order Now | Biteon" },
+  description: "Browse the Biteon menu and build your order.",
 };
 
 async function OrderRouteContent({ searchParams }) {

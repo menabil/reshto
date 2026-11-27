@@ -70,7 +70,7 @@ export const CheckoutExperience = () => {
       ? `${formData.address}${formData.city ? `, ${formData.city}` : ""}${
           formData.zip ? ` - ${formData.zip}` : ""
         }`
-      : "Pickup at Reshto Restaurant Counter (3667 Nutters Washington Barn, IA)";
+      : "Pickup at Biteon Restaurant Counter (3667 Nutters Washington Barn, IA)";
 
   const handleSubmitOrder = (e) => {
     e.preventDefault();

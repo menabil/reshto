@@ -13,7 +13,7 @@ export const Discover = () => (
       <Reveal className="story-portrait">
         <SafeImage
           src={foodImages.chefs[1]}
-          alt="A Reshto chef preparing a dish with care"
+          alt="A Biteon chef preparing a dish with care"
         />
         <div className="story-portrait-note">
           <span className="story-portrait-mark">R</span>
@@ -35,7 +35,7 @@ export const Discover = () => (
           <em>Unforgettable evenings.</em>
         </h2>
         <p>
-          Reshto began with a simple idea: bring people closer around food made
+          Biteon began with a simple idea: bring people closer around food made
           with care. We work with the seasons, honor every ingredient, and make
           room at the table for the moments that matter.
         </p>
@@ -47,7 +47,7 @@ export const Discover = () => (
           <span className="story-signature-rule" aria-hidden="true" />
           <span>
             <strong>Good food, shared slowly.</strong>
-            <small>The Reshto kitchen</small>
+            <small>The Biteon kitchen</small>
           </span>
         </div>
         <div className="mt-6 flex flex-wrap gap-4">

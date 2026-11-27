@@ -6,9 +6,9 @@ import { foodImages } from "@/constants/images";
 import { chefs } from "@/data/data";
 
 export const metadata = {
-  title: "Meet Our Chefs",
+  title: { absolute: "Meet Our Chefs | Biteon" },
   description:
-    "Meet the world-class culinary artists, pastry masters, and executive chefs at Reshto.",
+    "Meet the world-class culinary artists, pastry masters, and executive chefs at Biteon.",
 };
 
 const chefDetails = [

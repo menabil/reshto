@@ -22,7 +22,7 @@ export const AboutContent = () => {
           <h1>
             More than a meal.
             <br />
-            <span>It&apos;s a Reshto moment.</span>
+            <span>It&apos;s a Biteon moment.</span>
           </h1>
           <p>
             {t(
@@ -51,7 +51,7 @@ export const AboutContent = () => {
             <p className="mt-5 leading-7 text-ink-700/65 dark:text-white/60">
               {t(
                 "about.body",
-                "At Reshto, we bring together fresh produce, comforting classics, and the kind of hospitality that makes you want to stay a little longer. Every dish starts with quality ingredients and ends with a reason to come back."
+                "At Biteon, we bring together fresh produce, comforting classics, and the kind of hospitality that makes you want to stay a little longer. Every dish starts with quality ingredients and ends with a reason to come back."
               )}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -110,7 +110,7 @@ export const AboutContent = () => {
           <p className="mx-auto mt-3 max-w-xl text-sm text-white/80 md:text-base">
             {t(
               "about.joinDesc",
-              "From our family to yours, we invite you to experience hospitality and culinary mastery at Reshto."
+              "From our family to yours, we invite you to experience hospitality and culinary mastery at Biteon."
             )}
           </p>
           <div className="mt-6 flex justify-center gap-4">

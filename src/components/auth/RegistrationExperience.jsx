@@ -67,7 +67,7 @@ export const RegistrationExperience = () => {
     <AuthLayout
       mode="register"
       title="Create your account"
-      description="Register to manage your Reshto orders and reservations."
+      description="Register to manage your Biteon orders and reservations."
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {error ? (

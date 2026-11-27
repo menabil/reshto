@@ -7,9 +7,9 @@ import { foodImages } from "@/constants/images";
 import { AboutContent } from "@/components/about/AboutContent";
 
 export const metadata = {
-  title: "About Us",
+  title: { absolute: "About Us | Biteon" },
   description:
-    "Learn more about Reshto, our team, history and our love for fresh culinary craft.",
+    "Learn more about Biteon, our team, history and our love for fresh culinary craft.",
 };
 
 export default function AboutPage() {

@@ -14,10 +14,10 @@ export const HomeLanding = () => (
     <Hero />
     <Discover />
     <PopularCategories />
-    <ExploreMenu />
-    <WhyChoose />
-    <VideoCta />
+    {/* <ExploreMenu /> */}
     <Gallery />
+    <VideoCta />
+    <WhyChoose />
     <Chefs />
     <Testimonials />
     <InstagramFeed />

@@ -45,7 +45,7 @@ const TRACKING_STAGES = [
     statusKey: "Delivered",
     label: "Delivered",
     title: "Order Delivered",
-    desc: "Your order has been marked as delivered. Thank you for dining with Reshto!",
+    desc: "Your order has been marked as delivered. Thank you for dining with Biteon!",
     icon: "ri-gift-fill",
     color: "text-emerald-600",
     bg: "bg-emerald-600",
