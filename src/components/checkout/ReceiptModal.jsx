@@ -21,7 +21,6 @@ export const ReceiptModal = ({ order, onClose }) => {
       aria-modal="true"
     >
       <div className="relative my-auto flex max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-ink/10 bg-white text-ink shadow-2xl dark:border-white/10 dark:bg-[#1a1816] dark:text-white sm:max-h-[calc(100dvh-2.5rem)] print:my-0 print:max-h-none print:max-w-none print:overflow-visible print:rounded-none print:border-0 print:shadow-none">
-        
         {/* Top Control Bar (Hidden when printing) */}
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-ink/10 bg-[#faf8f5] px-4 py-3 dark:border-white/10 dark:bg-[#22201d] sm:px-6 sm:py-4 print:hidden">
           <div className="flex items-center gap-2">
@@ -54,8 +53,10 @@ export const ReceiptModal = ({ order, onClose }) => {
         </div>
 
         {/* Printable Invoice Container */}
-        <div ref={receiptRef} className="min-h-0 flex-1 space-y-5 overflow-y-auto p-5 sm:p-7 print:m-0 print:overflow-visible print:p-0">
-          
+        <div
+          ref={receiptRef}
+          className="min-h-0 flex-1 space-y-5 overflow-y-auto p-5 sm:p-7 print:m-0 print:overflow-visible print:p-0"
+        >
           {/* Invoice Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-ink/10 pb-6 dark:border-white/10">
             <div>
@@ -89,7 +90,8 @@ export const ReceiptModal = ({ order, onClose }) => {
                 Date: {order.date || "Today"}
               </p>
               <p className="text-xs text-ink-700 dark:text-white/60">
-                Type: <strong>{order.orderType || order.type || "Delivery"}</strong>
+                Type:{" "}
+                <strong>{order.orderType || order.type || "Delivery"}</strong>
               </p>
             </div>
           </div>
@@ -104,7 +106,9 @@ export const ReceiptModal = ({ order, onClose }) => {
                 {order.customer}
               </p>
               <p className="text-ink-700 dark:text-white/70">{order.phone}</p>
-              {order.email && <p className="text-ink-700 dark:text-white/70">{order.email}</p>}
+              {order.email && (
+                <p className="text-ink-700 dark:text-white/70">{order.email}</p>
+              )}
             </div>
 
             <div>
@@ -115,7 +119,8 @@ export const ReceiptModal = ({ order, onClose }) => {
                 {order.address || "Dine-in / Pickup at Counter"}
               </p>
               <p className="mt-0.5 text-ink-700 dark:text-white/70">
-                Payment: <strong>{order.paymentMethod || "Cash on Delivery"}</strong>
+                Payment:{" "}
+                <strong>{order.paymentMethod || "Cash on Delivery"}</strong>
               </p>
               {order.notes && (
                 <p className="mt-1 italic text-amber-700 dark:text-amber-300">
@@ -140,7 +145,8 @@ export const ReceiptModal = ({ order, onClose }) => {
                 {(order.items || []).map((item, idx) => {
                   const qty = item.qty || item.quantity || 1;
                   const priceStr = item.price || item.menuItemPrice || "$0.00";
-                  const unitPrice = Number(String(priceStr).replace("$", "")) || 0;
+                  const unitPrice =
+                    Number(String(priceStr).replace("$", "")) || 0;
                   const lineTotal = (unitPrice * qty).toFixed(2);
 
                   return (
@@ -186,7 +192,11 @@ export const ReceiptModal = ({ order, onClose }) => {
               <div className="flex justify-between text-ink-700 dark:text-white/70">
                 <span>Delivery Charge:</span>
                 <span className="font-semibold text-ink dark:text-white">
-                  {order.deliveryFee === "FREE" || order.deliveryFee === 0 || order.deliveryFee === "$0.00" ? "FREE" : formatPrice(order.deliveryFee)}
+                  {order.deliveryFee === "FREE" ||
+                  order.deliveryFee === 0 ||
+                  order.deliveryFee === "$0.00"
+                    ? "FREE"
+                    : formatPrice(order.deliveryFee)}
                 </span>
               </div>
 
@@ -210,9 +220,12 @@ export const ReceiptModal = ({ order, onClose }) => {
 
           {/* Receipt Footer */}
           <div className="border-t border-dashed border-ink/15 pt-4 text-center text-[11px] text-ink-700 dark:border-white/10 dark:text-white/50">
-            <p className="font-bold">Thank you for dining with {siteConfig.name}!</p>
+            <p className="font-bold">
+              Thank you for dining with {siteConfig.name}!
+            </p>
             <p className="mt-0.5">
-              Questions about this order? Call our kitchen hotline at {siteConfig.contact.phone}.
+              Questions about this order? Call our kitchen hotline at{" "}
+              {siteConfig.contact.phone}.
             </p>
           </div>
         </div>

@@ -62,7 +62,7 @@ export const CheckoutExperience = () => {
   const currentDeliveryFee = orderType === "Pickup" ? 0 : deliveryFee;
   const currentTotal = Math.max(
     0,
-    cartSubtotal - couponDiscount + currentDeliveryFee + taxAmount
+    cartSubtotal - couponDiscount + currentDeliveryFee + taxAmount,
   );
 
   const fullAddress =
@@ -136,23 +136,40 @@ export const CheckoutExperience = () => {
               </h1>
 
               <p className="mt-2 text-sm leading-relaxed text-ink-700 dark:text-white/60">
-                Your order <strong className="text-ink dark:text-white">#{confirmedOrder.id}</strong> has been successfully placed. Our master chefs are already crafting your meal to perfection.
+                Your order{" "}
+                <strong className="text-ink dark:text-white">
+                  #{confirmedOrder.id}
+                </strong>{" "}
+                has been successfully placed. Our master chefs are already
+                crafting your meal to perfection.
               </p>
 
               {/* Order Quick Summary Card */}
               <div className="mt-8 rounded-3xl bg-[#faf8f5] p-6 text-left dark:bg-[#22201d]">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-b border-ink/10 pb-4 dark:border-white/10 text-xs">
                   <div>
-                    <span className="text-ink-700 dark:text-white/50 block">Customer</span>
-                    <strong className="text-ink dark:text-white text-sm">{confirmedOrder.customer}</strong>
+                    <span className="text-ink-700 dark:text-white/50 block">
+                      Customer
+                    </span>
+                    <strong className="text-ink dark:text-white text-sm">
+                      {confirmedOrder.customer}
+                    </strong>
                   </div>
                   <div>
-                    <span className="text-ink-700 dark:text-white/50 block">Est. Delivery Time</span>
-                    <strong className="text-brand dark:text-brand-300 text-sm">30 - 45 Minutes</strong>
+                    <span className="text-ink-700 dark:text-white/50 block">
+                      Est. Delivery Time
+                    </span>
+                    <strong className="text-brand dark:text-brand-300 text-sm">
+                      30 - 45 Minutes
+                    </strong>
                   </div>
                   <div>
-                    <span className="text-ink-700 dark:text-white/50 block">Total Amount</span>
-                    <strong className="text-ink dark:text-white text-sm">{confirmedOrder.total}</strong>
+                    <span className="text-ink-700 dark:text-white/50 block">
+                      Total Amount
+                    </span>
+                    <strong className="text-ink dark:text-white text-sm">
+                      {confirmedOrder.total}
+                    </strong>
                   </div>
                 </div>
 
@@ -172,7 +189,8 @@ export const CheckoutExperience = () => {
                   href={`/order-tracking?orderId=${confirmedOrder.id}`}
                   className="flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-3 text-xs font-bold text-white transition shadow-sm"
                 >
-                  <i className="ri-e-bike-2-fill text-base" /> Track Live Delivery
+                  <i className="ri-e-bike-2-fill text-base" /> Track Live
+                  Delivery
                 </Link>
 
                 <button
@@ -180,7 +198,8 @@ export const CheckoutExperience = () => {
                   onClick={() => setShowReceiptModal(true)}
                   className="btn-brand flex items-center gap-2 px-6 py-3 text-xs! font-bold"
                 >
-                  <i className="ri-printer-line text-base" /> View &amp; Print Receipt
+                  <i className="ri-printer-line text-base" /> View &amp; Print
+                  Receipt
                 </button>
 
                 <Link
@@ -210,7 +229,8 @@ export const CheckoutExperience = () => {
               Your Cart is Empty
             </h1>
             <p className="mt-2 text-xs text-ink-700 dark:text-white/60">
-              You need to add at least one dish to your order before proceeding to checkout.
+              You need to add at least one dish to your order before proceeding
+              to checkout.
             </p>
             <div className="mt-6 flex flex-col gap-2">
               <Link href="/order" className="btn-brand py-3! text-xs!">
@@ -292,7 +312,8 @@ export const CheckoutExperience = () => {
             Complete Your <span>Order</span>.
           </h1>
           <p>
-            Review your dishes, apply coupons, enter delivery details, and confirm your meal in minutes.
+            Review your dishes, apply coupons, enter delivery details, and
+            confirm your meal in minutes.
           </p>
         </Container>
       </section>
@@ -301,7 +322,6 @@ export const CheckoutExperience = () => {
       <section className="py-12 md:py-16 bg-[#faf8f5] dark:bg-[#0f0e0d] transition-colors duration-300">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
             {/* Left Column: Delivery & Customer Info Form */}
             <div className="lg:col-span-7">
               <form
@@ -309,11 +329,12 @@ export const CheckoutExperience = () => {
                 onSubmit={handleSubmitOrder}
                 className="space-y-6"
               >
-                
                 {/* 1. Fulfillment Type (Delivery vs Pickup) */}
                 <div className="rounded-3xl border border-ink/10 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-[#1a1816]">
                   <h2 className="font-display text-lg font-bold text-ink dark:text-white flex items-center gap-2">
-                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-white text-xs font-bold">1</span>
+                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-white text-xs font-bold">
+                      1
+                    </span>
                     Order Fulfillment Method
                   </h2>
 
@@ -344,7 +365,9 @@ export const CheckoutExperience = () => {
                       }`}
                     >
                       <i className="ri-store-2-line text-2xl" />
-                      <span className="text-xs font-bold">Dine-in / Takeaway Pickup</span>
+                      <span className="text-xs font-bold">
+                        Dine-in / Takeaway Pickup
+                      </span>
                       <small className="text-[10px] text-ink-700/70 dark:text-white/50">
                         Pick up directly at the counter
                       </small>
@@ -355,7 +378,9 @@ export const CheckoutExperience = () => {
                 {/* 2. Customer Contact Information */}
                 <div className="rounded-3xl border border-ink/10 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-[#1a1816]">
                   <h2 className="font-display text-lg font-bold text-ink dark:text-white flex items-center gap-2">
-                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-white text-xs font-bold">2</span>
+                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-white text-xs font-bold">
+                      2
+                    </span>
                     Customer Information
                   </h2>
 
@@ -404,14 +429,17 @@ export const CheckoutExperience = () => {
                 {orderType === "Delivery" && (
                   <div className="rounded-3xl border border-ink/10 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-[#1a1816]">
                     <h2 className="font-display text-lg font-bold text-ink dark:text-white flex items-center gap-2">
-                      <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-white text-xs font-bold">3</span>
+                      <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-white text-xs font-bold">
+                        3
+                      </span>
                       Delivery Destination
                     </h2>
 
                     <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="sm:col-span-2">
                         <label className="text-xs font-bold text-ink dark:text-white block mb-1">
-                          Street Address / House / Flat <span className="text-rose-500">*</span>
+                          Street Address / House / Flat{" "}
+                          <span className="text-rose-500">*</span>
                         </label>
                         <input
                           type="text"
@@ -497,7 +525,9 @@ export const CheckoutExperience = () => {
                       />
                       <div className="flex-1">
                         <span className="text-xs font-bold text-ink dark:text-white block">
-                          {orderType === "Delivery" ? "Cash on Delivery (COD)" : "Pay at Restaurant Counter"}
+                          {orderType === "Delivery"
+                            ? "Cash on Delivery (COD)"
+                            : "Pay at Restaurant Counter"}
                         </span>
                         <small className="text-[11px] text-ink-700/70 dark:text-white/50">
                           Pay by cash or card upon receiving your order
@@ -531,14 +561,12 @@ export const CheckoutExperience = () => {
                     </div>
                   </div>
                 </div>
-
               </form>
             </div>
 
             {/* Right Column: Order Summary & Coupon Code */}
             <div className="lg:col-span-5">
               <aside className="sticky top-28 space-y-6">
-                
                 {/* Cart Items List Card */}
                 <div className="rounded-3xl border border-ink/10 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-[#1a1816]">
                   <div className="flex items-center justify-between border-b border-ink/10 pb-4 dark:border-white/10">
@@ -556,7 +584,10 @@ export const CheckoutExperience = () => {
                   {/* Items scroll */}
                   <div className="divide-y divide-ink/8 dark:divide-white/8 max-h-72 overflow-y-auto my-3 pr-1">
                     {cartItems.map((item) => (
-                      <div key={item.cartId} className="flex items-center gap-3 py-3">
+                      <div
+                        key={item.cartId}
+                        className="flex items-center gap-3 py-3"
+                      >
                         <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-xl bg-ink/5 dark:bg-white/5">
                           <SafeImage
                             src={item.image}
@@ -570,7 +601,8 @@ export const CheckoutExperience = () => {
                             {item.menuItemName}
                           </h4>
                           <span className="text-[11px] text-ink-700 dark:text-white/60">
-                            {formatPrice(item.menuItemPrice)} &times; {item.quantity}
+                            {formatPrice(item.menuItemPrice)} &times;{" "}
+                            {item.quantity}
                           </span>
                         </div>
 
@@ -606,7 +638,8 @@ export const CheckoutExperience = () => {
                   <div className="border-t border-ink/10 pt-4 dark:border-white/10">
                     <span className="text-xs font-bold text-ink dark:text-white flex items-center justify-between mb-2">
                       <span className="flex items-center gap-1">
-                        <i className="ri-coupon-3-line text-brand" /> {t("cart.promoCoupon", "Promo Coupon")}
+                        <i className="ri-coupon-3-line text-brand" />{" "}
+                        {t("cart.promoCoupon", "Promo Coupon")}
                       </span>
                       <span className="text-[10px] text-ink-700/60 dark:text-white/50">
                         {t("cart.tryCoupons", "Try: SAVE20 or FREESHIP")}
@@ -617,7 +650,9 @@ export const CheckoutExperience = () => {
                       <div className="flex items-center justify-between rounded-xl bg-emerald-500/10 px-3 py-2 border border-emerald-500/20 text-xs font-bold text-emerald-700 dark:text-emerald-300">
                         <div className="flex items-center gap-1.5">
                           <i className="ri-checkbox-circle-fill text-sm" />
-                          <span>{appliedCoupon.code} ({appliedCoupon.desc})</span>
+                          <span>
+                            {appliedCoupon.code} ({appliedCoupon.desc})
+                          </span>
                         </div>
                         <button
                           type="button"
@@ -648,7 +683,9 @@ export const CheckoutExperience = () => {
                     {couponFeedback && (
                       <p
                         className={`mt-2 text-[11px] font-semibold ${
-                          couponFeedback.success ? "text-emerald-600 dark:text-emerald-400" : "text-rose-500"
+                          couponFeedback.success
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-rose-500"
                         }`}
                       >
                         {couponFeedback.message}
@@ -667,16 +704,23 @@ export const CheckoutExperience = () => {
 
                     {couponDiscount > 0 && (
                       <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
-                        <span>{t("cart.discount", "Discount")} ({appliedCoupon?.code})</span>
+                        <span>
+                          {t("cart.discount", "Discount")} (
+                          {appliedCoupon?.code})
+                        </span>
                         <span>-{formatPrice(couponDiscount)}</span>
                       </div>
                     )}
 
                     <div className="flex justify-between text-ink-700 dark:text-white/70">
-                      <span>{t("cart.deliveryFee", "Delivery Service Fee")}</span>
+                      <span>
+                        {t("cart.deliveryFee", "Delivery Service Fee")}
+                      </span>
                       <span className="font-bold text-ink dark:text-white">
                         {currentDeliveryFee === 0 ? (
-                          <span className="text-emerald-600 font-bold">{t("cart.free", "FREE")}</span>
+                          <span className="text-emerald-600 font-bold">
+                            {t("cart.free", "FREE")}
+                          </span>
                         ) : (
                           formatPrice(currentDeliveryFee)
                         )}
@@ -706,13 +750,14 @@ export const CheckoutExperience = () => {
                   >
                     {isSubmitting ? (
                       <>
-                        <i className="ri-loader-4-line animate-spin" /> Processing Order...
+                        <i className="ri-loader-4-line animate-spin" />{" "}
+                        Processing Order...
                       </>
                     ) : (
                       <>
                         <i className="ri-checkbox-circle-line text-base" />
-                        {t("checkout.placeOrder", "Confirm & Place Order")} &bull;{" "}
-                        {formatPrice(currentTotal)}
+                        {t("checkout.placeOrder", "Confirm & Place Order")}{" "}
+                        &bull; {formatPrice(currentTotal)}
                       </>
                     )}
                   </button>
@@ -728,11 +773,11 @@ export const CheckoutExperience = () => {
                       100% Fresh &amp; Hygienic Guarantee
                     </strong>
                     <span className="text-ink-700 dark:text-white/60 text-[11px]">
-                      Prepared with organic ingredients and sealed safely for delivery.
+                      Prepared with organic ingredients and sealed safely for
+                      delivery.
                     </span>
                   </div>
                 </div>
-
               </aside>
             </div>
           </div>

@@ -2,7 +2,6 @@ import { Hero } from "@/components/home/Hero";
 import { PopularCategories } from "@/components/home/PopularCategories";
 import { Discover } from "@/components/home/Discover";
 import { WhyChoose } from "@/components/home/WhyChoose";
-import { ExploreMenu } from "@/components/home/ExploreMenu";
 import { VideoCta } from "@/components/home/VideoCta";
 import { Gallery } from "@/components/home/Gallery";
 import { Chefs } from "@/components/home/Chefs";
@@ -14,7 +13,6 @@ export const HomeLanding = () => (
     <Hero />
     <Discover />
     <PopularCategories />
-    {/* <ExploreMenu /> */}
     <Gallery />
     <VideoCta />
     <WhyChoose />

@@ -17,7 +17,8 @@ export const AboutContent = () => {
       <section className="subpage-hero">
         <Container>
           <span className="hero-eyebrow">
-            <i className="ri-restaurant-2-fill" /> {t("about.slogan", "Since day one")}
+            <i className="ri-restaurant-2-fill" />{" "}
+            {t("about.slogan", "Since day one")}
           </span>
           <h1>
             More than a meal.
@@ -27,7 +28,7 @@ export const AboutContent = () => {
           <p>
             {t(
               "about.description",
-              "Fresh ingredients, thoughtful cooking, and a table that always has room for one more."
+              "Fresh ingredients, thoughtful cooking, and a table that always has room for one more.",
             )}
           </p>
         </Container>
@@ -43,7 +44,8 @@ export const AboutContent = () => {
           </div>
           <div>
             <span className="section-pill dark:bg-brand-900/40 dark:text-brand-300">
-              <i className="ri-leaf-line" /> {t("about.philosophy", "Our Philosophy")}
+              <i className="ri-leaf-line" />{" "}
+              {t("about.philosophy", "Our Philosophy")}
             </span>
             <h2 className="mt-5 font-display text-3xl font-extrabold leading-tight text-ink dark:text-white md:text-4xl">
               A little care makes every plate special.
@@ -51,7 +53,7 @@ export const AboutContent = () => {
             <p className="mt-5 leading-7 text-ink-700/65 dark:text-white/60">
               {t(
                 "about.body",
-                "At Biteon, we bring together fresh produce, comforting classics, and the kind of hospitality that makes you want to stay a little longer. Every dish starts with quality ingredients and ends with a reason to come back."
+                "At Biteon, we bring together fresh produce, comforting classics, and the kind of hospitality that makes you want to stay a little longer. Every dish starts with quality ingredients and ends with a reason to come back.",
               )}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -69,8 +71,6 @@ export const AboutContent = () => {
 
       <WhyChoose />
       <PopularCategories />
-
-      
 
       <section className="bg-brand py-14 text-center text-white dark:bg-[#1e1c1a]">
         <Container>

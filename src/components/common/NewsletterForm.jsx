@@ -19,11 +19,14 @@ export const NewsletterForm = () => {
     setTimeout(() => {
       try {
         const subscribers = JSON.parse(
-          localStorage.getItem("reshto-subscribers") || "[]"
+          localStorage.getItem("reshto-subscribers") || "[]",
         );
         if (!subscribers.includes(email.trim().toLowerCase())) {
           subscribers.push(email.trim().toLowerCase());
-          localStorage.setItem("reshto-subscribers", JSON.stringify(subscribers));
+          localStorage.setItem(
+            "reshto-subscribers",
+            JSON.stringify(subscribers),
+          );
         }
       } catch {
         setLoading(false);

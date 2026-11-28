@@ -157,7 +157,8 @@ export const CartDrawer = () => {
                   onClick={closeCart}
                   className="col-span-2 flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-brand-600 sm:col-span-1 sm:min-h-9 sm:whitespace-nowrap"
                 >
-                  Track Live <i className="ri-arrow-right-line" aria-hidden="true" />
+                  Track Live{" "}
+                  <i className="ri-arrow-right-line" aria-hidden="true" />
                 </Link>
               ) : (
                 <button

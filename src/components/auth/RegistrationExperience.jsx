@@ -139,7 +139,8 @@ export const RegistrationExperience = () => {
               htmlFor="register-phone"
               className="mb-1.5 block text-xs font-extrabold text-ink-700 dark:text-white/80"
             >
-              Phone number <span className="font-medium text-ink-700/50">(optional)</span>
+              Phone number{" "}
+              <span className="font-medium text-ink-700/50">(optional)</span>
             </label>
             <div className="relative">
               <i
@@ -221,7 +222,8 @@ export const RegistrationExperience = () => {
         >
           {isSubmitting ? (
             <>
-              <i className="ri-loader-4-line animate-spin" /> Creating account...
+              <i className="ri-loader-4-line animate-spin" /> Creating
+              account...
             </>
           ) : (
             <>

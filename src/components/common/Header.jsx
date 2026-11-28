@@ -123,8 +123,12 @@ export const Header = () => {
                   {userMenuOpen ? (
                     <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-ink/10 bg-[var(--theme-surface)] p-2 text-ink shadow-2xl backdrop-blur-xl dark:border-white/10 z-50">
                       <div className="border-b border-ink/10 px-3 py-2 dark:border-white/10">
-                        <p className="truncate text-xs font-bold">{user.name}</p>
-                        <p className="truncate text-[11px] text-ink-700">{user.email}</p>
+                        <p className="truncate text-xs font-bold">
+                          {user.name}
+                        </p>
+                        <p className="truncate text-[11px] text-ink-700">
+                          {user.email}
+                        </p>
                         <span className="mt-1 inline-block rounded-md bg-soft-primary px-2 py-0.5 text-[10px] font-bold text-brand">
                           {user.role === "admin" ? "👑 Admin" : "👤 Customer"}
                         </span>
@@ -140,7 +144,8 @@ export const Header = () => {
                           }}
                           className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-ink hover:bg-soft-primary"
                         >
-                          <i className="ri-user-smile-line text-sm" /> User Dashboard
+                          <i className="ri-user-smile-line text-sm" /> User
+                          Dashboard
                         </Link>
                         <Link
                           href="/order-tracking"
@@ -151,7 +156,8 @@ export const Header = () => {
                           }}
                           className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-ink hover:bg-soft-primary"
                         >
-                          <i className="ri-e-bike-2-line text-sm text-brand" /> Track Order
+                          <i className="ri-e-bike-2-line text-sm text-brand" />{" "}
+                          Track Order
                         </Link>
                         {user.role === "admin" ? (
                           <Link
@@ -163,7 +169,8 @@ export const Header = () => {
                             }}
                             className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-brand hover:bg-soft-primary"
                           >
-                            <i className="ri-dashboard-line text-sm" /> Admin Portal
+                            <i className="ri-dashboard-line text-sm" /> Admin
+                            Portal
                           </Link>
                         ) : null}
                       </div>
@@ -177,7 +184,8 @@ export const Header = () => {
                           }}
                           className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-white/5"
                         >
-                          <i className="ri-logout-box-r-line text-sm" /> Sign Out
+                          <i className="ri-logout-box-r-line text-sm" /> Sign
+                          Out
                         </button>
                       </div>
                     </div>
